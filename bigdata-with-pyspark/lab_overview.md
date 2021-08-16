@@ -8,7 +8,7 @@
 
 Labs for this course are available at endpoints shared below. Open following URL in browser to open jupyter workspace for the lab.
 
-1. ##### Introduction
+1. ##### Getting Started with PySpark
 		* http://localhost/lab/workspaces/lab1_introduction
 2. ##### Getting Your Big Data into the Spark Environment Using RDDs
 		* http://localhost/lab/workspaces/lab2_rdd

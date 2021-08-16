@@ -2,13 +2,6 @@
 Putting Structure on Your Big Data with SparkSQL
 ================================================
 
-In this lab, we\'ll learn how to manipulate DataFrames with Spark
-SQL schemas, and use the Spark DSL to build queries for structured data
-operations. By now we have already learned to get big data into the
-Spark Environment using RDDs and carried out multiple operations on that
-big data. Let us now look that how to manipulate our DataFrames and
-build queries for structured data operations.
-
 In particular, we will cover the following topics:
 
 -   Manipulating DataFrames with Spark SQL schemas
@@ -20,12 +13,6 @@ Manipulating DataFrames with Spark SQL schemas
 
 In this section, we will learn more about DataFrames and learn how to
 use Spark SQL.
-
-The Spark SQL interface is very simple. For this reason, taking away
-labels means that we are in unsupervised learning territory. Also, Spark
-has great support for clustering and dimensionality reduction
-algorithms. We can tackle learning problems effectively by using Spark
-SQL to give big data a structure.
 
 Let\'s take a look at the code that we will be using in our Jupyter
 Notebook. To maintain consistency, we will be using the same KDD cup
@@ -42,7 +29,7 @@ raw_data = sc.textFile("./kddcup.data.gz")
 2.  What\'s new here is that we are importing two new packages from
     [pyspark.sql]:
     -   [Row]
-    -   [SQLContext]
+    -   `SQLContext`
 3.  The following code shows us how to import these packages:
 
 ```
@@ -52,11 +39,11 @@ csv = raw_data.map(lambda l: l.split(","))
 ```
 
 
-Using [SQLContext], we create a new [sql\_context] variable
-that holds the object of the [SQLContext] variable created by
+Using `SQLContext`, we create a new [sql\_context] variable
+that holds the object of the `SQLContext` variable created by
 PySpark. As we\'re using [SparkContext] to start this
-[SQLContext] variable, we need to pipe in [sc] as the first
-parameter of the [SQLContext] creator. After this, we need to take
+`SQLContext` variable, we need to pipe in [sc] as the first
+parameter of the `SQLContext` creator. After this, we need to take
 our [raw\_data] variable and map it with the [l.split]
 lambda function to create an object that holds our **comma-separated
 values** (**CSV**).
@@ -140,14 +127,10 @@ sql_context.sql("""SELECT duration FROM rdd WHERE protocol = 'tcp' AND duration 
 only showing top 20 rows
 ```
 
-
 Using the preceding example, we can infer that we can use the
-[SQLContext] variable from the PySpark package to package our data
+`SQLContext` variable from the PySpark package to package our data
 in a SQL friendly format.
 
-Therefore, not only does PySpark support using SQL syntax to query the
-data, but it can also use the Spark **domain-specific language**
-(**DSL**) to build queries for structured data operations.
 
 Using Spark DSL to build queries
 ================================

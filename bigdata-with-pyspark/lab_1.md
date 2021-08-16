@@ -1,18 +1,8 @@
 
-Installing Pyspark and Setting up Your Development Environment
-==============================================================
+Getting Started with PySpark
+==============================
 
-In this lab, we will cover the following topics:
-
--   An overview of PySpark
--   Setting up Spark on Windows and PySpark
--   Core concepts in Spark and PySpark
-
-
-An overview of PySpark
-======================
-
-Start the spark shell by typing following command in the terminal: `pyspark`
+In this lab, we will work on PySpark. Start the spark shell by typing following command in the terminal: `pyspark`
 
 The best way for us to understand Spark is to look at an example, as shown in the following screenshot:
 
@@ -23,7 +13,10 @@ totalLength = lineLengths.reduce(lambda a, b: a + b)
 totalLength
 ```
 
-**Task:** Modify `data.txt` file, run above code again and verify that sum output is correct.
+**Task:** Modify `data.txt` file, run above code again and verify that output (sum of total number of characters in text file) is correct.
+
+
+![](./images/1.png)
 
 
 In the preceding code, we have created a new variable called
@@ -89,8 +82,23 @@ sqlDF.show()
 
 ```
 
+![](./images/2.png)
+
 
 **Task:** Update the above query to select row where age is `30`.
+
+
+Solution:
+
+![](./images/3.png)
+
+
+**Protip**
+
+Open `http://localhost:4040/` in lab environment browser to view spark history:
+
+![](./images/4.png)
+
 
 
 SparkContext
@@ -152,8 +160,7 @@ following screenshot:
 
 Spark is now available to us as a [spark] variable. Let\'s try a
 simple thing in Spark. The first thing to do is to load a random file.
-In each Spark installation, there is a [README.md] markdown file,
-so let\'s load it into our memory as follows:
+Let\'s load `README.md` file into our memory as follows:
 
 ```
 text_file = spark.read.text("/headless/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab01/README.md")
@@ -176,7 +183,7 @@ text_file.count()
 From this, we get the following output:
 
 ```
-103
+109
 ```
 
 
@@ -226,4 +233,3 @@ We will now get the following output:
 We can see that [20] lines in the text file contain the word
 [Spark]. This is just a simple example of how we can use the Spark
 shell.
-

@@ -2,10 +2,6 @@
 Aggregating and Summarizing Data into Useful Reports
 ====================================================
 
-In this lab, we will learn how to aggregate and summarize data into
-useful reports. We will learn how to calculate averages with [map]
-and [reduce] functions, perform faster average computation, and
-use pivot tables with key-value pair data points.
 
 In this lab, we will cover the following topics:
 
@@ -15,15 +11,6 @@ In this lab, we will cover the following topics:
 
 Calculating averages with map and reduce
 ========================================
-
-We will be answering the following three main questions in this section:
-
--   How do we calculate averages?
--   What is a map?
--   What is reduce?
-
-You can check the documentation at
-<https://spark.apache.org/docs/latest/api/python/pyspark.html?highlight=map#pyspark.RDD.map>.
 
 The [map] function takes two arguments, one of which is optional.
 The first argument to [map] is [f], which is a function that
@@ -121,41 +108,7 @@ calculate averages with PySpark, and what the [map] and
 Faster average computations with aggregate
 ==========================================
 
-In the previous section, we saw how we can use [map] and
-[reduce] to calculate averages. Let\'s now look at faster average
-computations with the [aggregate] function. You can refer to the
-documentation mentioned in the previous section.
-
-The [aggregate] is a function that takes three arguments, none of
-which are optional.
-
-The first one is the [zeroValue] argument, where we put in the
-base case of the aggregated results.
-
-The second argument is the sequential operator ([seqOp]), which
-allows you to stack and aggregate values on top of [zeroValue].
-You can start with [zeroValue], and the [seqOp] function
-that you feed into [aggregate] takes values from your RDD, and
-stacks or aggregates it on top of [zeroValue].
-
-The last argument is [combOp], which stands for combination
-operation, where we simply take the [zeroValue] argument that is
-now aggregated through the [seqOp] argument, and combine it into
-one value so that we can use this to conclude the aggregation.
-
-So, here we are aggregating the elements of each partition and then the
-results for all the partitions using a combined function and a neutral
-zero value. Here, we have two things to note:
-
-1.  The [op] function is allowed to modify [t1], but it
-    should not modify [t2]
-2.  The first function [seqOp] can return a different result type
-    [U]
-
-In this case, we all need one operation for merging a [T] into
-[U], and one operation for merging the two Us.
-
-Let\'s go to our Jupyter Notebook to check how this is done.
+Let\'s go to our Jupyter Notebook.
 [aggregate] allows us to calculate both the total duration and the
 count at the same time. We call the [duration\_count] function. We
 then take [normal\_data] and we aggregate it. Remember that there
@@ -228,15 +181,6 @@ pivot tabling with key-value paired data points.
 Pivot tabling with key-value paired data points
 ===============================================
 
-Pivot tables are very simple and easy to use. What we are going to do is
-use big datasets, such as the KDD cup dataset, and group certain values
-by certain keys.
-
-For example, we have a dataset of people and their favorite fruits. We
-want to know how many people have apple as their favorite fruit, so we
-will group the number of people, which is the value, against a key,
-which is the fruit. This is the simple concept of a pivot table.
-
 We can use the [map] function to move the KDD datasets into a
 key-value pair paradigm. We map feature [41] of the dataset using
 a [lambda] function in the [kv] key value, and we append the
@@ -259,15 +203,6 @@ the [41] feature as our key. We can take the float of the first
 number in the data point as our value. We will use the
 [reduceByKey] function to reduce each duration by its key.
 
-So, instead of just reducing all of the data points regardless of which
-key they belong to, [reduceByKey] reduces duration numbers
-depending on which key it is associated with. You can view the
-documentation at
-<https://spark.apache.org/docs/latest/api/python/pyspark.html?highlight=map#pyspark.RDD.reduceByKey>.
-[reduceByKey] merges the values for each key using an associative
-and commutative [reduce] function. It performs local merging on
-each mapper before sending the results to the reducer, which is similar
-to a combiner in MapReduce.
 
 The [reduceByKey] function simply takes one argument. We will be
 using the [lambda] function. We take two different durations and
@@ -318,6 +253,3 @@ computations with [aggregate]. Finally, we learned that pivot
 tables allow us to aggregate data based on different values of features,
 and that, with pivot tables in PySpark, we can leverage handy functions,
 such as [reducedByKey] or [countByKey].
-
-In the next lab, we will learn about MLlib, which involves machine
-learning, which is a very hot topic.

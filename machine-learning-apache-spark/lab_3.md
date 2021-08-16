@@ -274,7 +274,7 @@ bike renters ([cnt]) being our dependent variable:\
 
 4.  In order to develop a Spark application, we need to first
     instantiate a Spark context to connect to our local Apache Spark
-    cluster. We also instantiate a Spark [SQLContext] for the
+    cluster. We also instantiate a Spark `SQLContext` for the
     structured processing of our dataset:
 
 ```
@@ -286,7 +286,7 @@ sqlContext = SQLContext(sc)
 
 
 5.  We can now load our CSV dataset into a Spark DataFrame called [bike\_sharing\_df]. We use
-    the [SQLContext] previously defined and we tell Spark to use
+    the `SQLContext` previously defined and we tell Spark to use
     the first row as the header row and to infer the schema data types:
 
 ```

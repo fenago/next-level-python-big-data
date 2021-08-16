@@ -8,6 +8,15 @@ In this lab, we will cover the following topics:
 -   Parallelization with Spark RDDs
 -   Basics of RDD operation
 
+#### Pre-reqs:
+- Google Chrome (Recommended)
+
+#### Lab Environment
+Notebooks are ready to run. All packages have been installed. There is no requirement for any setup.
+
+All examples are present in `~/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab02` folder. 
+
+
 Loading data on to Spark RDDs
 =============================
 
@@ -21,74 +30,30 @@ and will cover the following topics:
 Let\'s start with an overview of the UCI machine learning data
 repository.
 
+### Start SparkShell
+Start the spark shell by typing following command in the terminal: 
 
+```
+cd ~/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab02
+pyspark
+```
 
 The UCI machine learning repository
 ===================================
 
-We can access the UCI machine learning repository by navigating to
-<https://archive.ics.uci.edu/ml/>. So, what is the UCI machine learning
-repository? UCI stands for the University of California Irvine machine
-learning repository, and it is a very useful resource for getting open
-source and free datasets for machine learning. Although PySpark\'s main
-issue or solution doesn\'t concern machine learning, we can use this as
-a chance to get big datasets that help us test out the functions of
-PySpark.
-
+We can access the UCI machine learning repository.
 Let\'s take a look at the KDD Cup 1999 dataset, which we will download,
 and then we will load the whole dataset into PySpark.
 
-
-
-Getting the data from the repository to Spark
-=============================================
-
-We can follow these steps to download the dataset and load it in
-PySpark:
-
-1.  Click on [Data Folder].
-2.  You will be redirected to a folder that has various files as
-    follows:
+https://archive.ics.uci.edu/ml/machine-learning-databases/kddcup99-mld
 
 
 ![](./images/e7fb27a2-161d-4d0a-bddf-1955206aab1d.png)
 
+**Note:** Dataset is already downloaded. Let's load it in PySpark:
 
-
-You can see that there\'s [kddcup.data.gz], and there is
-also 10% of that data available in
-[kddcup.data\_10\_percent.gz]. We will be working with
-food datasets. To work with the food datasets, right-click on
-[kddcup.data.gz], select [Copy link
-address], and then go back to the PySpark console and
-import the data.
-
-Let\'s take a look at how this works using the following steps:
-
-1.  After launching PySpark, the first thing we need to do is import
-    [urllib], which is a library that allows us to interact with
-    resources on the internet, as follows:
-
-```
-import urllib.request
-```
-
-
-2.  The next thing to do is use this [request] library to pull
-    some resources from the internet, as shown in the following code:
-
-```
-f = urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/kddcup99-mld/kddcup.data.gz"),"kddcup.data.gz"
-```
-
-
-This command will take some time to process. Once the file has been
-downloaded, we can see that Python has returned and the console is
-active.
-
-3.  Next, load this using [SparkContext]. So, [SparkContext]
-    is materialized or objectified in Python as the [sc] variable,
-    as follows:
+Load this using [SparkContext]. So, [SparkContext]
+is materialized or objectified in Python as the [sc] variable as follows:
 
 ```
 sc
@@ -98,14 +63,7 @@ sc
 This output is as demonstrated in the following code snippet:
 
 ```
-SparkContext
-Spark UI
-Version
-v2.3.3
-Master
-local[*]
-AppName
-PySparkShell
+< SparkContext master=local[*] appName=PySparkShell?
 ```
 
 
@@ -147,42 +105,6 @@ parallelization with Spark RDDs.
 
 Parallelization with Spark RDDs
 ===============================
-
-Now that we know how to create RDDs within the text file that we
-received from the internet, we can look at a different way to create
-this RDD. Let\'s discuss parallelization with our Spark RDDs.
-
-In this section, we will cover the following topics:
-
--   What is parallelization?
--   How do we parallelize Spark RDDs?
-
-Let\'s start with parallelization.
-
-
-
-What is parallelization?
-========================
-
-The best way to understand Spark, or any language, is to look at the
-documentation. If we look at Spark\'s documentation, it clearly states
-that, for the [textFile] function that we used last time, it reads
-the text file from HDFS.
-
-On the other hand, if we look at the definition of [parallelize],
-we can see that this is creating an RDD by distributing a local Scala
-collection.
-
-So, the main difference between using [parallelize] to create an
-RDD and using the [textFile] to create an RDD is where the data is
-sourced from.
-
-Let\'s look at how this works practically. Let\'s go to the PySpark
-installation screen, from where we left off previously. So, we imported
-[urllib], we used [urllib.request] to retrieve some data
-from the internet, and we used [SparkContext] and [textFile]
-to load this data into Spark. The other way to do this is to use
-[parallelize].
 
 Let\'s look at how we can do this. Let\'s first assume that our data is
 already in Python, and so, for demonstration purposes, we are going to
@@ -308,44 +230,12 @@ add all 100 numbers to the same results by using [reduce].
 
 Now, after some work through the distributed database, we can now see
 that adding numbers from [0] to [99] gives us [4950],
-and it is all done using PySpark\'s RDD methodology. You might recognize
-this function from the term MapReduce, and, indeed, it\'s the same
-thing.
-
-We have just learned what parallelization is in PySpark, and how we can
-parallelize Spark RDDs. This effectively amounts to another way for us
-to create RDDs, and that\'s very useful for us. Now, let\'s look at some
-basics of RDD operation.
-
+and it is all done using PySpark\'s RDD methodology.
 
 Basics of RDD operation
 =======================
 
-
-So, let\'s start with the [map] function. The [map] function
-returns an RDD by applying the [f] function to each element of
-this RDD. In other words, it works the same as the [map] function
-we see in Python. On the other hand, the [filter] function returns
-a new RDD containing only the elements that satisfy a predicate, and
-that predicate, which is a Boolean, is often returned by an [f]
-function fed into the [filter] function. Again, this works very
-similarly to the [filter] function in Python. Lastly, the
-[collect()] function returns a list that contains all the elements
-in this RDD. And this is where I think reading the documentation really
-shines, when we see notes like this. This would never come up in Stack
-Overflow or a blog post if you were simply googling what this is.
-
-So, we\'re saying that [collect()] should only be used if the
-resulting array is expected to be small, as all the data is loaded in a
-driver\'s memory. Spark is superb because it can collect and parallelize data across many
-different unique machines, and have it transparently operatable from one
-Terminal. What collects notes is saying is that, if we call
-[collect()], the resulting RDD would be completely loaded into the
-driver\'s memory, in which case we lose the benefits of distributing the
-data around a cluster of Spark instances.
-
-Now that we know all of this, let\'s see how we actually apply these
-three functions to our data. So, go back to the PySpark Terminal; we
+Go back to the PySpark Terminal; we
 have already loaded our raw data as a text file, as we have seen in
 previous labs.
 
@@ -372,11 +262,6 @@ calculate something. In this case, we can count on
 
 ![](./images/67a5b615-fcae-4356-99da-0bf6b0e22232.png)
 
-You can see that it has counted just over 970,000 lines in the raw data
-that contain the word [normal]. To use the [filter]
-function, we provide it with the [lambda] function and use a
-consolidating function, such as [counts], that forces Spark to
-calculate and compute the data in the underlying DataFrame.
 
 For the second example, we will use the map. Since we downloaded the KDD
 cup data, we know that it is a comma-separated value file, and so, one
@@ -427,8 +312,7 @@ Summary
 =======
 
 In this lab, we learned how to load data on Spark RDDs and also
-covered parallelization with Spark RDDs. We had a brief overview of the
-UCI machine learning repository before loading the data. We had an
+covered parallelization with Spark RDDs. We had an
 overview of the basic RDD operations, and also checked the functions
 from the official documentation.
 

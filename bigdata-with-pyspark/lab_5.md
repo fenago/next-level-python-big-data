@@ -2,13 +2,6 @@
 Powerful Exploratory Data Analysis with MLlib
 =============================================
 
-In this lab, we will explore Spark\'s capability to perform
-regression tasks with models such as linear regression and
-**support-vector machines** (**SVMs**). We will learn how to compute
-summary statistics with MLlib, and discover correlations in datasets
-using Pearson and Spearman correlations. We will also test our
-hypothesis on large datasets.
-
 We will cover the following topics:
 
 -   Computing summary statistics with MLlib
@@ -18,13 +11,6 @@ We will cover the following topics:
 
 Computing summary statistics with MLlib
 =======================================
-
-Let\'s check how to compute summary statistics in Spark. The key factor
-here is the [colStats] function. The [colStats] function
-computes the column-wise summary statistics for an [rdd] input.
-The [colStats] function accepts one parameter, that is
-[rdd], and it allows us to compute different summary statistics
-using Spark.
 
 Let\'s look at the code in the Jupyter Notebook
 for this lab in [Lab_5.ipynb]. We will first collect the
@@ -125,36 +111,6 @@ array([0.]) #output
 ```
 
 
-Using Pearson and Spearman correlations to discover correlations
-================================================================
-
-In this section, we will look at two different ways of computing
-correlations in your datasets, and these two methods are called Pearson
-and Spearman correlations.
-
-
-
-The Pearson correlation
-=======================
-
-The Pearson correlation coefficient shows us how two different variables
-vary at the same time, and then adjusts it for how much they vary. This
-is probably one of the most popular ways to compute a correlation if you
-have a dataset.
-
-
-
-The Spearman correlation
-========================
-
-Spearman\'s rank correlation is not the default correlation calculation
-that is built into PySpark, but it is very useful. The Spearman
-correlation coefficient is the Pearson correlation coefficient between
-the ranked variables. Using different ways of looking at correlation
-gives us more dimensions of understanding on how correlation works.
-Let\'s look at how we calculate this in PySpark.
-
-
 
 Computing Pearson and Spearman correlations
 ===========================================
@@ -198,49 +154,11 @@ us the correlation between the variables. In our example, the third
 variable in our [metrics] variable is more correlated than the
 second variable.
 
-If we run [corr] on [metrics] again, but specify that the
-method is [pearson], then it gives us Pearson correlations. So,
-let\'s examine why we need to be qualified as the data scientist or
-machine learning researcher to call these two simple functions and
-simply change the value of the second parameter. A lot of machine
-learning and data science revolves around our understanding of
-statistics, understanding how data behaves, an understanding of how
-machine learning models are grounded, and what gives them their
-predictive power.
-
-So, as a machine learning practitioner or a data scientist, we simply
-use PySpark as a big calculator. When we use a calculator, we never
-complain that the calculator is simple to use---in fact, it helps us to
-complete the goal in a more straightforward way. It is the same case
-with PySpark; once we move from the data engineering side to the MLlib
-side, we will notice that the code gets incrementally easier. It tries
-to hide the complexity of the mathematics underneath it, but we need to
-understand the difference between different correlations, and we also
-need to know how and when to use them.
 
 Testing our hypotheses on large datasets
 ========================================
 
-In this section, we will look at hypothesis testing, and also learn how
-to test the hypotheses using PySpark. Let\'s look at one particular type
-of hypothesis testing that is implemented in PySpark. This form of
-hypothesis testing is called Pearson\'s chi-square test. Chi-square
-tests how likely it is that the differences in the two datasets are
-there by chance.
-
-For example, if we had a retail store without any footfall, and suddenly
-you get footfall, how likely is it that this is random, or is there even
-any statistically significant difference in the level of visitors that
-we are getting now in comparison to before? The reason why this is
-called the chi-square test is that the test itself references the
-chi-square distributions. You can refer to online documentation to
-understand more about chi-square distributions.
-
-There are three variations within Pearson\'s chi-square test. We will
-check whether the observed datasets are distributed differently than in
-a theoretical dataset.
-
-Let\'s see how we can implement this. Let\'s start by importing the
+Let\'s start by importing the
 [Vectors] package from [pyspark.mllib.linalg]. Using this
 vector, we\'re going to create a dense vector of the visitor frequencies
 by day in our store.

@@ -1,6 +1,6 @@
 
-Big Data Cleaning and Wrangling with Spark Notebooks
-====================================================
+Big Data Cleaning and Wrangling with Spark
+==========================================
 
 
 In this lab, we will discuss the following topics:
@@ -101,25 +101,18 @@ SparkContext variables as in Jupyter Notebook. So, let\'s test it out as
 follows:
 
 ```
+from pyspark import SparkContext
+sc = SparkContext('local', 'BigData PySpark')
 sc
 ```
 
 
 We instantly get access to our [SparkContext] that tells us that
-Spark is version [2.3.3], our [Master] is at [local],
-and the [AppName] is the Python SparkShell ([PySparkShell]),
-as shown in the following code snippet:
+Spark is version [3.1.2], our [Master] is at [local],
+and the [AppName] is the Python SparkShell (`BigData PySpark`),
+as shown below:
 
-```
-SparkContext
-Spark UI
-Version
-v2.3.3
-Master
-local[*]
-AppName
-PySparkShell
-```
+![](./images/5.png)
 
 
 So, now we know how we create a Notebook-like environment in Jupyter. In
@@ -265,17 +258,6 @@ We have now finished calculating our [contains\_normal] function
 by bringing [data\_in\_memory]. This is a great illustration of
 the power of PySpark.
 
-We originally took a sample of 10,000 data points, and it crashed the
-machine. So here, we will take these ten data points to see if it
-contains the word [normal].
-
-We can see that the calculation is completed in the previous code block,
-and it took longer and used more memory than if we were doing it in
-PySpark. And that\'s why we use Spark, because Spark allows us to
-parallelize any big datasets and operate it on it using a parallel
-fashion, which means that we can do more with less memory and with less
-time. In the next section, we\'re going to talk about splitting datasets
-and creating new combinations with set operations.
 
 Splitting datasets and creating some new combinations
 =====================================================
