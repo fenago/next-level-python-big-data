@@ -5,23 +5,17 @@ Aggregating and Summarizing Data into Useful Reports
 
 In this lab, we will cover the following topics:
 
--   Calculating averages with [map] and [reduce]
+-   Calculating averages with `map` and `reduce`
 -   Faster average computations with aggregate
 -   Pivot tabling with key-value paired data points
 
 Calculating averages with map and reduce
 ========================================
 
-The [map] function takes two arguments, one of which is optional.
-The first argument to [map] is [f], which is a function that
-gets applied to the RDD throughout by the [map] function. The
-second argument, or parameter, is the [preservesPartitioning]
-parameter, which is [False] by default.
-
-If we look at the documentation, it says that [map] simply returns
+`map` simply returns
 a new RDD by applying a function to each element of this RDD, and
 obviously, this function refers to [f] that we feed into the
-[map] function itself. There\'s a very simple example in the
+`map` function itself. There\'s a very simple example in the
 documentation, where it says if we parallelize an [rdd] method
 that contains a list of three characters, [b], [a], and
 [c], and we map a function that creates a tuple of each element,
@@ -42,7 +36,7 @@ This will give us the following output:
 ```
 
 
-The [reduce] function takes only one argument, which is [f].
+The `reduce` function takes only one argument, which is [f].
 [f] is a function to reduce a list into one number. From a
 technical point of view, the specified commutative and associative
 binary operator reduces the elements of this RDD.
@@ -66,8 +60,8 @@ normal_data = csv.filter(lambda x: x[41]=="normal.")
 ```
 
 
-Then we use the [map] function to convert this data into an
-integer, and then, finally, we can use the [reduce] function to
+Then we use the `map` function to convert this data into an
+integer, and then, finally, we can use the `reduce` function to
 compute the [total\_duration], and then we can print the
 [total\_duration] as follows:
 
@@ -101,9 +95,9 @@ This will give us the following output:
 
 
 And after a little computation, we would have created two counts using
-[map] and [reduce]. We have just learned how we can
-calculate averages with PySpark, and what the [map] and
-[reduce] functions are in PySpark.
+`map` and `reduce`. We have just learned how we can
+calculate averages with PySpark, and what the `map` and
+`reduce` functions are in PySpark.
 
 Faster average computations with aggregate
 ==========================================
@@ -181,7 +175,7 @@ pivot tabling with key-value paired data points.
 Pivot tabling with key-value paired data points
 ===============================================
 
-We can use the [map] function to move the KDD datasets into a
+We can use the `map` function to move the KDD datasets into a
 key-value pair paradigm. We map feature [41] of the dataset using
 a [lambda] function in the [kv] key value, and we append the
 value as follows:
@@ -198,7 +192,7 @@ these transformed rows to see how it looks.
 
 Let\'s now try something similar to the previous example. To figure out
 the total duration against each type of value that is present in feature
-[41], we can use the [map] function again and simply take
+[41], we can use the `map` function again and simply take
 the [41] feature as our key. We can take the float of the first
 number in the data point as our value. We will use the
 [reduceByKey] function to reduce each duration by its key.
@@ -248,7 +242,7 @@ Summary
 =======
 
 In this lab, we have learned how to calculate averages with
-[map] and [reduce]. We also learned faster average
+`map` and `reduce`. We also learned faster average
 computations with [aggregate]. Finally, we learned that pivot
 tables allow us to aggregate data based on different values of features,
 and that, with pivot tables in PySpark, we can leverage handy functions,

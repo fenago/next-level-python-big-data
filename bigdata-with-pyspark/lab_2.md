@@ -214,7 +214,7 @@ Spark\'s power to manipulate this list of 100 items.
 Let\'s now use the reduce function in [list\_rdd], or in RDDs in
 general, to demonstrate what we can do with PySpark\'s RDDs. We will
 apply two parameter functions as an anonymous [lambda] function to
-the [reduce] call as follows:
+the `reduce` call as follows:
 
 ```
 list_rdd.reduce(lambda a, b: a+b)
@@ -223,10 +223,10 @@ list_rdd.reduce(lambda a, b: a+b)
 
 Here, [lambda] takes two parameters, [a] and [b]. It
 simply adds these two numbers together, hence [a+b], and returns
-the output. With the RDD [reduce] call, we can sequentially add
+the output. With the RDD `reduce` call, we can sequentially add
 the first two numbers of RDD lists together, return the results, and
 then add the third number to the results, and so on. So, eventually, you
-add all 100 numbers to the same results by using [reduce].
+add all 100 numbers to the same results by using `reduce`.
 
 Now, after some work through the distributed database, we can now see
 that adding numbers from [0] to [99] gives us [4950],
@@ -245,6 +245,8 @@ indicate RDD data, where each line [contains] the word
 
 ```
 contains_normal = raw_data.filter(lambda line: "normal." in line)
+
+contains_normal.count()
 ```
 
 
@@ -270,17 +272,19 @@ commas, as follows:
 
 ```
 split_file = raw_data.map(lambda line: line.split(","))
+
+split_file.take(5)
 ```
 
 
-Let\'s analyze what is happening. We call the [map] function on
+Let\'s analyze what is happening. We call the `map` function on
 [raw\_data]. We feed it an anonymous [lambda] function
 called [line], where we are splitting the [line] function by
 using [,]. The result is a split file. Now, here the power of
 Spark really comes into play. Recall that, in the
 [contains\_normal.] filter, when we called a function that forced
 Spark to calculate [count], it took us a few minutes to come up
-with the correct results. If we perform the [map] function, it is
+with the correct results. If we perform the `map` function, it is
 going to have the same effect, because there are going to be millions of
 lines of data that we need to map through. And so, one of the ways to
 quickly preview whether our mapping function runs correctly is if we can
@@ -292,21 +296,6 @@ before, as demonstrated in the following screenshot:
 
 ![](./images/e99a6e8a-4409-4b4e-b1e1-858e278abc2d.png)
 
-
-
-This might take a few seconds because we are only taking five lines,
-which is our splits and is actually quite manageable. If we look at this
-sample output, we can understand that our [map] function has been
-created successfully. The last thing we can do is to call
-[collect()] on raw data as follows:
-
-```
-raw_data.collect()
-```
-
-
-This is designed to move all of the raw data from Spark\'s RDD data
-structure into the memory.
 
 Summary
 =======

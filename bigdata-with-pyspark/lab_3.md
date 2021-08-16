@@ -155,7 +155,7 @@ sampled = raw_data.sample(False, 0.1, 42)
 ```
 
 
-The next thing to do is to chain some [map] and [filter]
+The next thing to do is to chain some `map` and [filter]
 functions, as we do normally if we are dealing with unsampled datasets:
 
 ```
@@ -238,7 +238,7 @@ data_in_memory = raw_data.takeSample(False, 10, 42)
 As we\'ve learned earlier, when we present the new functions we call
 [takeSample], and it will give us [10] items with a random
 seed of [42], which we will now put into memory. Now that this
-data is in memory, we can call the same [map] and [filter]
+data is in memory, we can call the same `map` and [filter]
 functions using native Python methods as follows:
 
 ```
