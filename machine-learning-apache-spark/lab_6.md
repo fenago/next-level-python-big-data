@@ -379,8 +379,6 @@ can be found in the GitHub repository accompanying this course.
     respectively, as shown in the following code:
 
 ```
-import findspark
-findspark.init()
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SQLContext
 from pyspark.ml.feature import VectorAssembler

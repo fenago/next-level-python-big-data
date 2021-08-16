@@ -23,8 +23,6 @@ notebook cells for future ease of reference):
 
 ```
 # (1) Import required Python dependencies
-import findspark
-findspark.init()
 from pyspark import SparkContext, SparkConf
 import random
 
@@ -53,8 +51,7 @@ sc.stop()
 
 This PySpark application, at a high level, works as follows:
 
-1.  Import the required Python dependencies, including [findspark]
-    and [pyspark]
+1.  Import the required Python dependencies, `including pyspark`
 2.  Create a Spark context, which tells the Spark application how to
     connect to the Spark cluster, by instantiating it with a
     [SparkConf] object that provides application-level settings at

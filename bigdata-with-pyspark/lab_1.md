@@ -12,39 +12,6 @@ In this lab, we will cover the following topics:
 An overview of PySpark
 ======================
 
-Before we start with installing PySpark, which is the Python interface
-for Spark, let\'s go through some core concepts in Spark and PySpark.
-Spark is the latest big data tool from Apache, which can be found by
-simply going to <http://spark.apache.org/>. It\'s a unified analytics
-engine for large-scale data processing. This means that, if you have a
-lot of data, you can feed that data into Spark to create some analytics
-at a good speed. If we look at the running times between Hadoop and
-Spark, Spark is more than a hundred times faster than Hadoop. It is very
-easy to use because there are very good APIs for use with Spark.
-
-The four major components of the Spark platform are as follows:
-
--   **Spark SQL**: A clearing language for Spark
--   **Spark Streaming**: Allows you to feed in real-time streaming data
--   **MLlib (machine learning)**: The machine learning library for Spark
--   **GraphX (graph)**: The graphing library for Spark
-
-The core concept in Spark is an RDD, which is similar to the pandas
-DataFrame, or a Python dictionary or list. It is a way for Spark to
-store large amounts of data on the infrastructure for us. The key
-difference of an RDD versus something that is in your local memory, such
-as a pandas DataFrame, is that an RDD is distributed across many
-machines, but it appears like one unified dataset. What this means is,
-if you have large amounts of data that you want to operate on in
-parallel, you can put it in an RDD and Spark will handle parallelization
-and the clustering of the data for you.
-
-Spark has three different interfaces, as follows:
-
--   Scala
--   Java
--   Python
-
 Python is similar to PySpark integration, which we will cover soon. For
 now, we will import some libraries from the PySpark package to help us
 work with Spark. The best way for us to understand Spark is to look at

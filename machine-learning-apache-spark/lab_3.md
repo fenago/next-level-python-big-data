@@ -226,8 +226,6 @@ found in the GitHub repository accompanying this course.
 %matplotlib inline
 import matplotlib.pyplot as plt
 import pandas as pd
-import findspark
-findspark.init()
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SQLContext
 from pyspark.ml.feature import VectorAssembler

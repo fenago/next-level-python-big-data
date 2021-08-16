@@ -354,8 +354,6 @@ the GitHub repository accompanying this course.
     as follows:
 
 ```
-import findspark
-findspark.init()
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SQLContext
 from pyspark.sql.functions import *
