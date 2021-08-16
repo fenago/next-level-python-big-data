@@ -113,7 +113,7 @@ repository accompanying this course.
 
 ```
 mri_healthy_brain_image = io.imread(
-'lab05/data/mri-images-data/mri-healthy-brain.png')
+'./data/mri-images-data/mri-healthy-brain.png')
 mri_healthy_brain_image_plot = plt.imshow(
 mri_healthy_brain_image, cmap='gray')
 ```
@@ -278,7 +278,7 @@ Figure 5.6: Segmented MRI scan
 
 ```
 mri_test_brain_image = io.imread(
-'lab05/data/mri-images-data/mri-test-brain.png')
+'./data/mri-images-data/mri-test-brain.png')
 ```
 
 

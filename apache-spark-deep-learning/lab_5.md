@@ -180,7 +180,6 @@ The output of the script can be seen in the following screenshot:
 
 ![](./images/9f6022e7-c8f8-48a9-ae27-64cafe8314c4.png)
 
-<div>
 
 Analyzing the therapy bot session dataset
 -----------------------------------------------------------

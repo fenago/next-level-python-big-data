@@ -503,7 +503,7 @@ bow_decision_tree_model.save('<Target filesystem path to save MLlib Model>')
 Our trained decision tree classifier for performing sentiment analysis
 of airline tweets has also been pushed to the GitHub repository
 accompanying this course, and may be found in
-[lab06/models/airline-sentiment-analysis-decision-tree-classifier].
+[./models/airline-sentiment-analysis-decision-tree-classifier].
 
 Summary
 =======

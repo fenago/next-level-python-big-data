@@ -29,9 +29,7 @@ the weather on a particular day!
 
 **Note:**
 
-The dataset that we will be using has been derived from the **University
-of California\'s** (**UCI**) machine learning repository found at
-<https://archive.ics.uci.edu/ml/index.php>. The specific bike sharing
+The specific bike sharing
 dataset that we will use, available from both the GitHub repository
 accompanying this course and from
 <https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset>, has been
@@ -45,32 +43,7 @@ either the GitHub repository accompanying this course or from UCI\'s
 machine learning repository, you will find bike sharing data aggregated
 on a daily basis over 731 days using the following schema:
 
-  -------------------- ----------------- -----------------------------------------------------------
-  **Column name**      **Data type**     **Description**
-  [instant]      [Integer]   Unique record identifier (primary key)
-  [dteday]       [Date]      Date
-  [season]       [Integer]   Season (1 -- spring, 2 -- summer, 3 -- fall, 4 -- winter)
-  [yr]           [Integer]   Year
-  [mnth]         [Integer]   Month
-  [holiday]      [Integer]   Day is a holiday or not
-  [weekday]      [Integer]   Day of the week
-  [workingday]   [Integer]   1 -- neither a weekend nor a holiday, 0 -- otherwise
-  [weathersit]   [Integer]   1 -- clear, 2 -- mist, 3 -- light snow, 4 -- heavy rain
-  [temp]         [Double]    Normalized temperature in Celsius
-  [atemp]        [Double]    Normalized feeling temperature in Celsius
-  [hum]          [Double]    Normalized humidity
-  [windspeed]    [Double]    Normalized wind speed
-  [casual]       [Integer]   Count of casual users for that day
-  [registered]   [Integer]   Count of registered users for that day
-  [cnt]          [Integer]   Count of total bike renters that day
-  -------------------- ----------------- -----------------------------------------------------------
-
-Using this dataset, can we predict the total bike renters for a given
-day (*cnt*) given the weather patterns for that particular day? In this
-case, *cnt* is the *dependent* variable that we wish to predict based on
-a set of *independent* variables that we shall choose from.
-
-
+![](./images/1.png)
 
 
 Univariate linear regression in Apache Spark
@@ -85,7 +58,7 @@ our bike sharing dataset:
 
 The following sub-sections describe each of the pertinent cells in the
 corresponding Jupyter Notebook for this use case, entitled
-[chp04-01-univariate-linear-regression.ipynb], and which may be
+[01-univariate-linear-regression.ipynb], and which may be
 found in the GitHub repository accompanying this course.
 
 
@@ -361,57 +334,6 @@ sc.stop()
 
 
 
-Multivariate linear regression
-==============================
-
-Our univariate linear regression model actually performed relatively
-poorly on both the training and test datasets, with R^2^ values of 0.42
-on the training dataset and 0.34 on the test dataset respectively. Is
-there any way we can take advantage of the other independent variables
-available in our raw dataset to increase the predictive quality of our
-model?
-
-Multivariate (or multiple) linear regression extends univariate linear
-regression by allowing us to utilize more than one independent variable,
-in this case *K* independent variables, as follows:
-
-
-![](./images/92ac9e48-9e36-422a-b81b-5edbb280f7c0.png)
-
-
-As before, we have our dependent variable *y^i^* (for the *i^th^*
-observation), an intercept coefficient *β~0~,* and our residuals ε^*i*^.
-But we also now have *k* independent variables, each with their own
-regression coefficient, *β~k~*. The goal, as before, is to derive
-coefficients that minimize the amount of error that our model makes. The
-problem now though is how to choose which subset of independent
-variables to use in order to train our multivariate linear regression
-model. Adding more independent variables increases the complexity of
-models in general and, hence, the data storage and processing
-requirements of underlying processing platforms. Furthermore, models
-that are too complex tend to cause **overfitting**, whereby the model
-achieves better performance (in other words, a higher *R^2^* metric) on
-the training dataset used to train the model than on new data that it
-has not seen before.
-
-
-
-Correlation
-===========
-
-Correlation is a metric that measures the linear relationship between
-two variables, and helps us to decide which independent variables to
-include in our model:
-
--   +1 implies a perfect positive linear relationship
--   0 implies no linear relationship
--   -1 implies a perfect negative linear relationship
-
-When two variables have an *absolute* value of correlation close to 1,
-then these two variables are said to be \"highly correlated\".
-
-
-
 Multivariate linear regression in Apache Spark
 ==============================================
 
@@ -423,7 +345,7 @@ our bike sharing dataset and a subset of independent variables:
 
 The following sub-sections describe each of the pertinent cells in the
 corresponding Jupyter Notebook for this use case, entitled
-[chp04-02-multivariate-linear-regression.ipynb], and which may be
+[02-multivariate-linear-regression.ipynb], and which may be
 found in the GitHub repository accompanying this course. Note that for the
 sake of brevity, we will skip those cells that perform the same
 functions as seen previously.
@@ -532,19 +454,9 @@ from either the GitHub repository accompanying this course or from UCI\'s
 machine learning repository, you will find breast cancer data that
 employs the following schema:
 
-  ------------------------ ----------------- -----------------------------------------------------------------------------------------------
-  **Column name**          **Data type**     **Description**
-  [Age]              [Integer]   Age of patient
-  [BMI]              [Double]    Body mass index (kg/m^2^)
-  [Glucose]          [Double]    Blood glucose level (mg/dL)
-  [Insulin]          [Double]    Insulin level (µU/mL)
-  [HOMA]             [Double]    Homeostatic Model Assessment (HOMA) -- used to assess β-cell function and insulin sensitivity
-  [Leptin]           [Double]    Hormone used to regulate energy expenditure (ng/mL)
-  [Adiponectin]      [Double]    Protein hormone used to regulate glucose levels (µg/mL)
-  [Resistin]         [Double]    Hormone that causes insulin resistance (ng/mL)
-  [MCP.1]            [Double]    Protein to aid recovery from injury and infection (pg/dL)
-  [Classification]   [Integer]   1 = Healthy patient as part of a control group, 2 = patient with breast cancer
-  ------------------------ ----------------- -----------------------------------------------------------------------------------------------
+
+![](./images/2.png)
+ 
 
 Using this dataset, can we develop a logistic regression model that
 calculates the probability of a given patient being healthy (in other
@@ -555,7 +467,7 @@ decision?
 
 The following sub-sections describe each of the pertinent cells in the
 corresponding Jupyter Notebook for this use case, entitled
-[chp04-03-logistic-regression.ipynb], and which may be found in
+[03-logistic-regression.ipynb], and which may be found in
 the GitHub repository accompanying this course. Note that, for the sake of
 brevity, we will skip those cells that perform the same functions as
 seen previously.
@@ -570,7 +482,6 @@ seen previously.
     a healthy patient, and a label of 0 corresponds to a breast cancer
     patient:
 
-<div>
 
 ```
 indexer = StringIndexer(inputCol = "Classification",
@@ -587,7 +498,6 @@ breast_cancer_df = indexer.transform(breast_cancer_df)
     numerical feature vectors for our model. Again, we can use the
     [VectorAssembler] of [MLlib] to achieve this:
 
-<div>
 
 ```
 feature_columns = ['Age', 'BMI', 'Glucose', 'Insulin', 'HOMA',
@@ -610,7 +520,6 @@ breast_cancer_features_df = vector_assembler
     the [LogisticRegression] estimator of [MLlib] to train a
     [LogisticRegression] model transformer:
 
-<div>
 
 ```
 logistic_regression = LogisticRegression(featuresCol = 'features',
@@ -630,7 +539,6 @@ logistic_regression_model = logistic_regression.fit(train_df)
     using a default threshold value of t=0.5 is contained within the
     [prediction] column:
 
-<div>
 
 ```
 test_logistic_regression_predictions_df = logistic_regression_model
@@ -650,7 +558,6 @@ test_logistic_regression_predictions_df.select("probability",
     [BinaryClassificationEvaluator] to calculate the AUC metric as
     follows:
 
-<div>
 
 ```
 test_summary = logistic_regression_model.evaluate(test_df)
@@ -706,7 +613,6 @@ false_negatives = test_logistic_regression_predictions_df
     by converting the test predictions\' DataFrame into an RDD and thereafter passing it to the
     [MulticlassMetrics] evaluation abstraction:
 
-<div>
 
 ```
 predictions_and_label = test_logistic_regression_predictions_df
@@ -798,7 +704,7 @@ given congressman or woman based on their voting records:
 
 The following sub-sections describe each of the pertinent cells in the
 corresponding Jupyter Notebook for this use case, entitled
-[chp04-04-classification-regression-trees.ipynb], and which may be
+[04-classification-regression-trees.ipynb], and which may be
 found in the GitHub repository accompanying this course. Note that for the
 sake of brevity, we will skip those cells that perform the same
 functions as seen previously.
@@ -808,7 +714,6 @@ functions as seen previously.
     define its schema before we can load it into a Spark DataFrame, as
     follows:
 
-<div>
 
 ```
 schema = StructType([
@@ -832,7 +737,6 @@ StructField("water_project_cost_sharing", StringType()),
     applied to a Spark DataFrame. In our case, each stage in our
     pipeline will be the indexing of a different column as follows:
 
-<div>
 
 ```
 categorical_columns = ['handicapped_infants',
@@ -865,7 +769,6 @@ pipeline_stages += [vector_assembler]
     before proceeding to generate our numerical feature vectors using
     [VectorAssembler] as before:
 
-<div>
 
 ```
 pipeline = Pipeline(stages = pipeline_stages)
@@ -883,7 +786,6 @@ pd.DataFrame(congressional_voting_features_df.take(5), columns=congressional_vot
     we can use MLlib\'s [DecisionTreeClassifier] estimator to
     train a decision tree on our training dataset as follows:
 
-<div>
 
 ```
 decision_tree = DecisionTreeClassifier(featuresCol = 'features',
@@ -899,7 +801,6 @@ decision_tree_model = decision_tree.fit(train_df)
     the model predicts correctly. In our case, our model has an AUC
     metric of 0.91, which is very high:
 
-<div>
 
 ```
 evaluator_roc_area = BinaryClassificationEvaluator(
@@ -918,7 +819,6 @@ print("Area Under ROC Curve on Test Data = %g" % evaluator_roc_area.evaluate(tes
     [toDebugString] method on our trained classification tree
     model, as follows:
 
-<div>
 
 ```
 print(str(decision_tree_model.toDebugString))
@@ -988,7 +888,7 @@ maximized in that region (as illustrated by the dashed circle in *Figure
 4.8*).
 
 Returning to our Jupyter Notebook,
-[chp04-04-classification-regression-trees.ipynb], let\'s now train
+[04-classification-regression-trees.ipynb], let\'s now train
 a random forest model using the same congressional voting dataset to see
 whether it results in a better performing model compared to our single
 classification tree that we developed previously:
@@ -999,7 +899,6 @@ classification tree that we developed previously:
     each child must have after a split via the
     [minInstancesPerNode] parameter, as follows:
 
-<div>
 
 ```
 random_forest = RandomForestClassifier(featuresCol = 'features',
@@ -1013,7 +912,6 @@ random_forest_model = random_forest.fit(train_df)
     model on our test dataset by computing the AUC metric using the same
     [BinaryClassificationEvaluator] as follows:
 
-<div>
 
 ```
 test_random_forest_predictions_df = random_forest_model

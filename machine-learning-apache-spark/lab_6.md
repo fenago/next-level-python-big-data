@@ -49,26 +49,7 @@ the GitHub repository accompanying this course or from UCI\'s machine
 learning repository, you will find 20,000 rows of data, described by the
 following schema:
 
-  ----------------- ----------------- ------------------------------------------------
-  **Column name**   **Data type**     **Description**
-  [lettr]     [String]    English letter (one of 26 values, from A to Z)
-  [x-box]     [Integer]   Horizontal position of box
-  [y-box]     [Integer]   Vertical position of box
-  [width]     [Integer]   Width of box
-  [high]      [Integer]   Height of box
-  [onpix]     [Integer]   Total number of on pixels
-  [x-bar]     [Integer]   Mean *x* of on pixels in the box
-  [y-bar]     [Integer]   Mean *y* of on pixels in the box
-  [x2bar]     [Integer]   Mean *x* variance
-  [y2bar]     [Integer]   Mean *y* variance
-  [xybar]     [Integer]   Mean *x y* correlation
-  [x2ybr]     [Integer]   Mean of *x* \* *x* \* *y*
-  [xy2br]     [Integer]   Mean of *x* \* *y* \* *y*
-  [x-ege]     [Integer]   Mean edge count left to right
-  [xegvy]     [Integer]   Correlation of [x-ege] with *y*
-  [y-ege]     [Integer]   Mean edge count, bottom to top
-  [yegvx]     [Integer]   Correlation of [y-ege] with *x*
-  ----------------- ----------------- ------------------------------------------------
+![](./images/3.png)
 
 This dataset describes 16 numerical attributes representing statistical
 features of the pixel distribution based on scanned character images,
@@ -88,7 +69,7 @@ symbols and classify them as letters from the English alphabet:
 
 The following subsections describe each of the pertinent cells in the
 corresponding Jupyter notebook for this use case, called
-[chp07-01-multilayer-perceptron-classifier.ipynb]. This notebook
+[01-multilayer-perceptron-classifier.ipynb]. This notebook
 can be found in the GitHub repository accompanying this course.
 
 
@@ -324,7 +305,7 @@ Attribution license, and which may be found at
 
 In the GitHub repository accompanying this course, you can find 30 images
 of birds ([image-recognition-data/birds]) and 30 images of planes
-([image-recognition-data/planes]) respectively. *Figure 7.15*
+([image-recognition-data/planes]) respectively. below image
 shows a couple of examples of the images that you might find in these
 test datasets:
 
@@ -341,15 +322,6 @@ and planes within a single test dataset.
 
 PySpark image recognition application
 =====================================
-
-Note that for the purposes of this case study, we will not be using
-Jupyter notebooks for development but rather standard Python code files
-with the [.py] file extension. This case study provides a first
-glimpse into how a production-grade pipeline should be developed and
-executed; rather than instantiating a `SparkContext` explicitly
-within our code, we will instead submit our code and all its
-dependencies to [spark-submit] (including any third-party Spark
-packages, such as [sparkdl]) via the Linux command line.
 
 Let\'s now take a look at how we can use the Inception-v3 deep CNN via
 PySpark to classify test images. In our Python-based image-recognition
@@ -405,15 +377,14 @@ spark = SparkSession.builder.appName("Convolutional Neural Networks - Transfer L
     [1] literal, as follows:
 
 ```
-path_to_img_directory = 'lab07/data/image-recognition-data'
+path_to_img_directory = './data/image-recognition-data'
 birds_df = ImageSchema.readImages(path_to_img_directory + "/birds")
 .withColumn("label", lit(0))
 ```
 
 
 ```
-planes_df = ImageSchema.readImages(path_to_img_directory +
-"/planes").withColumn("label", lit(1))
+planes_df = ImageSchema.readImages(path_to_img_directory + "/planes").withColumn("label", lit(1))
 ```
 
 
@@ -513,7 +484,7 @@ arguments:
 
 
 ```
-> spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 lab07/chp07-02-convolutional-neural-network-transfer-learning.py
+> spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 02-convolutional-neural-network-transfer-learning.py
 ```
 
 
@@ -525,21 +496,8 @@ Image-recognition results
 Assuming that the image-recognition application ran successfully, you
 should see the following results output to the console:
 
-  ------------------------------ ----------------
-  **Origin**                     **Prediction**
-  [planes/plane-005.jpg]   [1.0]
-  [planes/plane-008.jpg]   [1.0]
-  [planes/plane-009.jpg]   [1.0]
-  [planes/plane-016.jpg]   [1.0]
-  [planes/plane-017.jpg]   [0.0]
-  [planes/plane-018.jpg]   [1.0]
-  [birds/bird-005.jpg]     [0.0]
-  [birds/bird-008.jpg]     [0.0]
-  [birds/bird-009.jpg]     [0.0]
-  [birds/bird-016.jpg]     [0.0]
-  [birds/bird-017.jpg]     [0.0]
-  [birds/bird-018.jpg]     [0.0]
-  ------------------------------ ----------------
+![](./images/4.png)
+
 
 The [Origin] column refers to the absolute filesystem path of the
 image, and the value in the [Prediction] column is [1.0] if
@@ -595,7 +553,7 @@ Python code file):
 **Note:**
 
 The following Python code file, called
-[chp07-03-convolutional-neural-network-image-predictor.py], can be
+[03-convolutional-neural-network-image-predictor.py], can be
 found in the GitHub repository accompanying this course.
 
 
@@ -625,7 +583,7 @@ spark = SparkSession.builder.appName("Convolutional Neural Networks - Deep Image
 
 ```
 assorted_images_df = ImageSchema.readImages(
-"lab07/data/image-recognition-data/assorted")
+"./data/image-recognition-data/assorted")
 ```
 
 
@@ -653,7 +611,7 @@ To run this PySpark image-prediction application, we again invoke
 
 ```
 > cd {SPARK_HOME}
-> bin/spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 lab07/chp07-03-convolutional-neural-network-image-predictor.py
+> bin/spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 03-convolutional-neural-network-image-predictor.py
 ```
 
 
@@ -665,24 +623,7 @@ Image-prediction results
 Assuming that the image-prediction application ran successfully, you
 should see the following results output to the console:
 
-  -------------------------------- ------------------------------
-  **Origin**                       **First Predicted Label**
-  [assorted/snowman.jpg]     [Teddy]
-  [assorted/bicycle.jpg]     [Mountain Bike]
-  [assorted/house.jpg]       [Library]
-  [assorted/bus.jpg]         [Trolley Bus]
-  [assorted/banana.jpg]      [Banana]
-  [assorted/pizza.jpg]       [Pizza]
-  [assorted/toilet.jpg]      [Toilet Seat]
-  [assorted/knife.jpg]       [Cleaver]
-  [assorted/apple.jpg]       [Granny Smith (Apple)]
-  [assorted/pen.jpg]         [Ballpoint]
-  [assorted/lion.jpg]        [Lion]
-  [assorted/saxophone.jpg]   [Saxophone]
-  [assorted/zebra.jpg]       [Zebra]
-  [assorted/fork.jpg]        [Spatula]
-  [assorted/car.jpg]         [Convertible]
-  -------------------------------- ------------------------------
+![](./images/5.png)
 
 As you can see, the pretrained Inception-v3 deep CNN has an astonishing
 ability to recognize and classify the objects found in images. Though
