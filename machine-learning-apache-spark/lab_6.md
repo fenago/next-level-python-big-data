@@ -353,7 +353,7 @@ from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 
 2.  Unlike our Jupyter notebook case studies, there is no need to
     instantiate a `SparkContext`, as this will be done for us when
-    we execute our PySpark application via [spark-submit] on the
+    we execute our PySpark application via `spark-submit` on the
     command line. In this case study, we will create a
     [SparkSession], as shown in the following code, that acts as
     an entry point into the Spark execution environment (even if it is
@@ -409,10 +409,7 @@ test_df = planes_test_df.unionAll(birds_test_df)
     from our input data. However, rather than training a deep CNN from
     scratch---which could take many days, even with distributed
     technologies---we will take advantage of the pretrained Inception-v3
-    deep CNN. To do this, we will use a process called **transfer
-    learning**. In this process, knowledge gained while solving one
-    machine learning problem is applied to a different but related
-    problem. To use transfer learning in our case study, we employ the
+    deep CNN. To use transfer learning in our case study, we employ the
     [DeepImageFeaturizer] module of the third-party
     [sparkdl] Spark package. The [DeepImageFeaturizer] not
     only transforms our images into numeric features, it also performs
@@ -477,13 +474,15 @@ Spark submit
 ============
 
 We are now ready to run our image recognition application! Since it is a
-Spark application, we can execute it via [spark-submit] on the
+Spark application, we can execute it via `spark-submit` on the
 Linux command line. We can execute the
-[spark-submit] program by passing it the following command-line
+`spark-submit` program by passing it the following command-line
 arguments:
 
 
 ```
+> cd ~/Desktop/next-level-python-big-data/machine-learning-apache-spark/Lab06
+
 > spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 02-convolutional-neural-network-transfer-learning.py
 ```
 
@@ -607,11 +606,12 @@ predictions_df.select("image.origin", "predicted_label")
 
 
 To run this PySpark image-prediction application, we again invoke
-[spark-submit] via the command line, as follows:
+`spark-submit` via the command line, as follows:
 
 ```
-> cd {SPARK_HOME}
-> bin/spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 03-convolutional-neural-network-image-predictor.py
+> cd ~/Desktop/next-level-python-big-data/machine-learning-apache-spark/Lab06
+
+> spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 03-convolutional-neural-network-image-predictor.py
 ```
 
 
