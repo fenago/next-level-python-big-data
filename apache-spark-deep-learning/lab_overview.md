@@ -4,30 +4,30 @@
 
 ### Labs
 
-Labs for this course are available at endpoints shared below. Update `<host-ip>` with the lab environment DNS and open following URL in browser to open jupyter workspace for the lab.
+Labs for this course are available at endpoints shared below. Open following URL in browser to open jupyter workspace for the lab.
 
 1. ##### Creating a Neural Network in Spark
-		* http://<host-ip>/lab/workspaces/lab1_
+		* http://localhost/lab/workspaces/lab1_neural_network
 2. ##### Pain Points of Convolutional Neural Networks
-		* http://<host-ip>/lab/workspaces/lab2_
+		* http://localhost/lab/workspaces/lab2_cnn
 3. ##### Predicting Fire Department Calls with Spark ML
-		* http://<host-ip>/lab/workspaces/lab3_
+		* http://localhost/lab/workspaces/lab3_sparkml
 4. ##### Using LSTMs in Generative Networks
-		* http://<host-ip>/lab/workspaces/lab4_
+		* http://localhost/lab/workspaces/lab4_generative_networks
 5. ##### Natural Language Processing with TF-IDF
-		* http://<host-ip>/lab/workspaces/lab5_
+		* http://localhost/lab/workspaces/lab5_nlp_tf
 6. ##### Real Estate Value Prediction Using XGBoost
-		* http://<host-ip>/lab/workspaces/lab6_
+		* http://localhost/lab/workspaces/lab6_xgboost
 7. ##### Predicting Apple Stock Market Cost with LSTM
-		* http://<host-ip>/lab/workspaces/lab7_
+		* http://localhost/lab/workspaces/lab7_prediction
 8. ##### Face Recognition Using Deep Convolutional Networks
-		* http://<host-ip>/lab/workspaces/lab8_
+		* http://localhost/lab/workspaces/lab8_deep_networks
 9. ##### Creating and Visualizing Word Vectors Using Word2Vec
-		* http://<host-ip>/lab/workspaces/lab9_
+		* http://localhost/lab/workspaces/lab9_word2vec
 10. ##### Creating a Movie Recommendation Engine with Keras
-		* http://<host-ip>/lab/workspaces/lab10_
+		* http://localhost/lab/workspaces/lab10_Keras
 11. ##### Image Classification with TensorFlow on Spark
-		* http://<host-ip>/lab/workspaces/lab11_
+		* http://localhost/lab/workspaces/lab11_tensorflow
 
 ### About
 
