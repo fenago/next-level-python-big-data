@@ -17,7 +17,7 @@ Start the spark shell by typing following command in the terminal: `pyspark`
 The best way for us to understand Spark is to look at an example, as shown in the following screenshot:
 
 ```
-lines = sc.textFile("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/data.txt")
+lines = sc.textFile("/headless/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab01/data.txt")
 lineLengths = lines.map(lambda s: len(s))
 totalLength = lineLengths.reduce(lambda a, b: a + b)
 totalLength
@@ -56,7 +56,7 @@ a quick example of a DataFrame:
 
 ```
 # spark is an existing SparkSession
-df = spark.read.json("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/people.json")
+df = spark.read.json("/headless/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab01/people.json")
 # Displays the content of the DataFrame to stdout
 df.show()
 
@@ -156,7 +156,7 @@ In each Spark installation, there is a [README.md] markdown file,
 so let\'s load it into our memory as follows:
 
 ```
-text_file = spark.read.text("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/README.md")
+text_file = spark.read.text("/headless/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab01/README.md")
 ```
 
 If we use [spark.read.text] and then put in [README.md], we
