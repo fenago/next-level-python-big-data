@@ -588,7 +588,7 @@ which was the initial size. 
     will see the following output:
 
 
-    ![](./images/d5158650-fa17-4eef-9e1d-23ee532311f5.png)
+![](./images/d5158650-fa17-4eef-9e1d-23ee532311f5.png)
 
 16. Splitting the images into test and train sets as well as segregating
     them into variables named `x_train`, `y1_train`,
@@ -596,7 +596,7 @@ which was the initial size. 
     output shown in the following screenshot:
 
 
-    ![](./images/ed174ff9-fbe1-41a6-8eed-4518f11ff7c1.png)
+![](./images/ed174ff9-fbe1-41a6-8eed-4518f11ff7c1.png)
 
 17. Segregating the data is done as follows:
 
@@ -609,7 +609,7 @@ which was the initial size. 
     screenshot:
 
 
-    ![](./images/f458fd22-db56-4008-8cc9-d7126be21498.png)
+![](./images/f458fd22-db56-4008-8cc9-d7126be21498.png)
 
 
 
@@ -634,7 +634,7 @@ Consider the following:
     `255`. This will result in the output shown in the following screenshot:
 
 
-    ![](./images/fe30b951-9878-4b56-83ed-c3f8459c76a0.png)
+![](./images/fe30b951-9878-4b56-83ed-c3f8459c76a0.png)
 
 
 -   Next, the images are converted to input vectors with ten different
@@ -643,7 +643,7 @@ Consider the following:
 
 
 
-    ![](./images/8a41f5e8-ba84-4952-987d-dfadbeb5d8e4.png)
+![](./images/8a41f5e8-ba84-4952-987d-dfadbeb5d8e4.png)
 
 
 
@@ -841,7 +841,7 @@ The functionality is as follows:
     an output like the one in the following screenshot:
 
 
-    ![](./images/b048152b-51b4-4275-8604-0f55f418bc23.png)
+![](./images/b048152b-51b4-4275-8604-0f55f418bc23.png)
 
 11. The model is compiled using categorical
     crossentropy, which is a function to

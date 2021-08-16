@@ -602,7 +602,7 @@ The functionality is as follows:
     following screenshot describes this process:
 
 
-    ![](./images/c1b76ba2-079d-4dc2-a87f-a3af08ba6418.png)
+![](./images/c1b76ba2-079d-4dc2-a87f-a3af08ba6418.png)
 
 
 
@@ -612,19 +612,19 @@ The functionality is as follows:
     following screenshot:
 
 
-    ![](./images/1655417a-5dec-4d80-8cc8-de25adb2f444.png)
+![](./images/1655417a-5dec-4d80-8cc8-de25adb2f444.png)
 
 3.  Running the `build_vocab` command on the model should
     produce an output as seen in the following screenshot:
 
 
-    ![](./images/a259395a-b313-433f-9d24-ca89006a04dc.png)
+![](./images/a259395a-b313-433f-9d24-ca89006a04dc.png)
 
 4.  Training the model is done by defining the parameters as seen in the
     following screenshot:
 
 
-    ![](./images/1326f92c-e13d-470c-886e-454de9cdc5ec.png)
+![](./images/1326f92c-e13d-470c-886e-454de9cdc5ec.png)
 
 
 
@@ -657,7 +657,7 @@ Consider the following:
 -   The downsampling rate of 1e
 
 
-    ![](./images/a9a19a2d-830b-4235-ad91-afdda58f3d3e.png)
+![](./images/a9a19a2d-830b-4235-ad91-afdda58f3d3e.png)
 
 
     3 is found to be a good rate. This is specified to let the
@@ -817,7 +817,7 @@ The functionality is as follows:
     illustrated in the following screenshot:
 
 
-    ![](./images/f3c7b488-a037-45d9-86ca-486f85643a32.png)
+![](./images/f3c7b488-a037-45d9-86ca-486f85643a32.png)
 
 4.  The t-SNE algorithm needs to be trained on all these word vectors.
     The training takes about five minutes on a regular CPU.
@@ -827,7 +827,7 @@ The functionality is as follows:
     shown in the following screenshot:
 
 
-    ![](./images/54711d7f-11ae-4e1f-ac77-19c8435fcc36.png)
+![](./images/54711d7f-11ae-4e1f-ac77-19c8435fcc36.png)
 
 
 
@@ -846,13 +846,13 @@ The functionality is as follows:
     that looks similar to the one in the following screenshot:
 
 
-    ![](./images/6cd8ac65-f7a7-4775-ac3f-275e51c0ab9e.png)
+![](./images/6cd8ac65-f7a7-4775-ac3f-275e51c0ab9e.png)
 
 8.  The above command will produce a plot of all tokens or words
     generated from the entire text as shown in the following screenshot:
 
 
-    ![](./images/1fdd6ed9-060c-4021-885c-c4b51fe73b34.png)
+![](./images/1fdd6ed9-060c-4021-885c-c4b51fe73b34.png)
 
 
 
@@ -862,7 +862,7 @@ The functionality is as follows:
     following screenshot:
 
 
-    ![](./images/79c069a0-d9c4-4112-b1b0-641abe6bebe0.png)
+![](./images/79c069a0-d9c4-4112-b1b0-641abe6bebe0.png)
 
 
 
@@ -871,7 +871,7 @@ The functionality is as follows:
     shown in the following screenshot:
 
 
-    ![](./images/3e07cb80-ca2a-4bd9-b777-23ca092deca3.png)
+![](./images/3e07cb80-ca2a-4bd9-b777-23ca092deca3.png)
 
 
 
@@ -880,7 +880,7 @@ The functionality is as follows:
     following two screenshots:
 
 
-    ![](./images/77a17732-2b12-48ad-b638-0d77edfb9621.png)
+![](./images/77a17732-2b12-48ad-b638-0d77edfb9621.png)
 
 
 
@@ -932,21 +932,21 @@ Consider the following:
     shown in the following screenshot:
 
 
-    ![](./images/23ee51a5-b9de-4af2-be6d-02ed85fbdafb.png)
+![](./images/23ee51a5-b9de-4af2-be6d-02ed85fbdafb.png)
 
 
     This screenshots  all the closest words related to the word
     `Lannister`:
 
 
-    ![](./images/3b2321b3-98c1-4c37-8b5a-4a713670afdc.png)
+![](./images/3b2321b3-98c1-4c37-8b5a-4a713670afdc.png)
 
 
     This screenshot shows a list of all the words related to
     word `Jon`:
 
 
-    ![](./images/3c32c59f-49ee-4089-a71c-e2fa3f7f0157.png)
+![](./images/3c32c59f-49ee-4089-a71c-e2fa3f7f0157.png)
 
 
 
@@ -987,12 +987,12 @@ nearest_similarity_cosmul("Arya", "Nymeria", "dragons")
 -   The preceding process is illustrated in the following screenshot:
 
 
-    ![](./images/a2482cac-fca4-4c1d-827a-f19b24d2cc2a.png)
+![](./images/a2482cac-fca4-4c1d-827a-f19b24d2cc2a.png)
 
 -   The results are as follows:
 
 
-    ![](./images/0cbc97cc-16bd-40ac-b1d5-936859951214.png)
+![](./images/0cbc97cc-16bd-40ac-b1d5-936859951214.png)
 
 -   As seen in this section, word vectors form the basis of all NLP
     tasks. It is important to understand them and the math that goes
