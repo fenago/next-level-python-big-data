@@ -216,5 +216,3 @@ Summary
 In this lab, we covered Spark DSL and learned how to build queries.
 We also learned how to manipulate DataFrames with Spark SQL schemas, and
 then we used Spark DSL to build queries for structured data operations.
-Now that we have a good knowledge of Spark, let\'s look at a few tips,
-tricks, and techniques in Apache Spark in the following labs.

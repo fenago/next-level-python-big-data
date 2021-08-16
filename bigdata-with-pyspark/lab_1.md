@@ -114,27 +114,18 @@ contents of the DataFrame in a similar way to pandas.
 SparkContext
 ============
 
-
-A **SparkContext** lets you use the power of Spark\'s cluster manager as
-with Python objects. So with a **SparkContext**, you can pass jobs and
-resources, schedule tasks, and complete tasks the downstream from the
-**SparkContext** down to the **Spark Cluster Manager**, which will then
-take the results back from the **Spark Cluster Manager**[
-]once it has completed its computation.
-
-Let\'s see what this looks like in practice and see how to set up a
-SparkContext:
+Let\'s see how to set up a SparkContext:
 
 1.  First, we need to import [SparkContext].
 2.  Create a new object in the [sc] variable standing for the
     SparkContext using the [SparkContext] constructor.
 3.  In the [SparkContext] constructor, pass a [local]
-    context. We are looking at [hands on PySpark] in this context,
+    context. We are looking at `BigData PySpark` in this context,
     as follows:
 
 ```
 from pyspark import SparkContext
-sc = SparkContext('local', 'hands on PySpark')
+sc = SparkContext('local', 'BigData PySpark')
 ```
 
 
@@ -170,9 +161,7 @@ behind the scenes, while this is simply a Python operation.
 Spark shell
 ===========
 
-We will go back into our Spark folder, which is
-[spark-2.3.2-bin-hadoop2.7], and start our PySpark binary by
-typing [.\\bin\\pyspark].
+Start our PySpark binary by typing `pyspark` in the terminal:
 
 We can see that we\'ve started a shell session with Spark in the
 following screenshot:
