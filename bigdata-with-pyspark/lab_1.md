@@ -12,16 +12,18 @@ In this lab, we will cover the following topics:
 An overview of PySpark
 ======================
 
-Python is similar to PySpark integration, which we will cover soon. For
-now, we will import some libraries from the PySpark package to help us
-work with Spark. The best way for us to understand Spark is to look at
-an example, as shown in the following screenshot:
+Start the spark shell by typing following command in the terminal: `pyspark`
+
+The best way for us to understand Spark is to look at an example, as shown in the following screenshot:
 
 ```
-lines = sc.textFile("data.txt")
+lines = sc.textFile("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/data.txt")
 lineLengths = lines.map(lambda s: len(s))
 totalLength = lineLengths.reduce(lambda a, b: a + b)
+totalLength
 ```
+
+**Task:** Modify `data.txt` file, run above code again and verify that sum output is correct.
 
 
 In the preceding code, we have created a new variable called
@@ -49,50 +51,12 @@ is handling the MapReduce computation over all of these instances.
 Spark SQL
 =========
 
-Spark SQL is one of the four components on top of the Spark platform, as
-we saw earlier in the lab. It can be used to execute SQL queries or
-read data from any existing Hive insulation, where Hive is a database
-implementation also from Apache. Spark SQL looks very similar to MySQL
-or Postgres. The following code snippet is a good example:
-
-```
-#Register the DataFrame as a SQL temporary view
-df.CreateOrReplaceTempView("people")
-
-sqlDF = spark.sql("SELECT * FROM people")
-sqlDF.show()
-
-#+----+-------+
-#| age| name|
-#+----+-------+
-#+null|Jackson|
-#| 30| Martin|
-#| 19| Melvin|
-#+----|-------|
-```
-
-
-You\'ll need to select all the columns from a certain table, such as
-[people], and using the Spark objects, you\'ll feed in a very
-standard-looking SQL statement, which is going to show an SQL result
-much like what you would expect from a normal SQL implementation.
-
-Let\'s now look at datasets and DataFrames. A dataset is a distributed
-collection of data. It is an interface added in Spark 1.6 that provides
-benefits on top of RDDs. A DataFrame, on the other hand, is very
-familiar to those who have used pandas or R. A DataFrame is simply a
-dataset organized into named columns, which is similar to a relational
-database or a DataFrame in Python. The main difference between a dataset
-and a DataFrame is that DataFrames have column names. As you can
-imagine, this would be very convenient for machine learning work and
-feeding into things such as scikit-learn.
-
 Let\'s look at how DataFrames can be used. The following code snippet is
 a quick example of a DataFrame:
 
 ```
 # spark is an existing SparkSession
-df = spark.read.json("examples/src/main/resources/people.json")
+df = spark.read.json("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/people.json")
 # Displays the content of the DataFrame to stdout
 df.show()
 
@@ -109,6 +73,24 @@ df.show()
 In the same way, as pandas or R would do, [read.json] allows us to
 feed in some data from a JSON file, and [df.show] shows us the
 contents of the DataFrame in a similar way to pandas.
+
+
+Spark SQL can be used to execute SQL queries or
+read data from any existing Hive insulation, where Hive is a database
+implementation also from Apache. Spark SQL looks very similar to MySQL
+or Postgres. The following code snippet is a good example:
+
+```
+#Register the DataFrame as a SQL temporary view
+df.registerTempTable("people")
+
+sqlDF = spark.sql("SELECT * FROM people")
+sqlDF.show()
+
+```
+
+
+**Task:** Update the above query to select row where age is `30`.
 
 
 SparkContext
@@ -153,9 +135,6 @@ numbers and extrapolating them into a yearly number by mapping a
 [365], which is the number of days in a year. Then, we call a
 [collect()] function to make sure that Spark executes on this
 [lambda] call. Lastly, we print out [df\_ visitors\_yearly].
-Now, we have Spark working on this computation on our synthetic data
-behind the scenes, while this is simply a Python operation.
-
 
 
 Spark shell
@@ -177,9 +156,8 @@ In each Spark installation, there is a [README.md] markdown file,
 so let\'s load it into our memory as follows:
 
 ```
-text_file = spark.read.text("README.md")
+text_file = spark.read.text("/headless/next-level-python-big-data/bigdata-with-pyspark/Lab01/README.md")
 ```
-
 
 If we use [spark.read.text] and then put in [README.md], we
 get a few warnings, but we shouldn\'t be too concerned about that at the
