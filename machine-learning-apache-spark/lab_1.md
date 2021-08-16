@@ -1,6 +1,5 @@
-
-Setting Up a Local Development Environment
-==========================================
+Developing Spark Application
+=============================
 
 In this lab, we will write our first spark application.
 

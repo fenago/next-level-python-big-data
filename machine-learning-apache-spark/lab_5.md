@@ -1,1173 +1,746 @@
 
-Deep Learning Using Apache Spark
-================================
+Natural Language Processing Using Apache Spark
+==============================================
 
-In this lab, we will go on a hands-on exploration of the exciting
-and cutting-edge world of deep learning! We will use third-party deep
-learning libraries in conjunction with Apache Spark\'s [MLlib] to
-perform accurate **optical character recognition** (**OCR**) and
-automatically recognize and classify images via the following types of
-artificial neural networks and machine learning algorithms:
+In this lab, we\'ll study and implement common algorithms that are
+used in NLP, which can help us develop machines that are capable of
+automatically analyzing and understanding human text and speech in
+context. Specifically, we will study and implement the following classes
+of computer science algorithms related to NLP:
 
--   Multilayer perceptrons
--   Convolutional neural networks
--   Transfer learning
+-   Feature transformers, including the following:
+    -   Tokenization
+    -   Stemming
+    -   Lemmatization
+    -   Normalization
+-   Feature extractors, including the following :
+    -   Bag of words
+    -   Term frequency--inverse document frequency
 
-Artificial neural networks
-==========================
+Feature transformers
+====================
 
-An **artificial neural network** (**ANN**) is a connected group of artificial neurons that is
-aggregated into three types of linked neural layers---the input layer,
-zero or more hidden layers, and the output layer. A **monolayer** ANN
-consists of just *one* layer of links between the input nodes and output
-nodes, while **multilayer** ANNs are characterized by the segmentation
-of artificial neurons across multiple linked layers.
+The fundamental concept behind natural language processing is treating
+human text and speech as data---just like the structured and
+unstructured numerical and categorical data sources we have encountered
+in this course thus far---while preserving its *context*. However, natural
+language is notoriously difficult to understand, even for humans, let
+alone machines! Not only does natural language consist of hundreds of
+different spoken languages, with different writing systems, but it also
+poses other challenges, such as different tones, inflections, slang,
+abbreviations, metaphors, and sarcasm. Writing systems and communication
+platforms in particular provide us with text that may contain spelling
+mistakes, unconventional grammar, and sentences that are loosely
+structured.
 
-An ANN where signals are propagated in one direction only---that is, the
-signals are received by the input layer and forwarded to the next layer
-for processing---are called **feedforward** networks. ANNs where a
-signal may be propagated back to artificial neurons or neural layers
-that have already processed that signal are called **feedback**
-networks.
-
-**Backwards propagation** is a supervised learning process by which
-multilayer ANNs can learn---that is, derive an optimal set of weight
-coefficients. First, all weights are initially set as random and the
-output from the network is calculated. If the predicted output does not
-match the desired output, the total error at the output nodes is
-propagated back through the entire network in an effort to readjust all
-weights in the network so that the error is reduced in the output layer.
-In other words, backwards propagation seeks to minimize the difference
-between the actual output and the desired output via an iterative weight
-adjustment process.
+Our first challenge, therefore, is to convert natural language into data
+that can be used by a machine while preserving its underlying context.
+Furthermore, when applied to machine learning, we also need to convert
+natural language into feature vectors in order to train machine learning
+models. Well, there are two broad classes of computer science algorithms
+that help us with these challenges---**feature extractors**, which help
+us extract relevant features from the natural language data, and
+**feature transformers**, which help us scale, convert, and/or modify
+these features in preparation for subsequent modelling. In this
+subsection, we will discuss feature transformers and how they can help
+us convert our natural language data into structures that are easier to
+process. First, let\'s introduce some common definitions within NLP.
 
 
 
-Multilayer perceptrons
+Document
+========
+
+In NLP, a document represents a logical container of text. The container
+itself can be anything that makes sense within the context of your use
+case. For example, one document could refer to a single article, record,
+social media posting, or tweet.
+
+
+
+Corpus
+======
+
+Once you have defined what your document represents, a corpus is defined
+as a logical collection of documents. Using the previous examples, a
+corpus could represent a collection of articles (for example, a magazine
+or blog) or a collection of tweets (for example, tweets with a
+particular hashtag).
+
+
+
+Preprocessing pipeline
 ======================
 
-A **single-layer perceptron** (**SLP**) is a basic type of ANN that
-consists of just two layers of nodes---an input layer containing input
-nodes and an output layer containing output nodes. A **multilayer
-perceptron** (**MLP**), however, introduces one or more hidden layers
-between the input and output layers, giving them the ability to learn
-nonlinear functions, as illustrated in *Figure 7.1*:
-
-
-![](./images/2ca10ecb-d7ec-4d8c-9814-6a71948f7819.png)
-
-
-MLP classifier
-==============
-
-Apache Spark\'s machine learning library, [MLlib], provides an
-out-of-the-box **multilayer perceptron classifier** (**MLPC**) that can
-be applied to classification problems where we are required to predict
-from *k* possible classes.
+One of the basic tasks involved in NLP is the preprocessing of your
+documents in an attempt to standardize the text from different sources
+as much as possible. Not only does preprocessing help us to standardize
+text, it often reduces the size of the raw text, thereby reducing the
+computational complexity of subsequent processes and models. The
+following subsections describe common preprocessing techniques that may
+constitute a typical ordered preprocessing pipeline.
 
 
 
-Input layer
-===========
-
-In [MLlib]\'s MLPC, the nodes in the input layer represent the
-input data. Let\'s denote this input data as a vector, *X*, with *m*
-features, as follows:
-
-
-![](./images/5e5fdf3c-d101-4692-8748-4c03a602c366.png)
-
-
-
-
-Hidden layers
-=============
-
-The input data is then passed to the hidden layers. For the sake of
-simplicity, let\'s say that we have only one hidden layer, *h^1^*, and
-that within this one hidden layer, we have *n* neurons, as follows:
-
-
-![](./images/f3905ed0-3ff0-4448-886c-950002a5b445.png)
-
-
-The net input, *z*, into the activation function for each of these
-hidden neurons is then the input data set vector, *X*, multiplied by a
-weight set vector, *W*^n^ (corresponding to the weight sets assigned to
-the *n* neurons in the hidden layer), where each weight set vector,
-*W*^n^, contains *m* weights (corresponding to the *m* features in our
-input data set vector *X*), as follows:
-
-
-![](./images/b9f36ad6-5367-4754-aa2d-e09a06d96ae3.png)
-
-
-In linear algebra, the product of multiplying one vector by another is
-called the **dot product**, and it outputs a scalar (that is, a number)
-represented by *z*, as follows:
-
-
-![](./images/a12eea96-9a2e-49c2-a62b-31d49b582111.png)
-
-
-The **bias** is a *stand-alone* constant analogous to the intercept term in a
-regression model, and may be added to non-output layers in feedforward
-neural networks. It is called standalone because bias nodes are not
-connected to preceding layers. By introducing a constant, we allow for
-the output of an activation function to be shifted left or right by that
-constant, thereby increasing the flexibility of an ANN to learn patterns
-more effectively by providing the ability to shift decision boundaries
-based on the data.
-
-Note that in a single hidden layer containing *n* hidden neurons, *n*
-dot product calculations will be computed:
-
-
-![](./images/5ea4e211-6519-4181-951a-55aab034be62.png)
-
-In [MLlib]\'s MLPC, the hidden neurons use the **sigmoid**
-activation function, as shown in the following formula:
-
-
-![](./images/b83c9aed-746c-4a14-8e42-c1e1c0b0d976.png)
-
-
-Tthe sigmoid (or
-logistic) function is bounded between 0 and 1, and is smoothly defined
-for all real input values. By using the sigmoid activation function, the
-nodes in the hidden layers actually correspond to a logistic regression
-model. If we study the sigmoid curve, as shown in *Figure 7.3*, we can
-state that if the net input, *z*, is a large positive number, then the
-output of the sigmoid function, and hence the activation function for
-our hidden neurons, will be close to 1. Conversely, if the net input, z,
-is a negative number with a large absolute value, then the output of the
-sigmoid function will be close to 0:
-
-
-![](./images/d1c9a1b6-f7d5-4fa2-b3f3-e56f9ec4e9d8.png)
-
-In all cases, each hidden neuron will take the net input, *z*, which is
-the dot product of the input data, *X*, and the weight set, *W^n^*, plus
-a bias, and apply that to the sigmoid function, finally outputting a
-number between 0 and 1. After all hidden neurons have computed the
-result of their activation function, we will then have *n* hidden
-outputs from our hidden layer *h^1^*, as follows:
-
-
-![](./images/75bb784d-640c-4f8c-84b8-a7d203e8ff67.png)
-
-
-
-
-Output layer
+Tokenization
 ============
 
-The hidden layer outputs are then used as inputs to calculate the final
-outputs in the output layer. In our case, we only have a single hidden
-layer, *h^1^*, with outputs
-![](./images/bcbb9457-7f00-4b1b-baa1-f65957755e17.png).
-These then become *n* inputs into the output layer.
-
-The net input into the activation function for the output layer neurons
-is then these *n* inputs computed by the hidden layer and multiplied by
-a weight set vector, *W^h^*, where each weight set vector, *W^h^*,
-contains *n* weights (corresponding to the *n* hidden layer inputs). For
-the sake of simplicity, let\'s assume that we only have one output
-neuron in our output layer. The weight set vector for this neuron is
-therefore the following:
-
-
-![](./images/ea76a3ab-cd53-432f-8ff0-7529a5ffecf0.png)
-
-
-Again, since we are multiplying vectors together, we use the dot product
-calculation, which will compute the following scalar representing our
-net input, *z*:
-
-
-![](./images/30abd217-cdd9-48e5-9c85-9918a5d4770c.png)
-
-
-In [MLlib]\'s MLPC, the output neurons use the softmax function as
-the activation function, which extends logistic regression by predicting
-*k* classes instead of a standard binary classification. This function
-takes the following form:
-
-
-![](./images/87f99f9f-51bc-4666-82a6-b603514c8cb6.png)
-
-
-Therefore, the number of nodes in the output layer corresponds to the
-number of possible classes that you wish to predict from. For example,
-if your use case has five possible classes, then you would train an MLP
-with five nodes in the output layer. The final output from the
-activation function is therefore the prediction that the output neuron
-in question makes, as illustrated in *Figure 7.4*:
-
-
-![](./images/d50b70a5-c32c-4e22-b6e1-884a0b11d36b.png)
-
-
-Note that *Figure 7.4* illustrates the initial **forward propagation**
-of the MLP, whereby input data is propagated to the hidden layer and the
-output from the hidden layer is propagated to the output layer where the
-final output is computed. [MLlib]\'s MLPC thereafter uses
-**backwards propagation** to train the neural network and learn the
-model where the difference between the actual output and the desired
-output is minimized via an iterative weight adjustment process. MLPC
-achieves this by seeking to minimize a **loss function**. A loss
-function calculates a measure of the price paid for inaccurate
-predictions regarding classification problems. The specific loss
-function that MLPC employs is the **logistic loss function**, where
-predictions made with a high value of confidence are penalized less. To
-learn more about loss functions, please visit
-<https://en.wikipedia.org/wiki/Loss_functions_for_classification>.
+Tokenization refers to the technique of splitting up your text into
+individual *tokens* or terms. Formally, a token is defined as a sequence
+of characters that represents a subset of the original text. Informally,
+tokens are typically just the different words that make up the original
+text, and that have been segmented using the whitespace and other
+punctuation characters. For example, the sentence \"Machine Learning
+with Apache Spark\" may result in a collection of tokens persisted in an
+array or list expressed as [\[\"Machine\", \"Learning\", \"with\",
+\"Apache\", \"Spark\"\]].
 
 
 
-Case study 1 -- OCR
-===================
+Stop words
+==========
 
-A great real-world use case to demonstrate the power of MLPs is that of
-OCR. In OCR, the challenge is to recognize human writing, classifying
-each handwritten symbol as a letter. In the case of the English
-alphabet, there are 26 letters. Therefore, when applied to the English
-language, OCR is actually a classification problem that has *k* = 26
-possible classes!
+Stop words are common words in a given language that are used to
+structure a sentence grammatically, but that are not necessarily helpful
+in determining its underlying meaning or sentiment. For example, in the
+English language, common stop words include *and*, *I*, *there*, *this*,
+and *with*. A common preprocessing technique is to therefore remove
+these words from the collection of tokens by filtering based on a
+language-specific lookup of stop words. Using our previous example, our
+filtered list of tokens would be [\[\"Machine\", \"Learning\",
+\"Apache\", \"Spark\]].
+
+
+
+Stemming
+========
+
+Stemming refers to the technique of reducing words to a common base or
+*stem*. For example, the words \"connection\", \"connections\",
+\"connective\", \"connected\", and \"connecting\" can all be reduced to
+their common stem of \"connect\". Stemming is not a perfect process, and
+stemming algorithms are liable to make mistakes. However, for the
+purposes of reducing the size of a dataset in order to train a machine
+learning model, it is a valuable technique. Using our previous example,
+our filtered list of stems would be [\[\"Machin\", \"Learn\", \"Apach\",
+\"Spark\"\]].
+
+
+
+Lemmatization
+=============
+
+While stemming quickly reduces words to a base form, it does not take
+into account the context, and can therefore not differentiate between
+words that have different meanings depending on their position within a
+sentence or context. Lemmatization does not crudely reduce words purely
+based on a common stem, but instead aims to remove inflectional endings
+only in order to return a dictionary form of a word called its *lemma*.
+For example, the words *am*, *is*, *being*, and *was* can be reduced to
+the lemma *be*, while a stemmer would not be able to infer this
+contextual meaning.
+
+While lemmatization can be used to preserve context and meaning to a
+better extent, it comes at the cost of additional computational
+complexity and processing time. Using our previous example, our filtered
+list of lemmas may therefore look like [\[\"Machine\", \"Learning\",
+\"Apache\", \"Spark\"\]].
+
+
+
+Normalization
+=============
+
+Finally, normalization refers to a wide variety of common techniques
+that are used to standardize text. Typical normalization techniques
+include converting all text to lowercase, removing selected characters,
+punctuation and other sequences of characters (typically using regular
+expressions), and expanding abbreviations by applying language-specific
+dictionaries of common abbreviations and slang terms.
+
+*Figure 6.1* illustrates a typical ordered preprocessing pipeline that
+is used to standardize raw written text:
+
+
+![](./images/2166c5b8-2ae4-494c-aeff-0addd02bdefa.png)
+
+
+Feature extractors
+==================
+
+We have seen how feature transformers allow us to convert, modify, and
+standardize our documents using a preprocessing pipeline, resulting in
+the conversion of raw text into a collection of tokens. *Feature
+extractors* take these tokens and generate feature vectors from them
+that may then be used to train machine learning models. Two common
+examples of typical feature extractors that are used in NLP are the
+**bag of words** and **term frequency--inverse document frequency**
+(**TF--IDF**) algorithms.
+
+
+
+Bag of words
+============
+
+The *bag of words* approach simply counts the number of occurrences of
+each unique word in the raw or tokenized text. For example, given the
+text \"Machine Learning with Apache Spark, Apache Spark\'s MLlib and
+Apache Kafka\", the bag of words approach would provide us with the
+following numerical feature vector:
+
+  --------- ---------- ------ -------- ------- ------- -------
+  Machine   Learning   with   Apache   Spark   MLlib   Kafka
+  1         1          1      3        2       1       1
+  --------- ---------- ------ -------- ------- ------- -------
+
+Note that each unique word is a feature or dimension, and that the bag
+of words approach is a simple technique that is often employed as a
+baseline model with which to compare the performance of more advanced
+feature extractors.
+
+
+
+Term frequency--inverse document frequency
+==========================================
+
+**TF--IDF** aims to improve upon the bag of words approach by providing
+an indication of how *important* each word is, taking into account how
+often that word appears across the entire corpus.
+
+Let us use *TF(t, d)* to denote the **term frequency**, which is the
+number of times that a term, *t*, appears in a document, *d*. Let\'s
+also use *DF(t, D)* to denote the **document frequency**, which is the
+number of documents in our corpus, *D*, that contain the term *t*. We
+can then define the **inverse document frequency** *IDF(t, D)* as
+follows:
+
+
+![](./images/a66d7f42-032c-4cd8-8362-92c147274cbc.png)
+
+
+The IDF provides us with a measure of how important a term is, taking
+into account how often that term appears across the entire corpus, where
+*\|D\|* is the total number of documents in our corpus, *D*. Terms that
+are less common across the corpus have a higher IDF metric. Note,
+however, that because of the use of the logarithm, if a term appears in
+all documents, its IDF becomes 0---that is, *log(1)*. IDF, therefore,
+provides a metric whereby more value is placed on rarer terms that are
+important in describing documents.
+
+Finally, to calculate the TF--IDF measure, we simply multiply the term
+frequency by the inverse document frequency as follows:
+
+
+![](./images/fc877716-e3b7-4aba-a75e-9a744a014d5c.png)
+
+
+This implies that the TF--IDF measure increases proportionally with the
+number of times that a word appears in a document, offset by the
+frequency of the word across the entire corpus. This is important
+because the term frequency alone may highlight words such as \"a\",
+\"I\", and \"the\" that appear very often in a given document but that
+do not help us determine the underlying meaning or sentiment of the
+text. By employing TF--IDF, we can reduce the impact of these types of
+words on our analysis.
+
+
+Case study -- sentiment analysis
+================================
+
+Let\'s now apply these feature transformers and feature extractors to a
+very modern real-world use case---sentiment analysis. In sentiment
+analysis, the goal is to classify the underlying human sentiment---for
+example, whether the writer is positive, neutral, or negative towards
+the subject of a text. To many organizations, sentiment analysis is an
+important technique that is used to better understand their customers
+and target markets. For example, sentiment analysis can be used by
+retailers to gauge the public\'s reaction to a particular product, or by
+politicians to assess public mood towards a policy or news item. In our
+case study, we will examine tweets about airlines in order to predict
+whether customers are saying positive or negative things about them. Our
+analysis could then be used by airlines in order to improve their
+customer service by focusing on those tweets that have been classified
+as negative in sentiment.
 
 **Note:**
 
-The dataset that we will be using has been derived from the **University
-of California\'s** (**UCI**) Machine Learning Repository, which is found
-at <https://archive.ics.uci.edu/ml/index.php>. The specific letter
-recognition dataset that we will use, available from both the GitHub
-repository accompanying this course and from
-<https://archive.ics.uci.edu/ml/datasets/letter+recognition>, was
-created by David J. Slate at Odesta Corporation; 1890 Maple Ave; Suite
-115; Evanston, IL 60201, and was used in the paper *Letter Recognition
-Using Holland-style Adaptive Classifiers* by P. W. Frey and D. J. Slate
-(from Machine Learning Vol 6 \#2 March 91).
+The corpus of tweets that we will use for our case study has been
+downloaded from **Figure Eight**, a company that provides businesses
+with high-quality training datasets for real-world machine learning.
+Figure Eight also provides a Data for Everyone platform containing open
+datasets that are available for download by the public, and which may be
+found at <https://www.figure-eight.com/data-for-everyone/>.
 
 
-*Figure 7.5* provides an example illustration of this dataset rendered
-visually. We will train an MLP classifier to recognize and classify each
-of the symbols, such as those shown in *Figure 7.5*, as a letter of the
-English alphabet:
+If you open [twitter-data/airline-tweets-labelled-corpus.csv] in
+any text editor from either the GitHub repository accompanying this course
+or from Figure Eight\'s Data for Everyone platform, you will find a
+collection of 14,872 tweets about major airlines that were scraped from
+Twitter in February 2015. These tweets have also been pre-labelled for
+us, with a sentiment classification of positive, negative, or neutral.
+The pertinent columns in this dataset are described in the following
+table:
 
+  ---------------------------- ---------------- -----------------------------------------------------------
+  **Column Name**              **Data Type**    **Description**
+  [unit\_id]             [Long]     Unique identifier (primary key)
+  [airline\_sentiment]   [String]   Sentiment classification---positive, neutral, or negative
+  [airline]              [String]   Name of the airline
+  [text]                 [String]   Textual content of the tweet
+  ---------------------------- ---------------- -----------------------------------------------------------
 
-![](./images/3c356df0-4c5d-4c5e-a656-bd2a295c0b1e.png)
-
-
-
-Input data
-==========
-
-Before we delve further into the schema of our specific dataset, let\'s
-first understand how a MLP will actually help us with this problem.
-Firstly, when studying image
-segmentation, images can be broken down into a matrix of either
-pixel-intensity values (for grayscale images) or pixel RGB values (for
-images with color). A single vector containing (*m* x *n*) numerical
-elements can then be generated, corresponding to the pixel height (*m*)
-and width (*n*) of the image.
+Our goal will be to use this corpus of tweets in order to train a
+machine learning model to predict whether future tweets about a given
+airline are positive or negative in sentiment towards that airline.
 
 
 
-Training architecture
-=====================
+NLP pipeline
+============
 
-Now, imagine that we want to train an MLP using our entire letter
-recognition dataset, as illustrated in *Figure 7.6*:
-
-
-![](./images/18a703a1-9640-48e9-934e-228916131d45.png)
+Before we look at the Python code for our case study, let\'s visualize
+the end-to-end NLP pipeline that we will construct. Our NLP pipeline for
+this case study is illustrated in *Figure 6.2*:
 
 
-In our MLP, we have *p* (= *m* x *n*) neurons in our input layer that
-represent the *p* pixel-intensity values from our image. A single hidden
-layer has *n* neurons, and the output layer has 26 neurons that
-represent the 26 possible classes or letters in the English alphabet.
-When training this neural network, since we do not know initially what
-weights should be assigned to each layer, we initialize the weights
-randomly and perform a first iteration of forward propagation. We then
-iteratively employ backwards propagation to train the neural network,
-resulting in a set of weights that have been optimized so that the
-predictions/classifications made by the output layer are as accurate as
-possible.
-
-Detecting patterns in the hidden layer
-======================================
-
-The job of the neurons in the hidden layer is to learn to detect
-patterns within the input data. In our case, the neurons in the hidden
-layer(s) will detect the presence of certain substructures that
-constitute a wider symbol. This is illustrated in *Figure 7.7*, where we
-assume that the first three neurons in the hidden layer learn to
-recognize forward slash, back slash and horizontal line type patterns
-respectively:
-
-![](./images/94bcd340-a59d-41b5-a205-4ef7066b99eb.png)
-
-
-Classifying in the output layer
-===============================
-
-In our neural network, the first neuron in the output layer is trained
-to decide whether a given symbol is the uppercase English letter *A*.
-Assuming that the first three neurons in the hidden layer fire, we would
-expect the first neuron in the output layer to fire and the remaining 25
-neurons not to fire. Our MLP would then classify this symbol as the
-letter *A*!
-
-
-MLPs in Apache Spark
-====================
-
-Let\'s return to our dataset and train an MLP in Apache Spark to
-recognize and classify letters from the English alphabet. If you open
-[ocr-data/letter-recognition.data] in any text editor, from either
-the GitHub repository accompanying this course or from UCI\'s machine
-learning repository, you will find 20,000 rows of data, described by the
-following schema:
-
-  ----------------- ----------------- ------------------------------------------------
-  **Column name**   **Data type**     **Description**
-  [lettr]     [String]    English letter (one of 26 values, from A to Z)
-  [x-box]     [Integer]   Horizontal position of box
-  [y-box]     [Integer]   Vertical position of box
-  [width]     [Integer]   Width of box
-  [high]      [Integer]   Height of box
-  [onpix]     [Integer]   Total number of on pixels
-  [x-bar]     [Integer]   Mean *x* of on pixels in the box
-  [y-bar]     [Integer]   Mean *y* of on pixels in the box
-  [x2bar]     [Integer]   Mean *x* variance
-  [y2bar]     [Integer]   Mean *y* variance
-  [xybar]     [Integer]   Mean *x y* correlation
-  [x2ybr]     [Integer]   Mean of *x* \* *x* \* *y*
-  [xy2br]     [Integer]   Mean of *x* \* *y* \* *y*
-  [x-ege]     [Integer]   Mean edge count left to right
-  [xegvy]     [Integer]   Correlation of [x-ege] with *y*
-  [y-ege]     [Integer]   Mean edge count, bottom to top
-  [yegvx]     [Integer]   Correlation of [y-ege] with *x*
-  ----------------- ----------------- ------------------------------------------------
-
-This dataset describes 16 numerical attributes representing statistical
-features of the pixel distribution based on scanned character images,
-such as those illustrated in *Figure 7.5*. These attributes have been
-standardized and scaled linearly to a range of integer values from 0 to 15. 
-For each row, a label column called [lettr] denotes the letter
-of the English alphabet that it represents, where no feature vector maps
-to more than one class---that is, each feature vector maps to only one
-letter in the English alphabet.
+![](./images/e322457d-6d42-4f82-999a-a2a446d5862e.png)
 
 
 
-Let\'s now use this dataset to train an MLP classifier to recognize
-symbols and classify them as letters from the English alphabet:
+NLP in Apache Spark
+===================
+
+Tokenization and stop-word removal feature
+transformers (among a wide variety of others), and the TF--IDF feature
+extractor is available natively in [MLlib]. Although stemming,
+lemmatization, and standardization can be achieved indirectly through
+transformations on Spark dataframes in Spark 2.3.2 (via **user-defined
+functions** (**UDFs**) and map functions that are applied to RDDs), we
+will be using a third-party Spark library called [spark-nlp] to
+perform these feature transformations. This third-party library has been
+designed to extend the features already available in [MLlib] by
+providing an easy-to-use API for distributed NLP annotations on Spark
+dataframes at scale.
+
+
+
+We then need to tell Spark where it can find the **spark-nlp**
+library. We can do this either by setting the
+`spark.jars.packages` configuration within our code when instantiating a
+Spark context, as follows:
+
+```
+conf = SparkConf().set("spark.jars.packages", "com.johnsnowlabs.nlp:spark-nlp_2.12:3.2.1")
+.setAppName("Natural Language Processing - Sentiment Analysis")
+sc = SparkContext(conf=conf)
+```
+
+
+We are now ready to develop our NLP pipeline in Apache Spark in order to
+perform sentiment analysis on our corpus of airline tweets! Let\'s go
+through the following steps:
 
 **Note:**
 
 The following subsections describe each of the pertinent cells in the
 corresponding Jupyter notebook for this use case, called
-[chp07-01-multilayer-perceptron-classifier.ipynb]. This notebook
-can be found in the GitHub repository accompanying this course.
+[01-natural-language-processing.ipynb]. It can be found in
+the GitHub repository accompanying this course.
 
 
-1.  First, we import the prerequisite PySpark libraries as normal,
-    including [MLlib]\'s [MultilayerPerceptronClassifier]
-    classifier and [MulticlassClassificationEvaluator] evaluator
-    respectively, as shown in the following code:
+1.  As well as importing the standard PySpark dependencies, we also need
+    to import the relevant [spark-nlp] dependencies, including its
+    [Tokenizer], [Stemmer], and [Normalizer] classes,
+    as follows:
 
 ```
 import findspark
 findspark.init()
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SQLContext
-from pyspark.ml.feature import VectorAssembler
-from pyspark.ml.classification import MultilayerPerceptronClassifier
-from pyspark.ml.evaluation import MulticlassClassificationEvaluator
-```
-
-
-2.  After instantiating a Spark context, we are now ready to ingest our
-    dataset into a Spark dataframe. Note that in our case, we have
-    preprocessed the dataset into CSV format, where we have converted
-    the [lettr] column from a [string] datatype to a
-    [numeric] datatype representing one of the 26 characters in
-    the English alphabet. This preprocessed CSV file is available in the
-    GitHub repository accompanying this course. Once we have ingested this
-    CSV file into a Spark dataframe, we then generate feature vectors
-    using [VectorAssembler], comprising the 16 feature columns, as
-    usual. The resulting Spark dataframe, called [vectorised\_df],
-    therefore contains two columns---the numeric [label] column,
-    representing one of the 26 characters in the English alphabet, and
-    the [features] column, containing our feature vectors:
-
-```
-letter_recognition_df = sqlContext.read
-.format('com.databricks.spark.csv')
-.options(header = 'true', inferschema = 'true')
-.load('letter-recognition.csv')
-feature_columns = ['x-box','y-box','width','high','onpix','x-bar',
-'y-bar','x2bar','y2bar','xybar','x2ybr','xy2br','x-ege','xegvy',
-'y-ege','yegvx']
-vector_assembler = VectorAssembler(inputCols = feature_columns,
-outputCol = 'features')
-vectorised_df = vector_assembler.transform(letter_recognition_df)
-.withColumnRenamed('lettr', 'label').select('label', 'features')
-```
-
-
-3.  Next, we split our dataset into training and test datasets with a
-    ratio of 75% to 25% respectively, using the following code:
-
-```
-train_df, test_df = vectorised_df
-.randomSplit([0.75, 0.25], seed=12345)
-```
-
-
-4.  We are now ready to train our MLP classifier. First, we must define
-    the size of the respective layers of our neural network. We do this
-    by defining a Python list with the following elements:\
-    \
-    -   The first element defines the size of the input layer. In our
-        case, we have 16 features in our dataset, and so we set this
-        element to [16].
-    -   The next elements define the sizes of the intermediate hidden
-        layers. We shall define two hidden layers of sizes [8] and
-        [4] respectively.
-    -   The final element defines the size of the output layer. In our
-        case, we have 26 possible classes representing the 26 letters of
-        the English alphabet, and so we set this element to [26]:
-
-```
-layers = [16, 8, 4, 26]
-```
-
-
-5.  Now that we have defined the architecture of our neural network, we
-    can train an MLP using [MLlib]\'s
-    [MultilayerPerceptronClassifier] classifier and fit it to the
-    training dataset, as shown in the following code. Remember that
-    [MLlib]\'s [MultilayerPerceptronClassifier] classifier
-    uses the sigmoid activation function for hidden neurons and the
-    softmax activation function for output neurons:
-
-```
-multilayer_perceptron_classifier = MultilayerPerceptronClassifier(
-maxIter = 100, layers = layers, blockSize = 128, seed = 1234)
-multilayer_perceptron_classifier_model =
-multilayer_perceptron_classifier.fit(train_df)
-```
-
-
-6.  We can now apply our trained MLP classifier to the test dataset in
-    order to predict which of the 26 letters of the English alphabet the
-    16 numerical pixel-related features represent, as follows:
-
-```
-test_predictions_df = multilayer_perceptron_classifier_model
-.transform(test_df)
-print("TEST DATASET PREDICTIONS AGAINST ACTUAL LABEL: ")
-test_predictions_df.select("label", "features", "probability",
-"prediction").show()
-
-TEST DATASET PREDICTIONS AGAINST ACTUAL LABEL:
-+-----+--------------------+--------------------+----------+
-|label| features| probability|prediction|
-+-----+--------------------+--------------------+----------+
-| 0|[1.0,0.0,2.0,0.0,...|[0.62605849526384...| 0.0|
-| 0|[1.0,0.0,2.0,0.0,...|[0.62875656935176...| 0.0|
-| 0|[1.0,0.0,2.0,0.0,...|[0.62875656935176...| 0.0|
-+-----+--------------------+--------------------+----------+
-```
-
-
-7.  Next, we compute the accuracy of our trained MLP classifier on the
-    test dataset using the following code. In our case, it performs very
-    poorly, with an accuracy rate of only 34%. We can conclude from this
-    that an MLP with two hidden layers of sizes 8 and 4 respectively
-    performs very poorly in recognizing and classifying letters from
-    scanned images in the case of our dataset:
-
-```
-prediction_and_labels = test_predictions_df
-.select("prediction", "label")
-accuracy_evaluator = MulticlassClassificationEvaluator(
-metricName = "accuracy")
-precision_evaluator = MulticlassClassificationEvaluator(
-metricName = "weightedPrecision")
-recall_evaluator = MulticlassClassificationEvaluator(
-metricName = "weightedRecall")
-print("Accuracy on Test Dataset = %g" % accuracy_evaluator
-.evaluate(prediction_and_labels))
-print("Precision on Test Dataset = %g" % precision_evaluator
-.evaluate(prediction_and_labels))
-print("Recall on Test Dataset = %g" % recall_evaluator
-.evaluate(prediction_and_labels))
-
-Accuracy on Test Dataset = 0.339641
-Precision on Test Dataset = 0.313333
-Recall on Test Dataset = 0.339641
-```
-
-
-8.  How can we increase the accuracy of our neural classifier? To answer
-    this question, we must revisit our definition of what the hidden
-    layers do. Remember that the job of the neurons in the hidden layers
-    is to learn to detect patterns within the input data. Therefore,
-    defining more hidden neurons in our neural architecture should
-    increase the ability of our neural network to detect more patterns
-    at greater resolutions. To test this hypothesis, we shall increase
-    the number of neurons in our two hidden layers to 16 and 12
-    respectively, as shown in the following code. Then, we retrain our
-    MLP classifier and reapply it to the test dataset. This results in a
-    far better performing model, with an accuracy rate of 72%:
-
-```
-new_layers = [16, 16, 12, 26]
-new_multilayer_perceptron_classifier =
-MultilayerPerceptronClassifier(maxIter = 400,
-layers = new_layers, blockSize = 128, seed = 1234)
-new_multilayer_perceptron_classifier_model =
-new_multilayer_perceptron_classifier.fit(train_df)
-new_test_predictions_df =
-new_multilayer_perceptron_classifier_model.transform(test_df)
-print("New Accuracy on Test Dataset = %g" % accuracy_evaluator
-.evaluate(new_test_predictions_df
-.select("prediction", "label")))
-```
-
-
-
-
-Convolutional neural networks
-=============================
-
-We have seen how MLPs, which receive a single input vector that is then
-transformed through one or more intermediate hidden layers, can be used
-to recognize and classify small images such as letters and digits in
-OCR. However, one limitation of MLPs is their ability to scale with
-larger images, taking into account not just individual pixel intensity
-or RGB values, but the height, width, and depth of the image itself.
-
-**Convolutional neural networks** (**CNNs**) assume that the input data
-is of a grid-like topology, and so they are predominantly used to
-recognize and classify objects in images since an image can be
-represented as a grid of pixels.
-
-
-
-End-to-end neural architecture
-==============================
-
-The end-to-end architecture of a convolutional neural network is
-illustrated in *Figure* *7.8*:
-
-
-![](./images/87bcf4e7-4543-4898-a2cf-0aec91618213.png)
-
-In the following subsections, we will describe each of the layers and
-transformations that constitute a CNN.
-
-
-
-Input layer
-===========
-
-Given that CNNs are predominantly used to classify images, the input
-data into CNNs consists of image matrices of the dimensions *h* (height
-in pixels), *w* (width in pixels) and *d* (depth). In the case of RGB
-images, the depth would be three corresponding, to the three color
-channels, **red**, **green**, and **blue** (**RGB**). This is
-illustrated in *Figure 7.9*:
-
-
-![](./images/c5b71f9a-c7c7-443c-b12f-67c8e6a5a0a7.png)
-
-
-Convolution layers
-==================
-
-The next transformations that occur in the CNN are processed in
-*convolution* layers. The purpose of the convolution layers is to detect
-features in the image, which is achieved through the use of **filters**
-(also called kernels). Imagine taking a magnifying glass and looking at
-an image, starting at the top-left of the image. As we move the
-magnifying glass from left to right and top to bottom, we detect the
-different features in each of the locations that our magnifying glass
-moves over. At a high level, this is the job of the convolution layers,
-where the magnifying glass represents the filter or kernel and the size
-of each step that the filter takes, normally pixel by pixel, is referred
-to as the **stride** size. The output of a convolution layer is called a
-**feature map**.
-
-Let\'s look at an example to understand the processes undertaken within
-a convolution layer better. Imagine that we have an image that is 3
-pixels (height) by 3 pixels (width). For the sake of simplicity, we will
-overlook the third dimension representing the image depth in our
-example, but note that real-world convolutions are computed in three
-dimensions for RGB images. Next, imagine that our filter is a matrix of
-2 pixels (height) by 2 pixels (width) and that our stride size is 1
-pixel.
-
-These respective matrices are illustrated in *Figure 7.10*:
-
-
-![](./images/a8e86093-7fa5-40c9-b751-c1f09993f6b0.png)
-
-First, we place our filter matrix at the top-left corner of our image
-matrix and perform a **matrix multiplication** of the two at that
-location. We then move the filter matrix to the right by our stride
-size---1 pixel---and perform a matrix multiplication at that location.
-We continue this process until the filter matrix has traversed the
-entire image matrix. The resulting feature map matrix is illustrated in
-*Figure 7.11*:
-
-
-![](./images/d4c664c9-11eb-4df2-81e2-aae3ff9594f1.png)
-
-Note that the feature map is smaller in its dimensions than the input
-matrix of the convolution layer. To ensure that the dimensions of the
-output match the dimensions of the input, a layer of zero-value pixels
-is added in a process called **padding**. Also note that the filter must
-have the same number of channels as the input image---so in the case of
-RGB images, the filter must also have three channels.
-
-So, how do convolutions help a neural network to learn? To answer this
-question, we must revisit the concept of filters. Filters themselves are
-matrices of *weights* that are trained to detect specific patterns
-within an image, and different filters can be used to detect different
-patterns, such as edges and other features. For example, if we use a
-filter that has been pretrained to detect simple edges, as we pass this
-filter over an image, the convolution computation will output a
-high-valued real number (as a result of matrix multiplication and
-summation) if an edge is present and a low-valued real number if an edge
-is not present.
-
-As the filter finishes traversing the entire image, the output is a
-feature map matrix that represents the convolutions of this filter over
-all parts of the image. By using different filters during different
-convolutions per layer, we get different feature maps, which form the
-output of the convolution layer.
-
-
-
-Rectified linear units
-======================
-
-As with other neural networks, an activation function defines the output
-of a node and is used so that our neural network can learn nonlinear
-functions. Note that our input data (the RGB pixels making up the
-images) is itself nonlinear, so we need a nonlinear activation function.
-**Rectified linear units** (**ReLUs**) are commonly used in CNNs, and
-are defined as follows:
-
-
-![](./images/81dc3852-c5cb-41a3-88cb-a7d51b7bb209.png)
-
-
-In other words, the ReLU function returns 0 for every negative value in
-its input data, and returns the value itself for every positive value in
-its input data. This is shown in *Figure 7.12*:
-
-
-![](./images/c50602e9-747c-4a87-968f-2c7aee8fe3eb.png)
-
-The ReLU function can be plotted as shown in *Figure 7.13*:
-
-
-![](./images/48fcb0e4-f861-4487-bfbe-44e896a65b00.png)
-
-Pooling layers
-==============
-
-The next transformations that occur in the CNN are processed in
-*pooling* layers. The goal of the pooling layers is to reduce the
-dimensionality of the feature maps output by the convolution layers (but
-not their depth) while preserving the spatial variance of the original
-input data. In other words, the size of the data is reduced in order to
-reduce computational complexity, memory requirements, and training times
-while overcoming over fitting so that patterns detected during training
-can be detected in test data even if their appearance varies. There are
-various pooling algorithms available, given a specified window size,
-including the following:
-
--   **Max pooling**: Takes the maximum value in each window
--   **Average pooling**: Takes the average value across each window
--   **Sum pooling**: Takes the sum of values in each window
-
-Following image shows the effect of performing max pooling on a 4 x 4
-feature map using a 2 x 2 window size:
-
-
-![](./images/df33f184-e0c5-471f-8dca-97add6d76529.png)
-
-
-Fully connected layer
-=====================
-
-After the 3-D input data has been transformed through a series of
-convolution and pooling layers, a fully connected layer flattens the
-feature maps output by the last convolution and pooling layer into a
-long 1-D feature vector, which is then used as the input data for a
-regular ANN in which all of the neurons in each layer are connected to
-all of the neurons in the previous layer.
-
-
-
-Output layer
-============
-
-The output neurons in this ANN then use an activation function such as
-the softmax function (as seen in the MLP classifier) to classify the
-outputs and thereby recognize and classify the objects contained in the
-input image data!
-
-
-
-Case study 2 -- image recognition
-=================================
-
-In this case study, we will use a pretrained CNN to recognize and
-classify objects in images that it has never encountered before.
-
-
-
-InceptionV3 via TensorFlow
-==========================
-
-The pretrained CNN that we will use is called **Inception-v3**. This
-deep CNN has been trained on the **ImageNet** image database (an
-academic benchmark for computer vision algorithms containing a vast
-library of labelled images covering a wide range of nouns) and can
-classify entire images into 1,000 classes found in everyday life, such
-as \"pizza\", \"plastic bag\", \"red wine\", \"desk\", \"orange\", and
-\"basketball\", to name just a few.
-
-The Inception-v3 deep CNN was developed and trained by **TensorFlow**
-^TM^, an open source machine learning framework and software library for
-high-performance numerical computation originally developed within
-Google\'s AI organization.
-
-To learn more about TensorFlow, Inception-v3, and ImageNet, please visit
-the following links:
-
--   **ImageNet:** <http://www.image-net.org/>
--   **TensorFlow:** <https://www.tensorflow.org/>
--   **Inception-v3:**
-    <https://www.tensorflow.org/tutorials/images/image_recognition>
-
-
-
-Deep learning pipelines for Apache Spark
-========================================
-
-In this case study, we will access the Inception-v3 TensorFlow deep CNN
-via a third-party Spark package called [sparkdl]. This Spark
-package has been developed by Databricks, a company formed by the
-original creators of Apache Spark, and provides high-level APIs for
-scalable deep learning within Apache Spark.
-
-To learn more about Databricks and [sparkdl], please visit the
-following links:
-
-
--   **Databricks**: <https://databricks.com/>
--   **sparkdl**: <https://github.com/databricks/spark-deep-learning>
-
-
-
-
-Image library
-=============
-
-The images that we will use to test the pretrained Inception-v3 deep CNN
-have been selected from the **Open Images v4** dataset, a collection of
-over 9 million images that have been released under the Creative Common
-Attribution license, and which may be found at
-<https://storage.googleapis.com/openimages/web/index.html>.
-
-In the GitHub repository accompanying this course, you can find 30 images
-of birds ([image-recognition-data/birds]) and 30 images of planes
-([image-recognition-data/planes]) respectively. *Figure 7.15*
-shows a couple of examples of the images that you might find in these
-test datasets:
-
-
-![](./images/b455f360-046b-4640-bc0f-cc260e7eba3c.png)
-
-
-Our goal in this case study will be to apply the pretrained Inception-v3
-deep CNN to these test images and quantify the accuracy of a trained
-classifier model when it comes to distinguishing between images of birds
-and planes within a single test dataset.
-
-
-
-PySpark image recognition application
-=====================================
-
-Note that for the purposes of this case study, we will not be using
-Jupyter notebooks for development but rather standard Python code files
-with the [.py] file extension. This case study provides a first
-glimpse into how a production-grade pipeline should be developed and
-executed; rather than instantiating a [SparkContext] explicitly
-within our code, we will instead submit our code and all its
-dependencies to [spark-submit] (including any third-party Spark
-packages, such as [sparkdl]) via the Linux command line.
-
-Let\'s now take a look at how we can use the Inception-v3 deep CNN via
-PySpark to classify test images. In our Python-based image-recognition
-application, we perform the following steps (numbered to correspond to
-the numbered comments in our Python code file):
-
-**Note:**
-
-The following Python code file, called
-[chp07-02-convolutional-neural-network-transfer-learning.py], can
-be found in the GitHub repository accompanying this course.
-
-
-1.  First, using the following code, we import the required Python
-    dependencies, including the relevant modules from the third-party
-    [sparkdl] package and the [LogisticRegression]
-    classifier native to [MLlib]:
-
-```
-from sparkdl import DeepImageFeaturizer
 from pyspark.sql.functions import *
-from pyspark.sql import SparkSession
-from pyspark.ml.image import ImageSchema
-from pyspark.ml import Pipeline
-from pyspark.ml.classification import LogisticRegression
-from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.sql.types import StructType, StructField
+from pyspark.sql.types import LongType, DoubleType, IntegerType, StringType, BooleanType
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import Tokenizer
+from pyspark.ml.feature import StopWordsRemover
+from pyspark.ml.feature import HashingTF, IDF
+from pyspark.ml import Pipeline, PipelineModel
+from pyspark.ml.classification import DecisionTreeClassifier
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+from pyspark.mllib.evaluation import MulticlassMetrics
+
+from sparknlp.base import *
+from sparknlp.annotator import Tokenizer as NLPTokenizer
+from sparknlp.annotator import Stemmer, Normalizer
 ```
 
 
-2.  Unlike our Jupyter notebook case studies, there is no need to
-    instantiate a [SparkContext], as this will be done for us when
-    we execute our PySpark application via [spark-submit] on the
-    command line. In this case study, we will create a
-    [SparkSession], as shown in the following code, that acts as
-    an entry point into the Spark execution environment (even if it is
-    already running) that subsumes SQLContext. We can therefore use
-    [SparkSession] to undertake the same SQL-like operations over
-    data that we have seen previously while still using the Spark
-    Dataset/DataFrame API:
+2.  Next, we instantiate a [SparkContext] as usual. Note, however,
+    that in this case, we explicitly tell Spark where to find the
+    [spark-nlp] library using the [spark-jars] configuration
+    parameter. We can then invoke the [getConf()] method on our
+    [SparkContext] instance to review the current Spark
+    configuration, as follows:
 
 ```
-spark = SparkSession.builder.appName("Convolutional Neural Networks - Transfer Learning - Image Recognition").getOrCreate()
-```
-
-
-3.  As of Version 2.3, Spark provides native support for image data
-    sources via its [MLlib] API. In this step, we invoke the
-    [readImages] method on [MLlib]\'s [ImageSchema]
-    class to load our bird and plane test images from the local
-    filesystem into Spark dataframes called [birds\_df] and
-    [planes\_df] respectively. We then label all images of birds
-    with the [0] literal and label all images of planes with the
-    [1] literal, as follows:
-
-```
-path_to_img_directory = 'lab07/data/image-recognition-data'
-birds_df = ImageSchema.readImages(path_to_img_directory + "/birds")
-.withColumn("label", lit(0))
+conf = SparkConf().set("spark.jars", '/opt/anaconda3/lib/python3.6/site-packages/sparknlp/lib/sparknlp.jar')
+.setAppName("Natural Language Processing - Sentiment Analysis")
+sc = SparkContext(conf=conf)
+sqlContext = SQLContext(sc)
+sc.getConf().getAll()
 ```
 
 
+3.  After loading our corpus of airline tweets from
+    [twitter-data/airline-tweets-labelled-corpus.csv] into a Spark
+    dataframe called [airline\_tweets\_df], we generate a new
+    label column. The existing dataset already contains a label column
+    called [airline\_sentiment], which is either
+    [\"positive\"], [\"neutral\"], or [\"negative\"]
+    based on a manual pre-classification. Although positive messages are
+    naturally always welcome, in reality, the most useful messages are
+    usually the negative ones. By automatically identifying and studying
+    the negative messages, organizations can focus more efficiently on
+    how to improve their products and services based on negative
+    feedback. Therefore, we will create a new label column called
+    [negative\_sentiment\_label] that is [\"true\"] if the
+    underlying sentiment has been classified as [\"negative\"] and
+    [\"false\"] otherwise, as shown in the following code:
+
 ```
-planes_df = ImageSchema.readImages(path_to_img_directory +
-"/planes").withColumn("label", lit(1))
+airline_tweets_with_labels_df = airline_tweets_df
+.withColumn("negative_sentiment_label",
+when(col("airline_sentiment") == "negative", lit("true"))
+.otherwise(lit("false")))
+.select("unit_id", "text", "negative_sentiment_label")
 ```
 
 
-4.  Now that we have loaded our test images into separate Spark
-    dataframes differentiated by their label, we consolidate them into
-    single training and test dataframes accordingly. We achieve this by
-    using the [unionAll] method via the Spark dataframe API, which
-    simply appends one dataframe onto another, as shown in the following
+4.  We are now ready to build and apply our preprocessing pipeline to
+    our corpus of raw tweets! Here, we demonstrate how to utilize the
+    feature transformers native to Spark\'s [MLlib], namely its
+    [Tokenizer] and [StopWordsRemover] transformers. First,
+    we tokenize the raw textual content of each tweet using the
+    [Tokenizer] transformer, resulting in a new column containing
+    a list of parsed tokens. We then pass this column containing the
+    tokens to the [StopWordsRemover] transformer, which removes
+    English language (default) stop words from this list, resulting in a
+    new column containing the list of filtered tokens. In the next cell,
+    we will demonstrate how to utilize the feature transformers
+    available in the [spark-nlp] third-party library. However,
+    [spark-nlp] requires a column of a [string] type as its
+    initial input, not a list of tokens. Therefore, the final statement
+    concatenates the list of filtered tokens back into a
+    whitespace-delimited [string] column, as follows:
+
+```
+filtered_df = airline_tweets_with_labels_df
+.filter("text is not null")
+tokenizer = Tokenizer(inputCol="text", outputCol="tokens_1")
+tokenized_df = tokenizer.transform(filtered_df)
+remover = StopWordsRemover(inputCol="tokens_1",
+outputCol="filtered_tokens")
+preprocessed_part_1_df = remover.transform(tokenized_df)
+preprocessed_part_1_df = preprocessed_part_1_df
+.withColumn("concatenated_filtered_tokens",
+concat_ws(" ", col("filtered_tokens")))
+```
+
+
+5.  We can now demonstrate how to utilize the feature transformers and
+    annotators available in the [spark-nlp] third-party library,
+    namely its [DocumentAssember] transformer and
+    [Tokenizer], [Stemmer] , and [Normalizer]
+    annotators. First, we create annotated documents from our string
+    column that are required as the initial input into the
+    [spark-nlp] pipelines. Then, we apply the [spark-nlp]
+    [Tokenizer] and [Stemmer] annotators to convert our
+    filtered list of tokens into a list of *stems*. Finally, we apply
+    its [Normalizer] annotator, which converts the stems into
+    lowercase by default. All of these stages are defined within a
+    *pipeline*, which is an ordered list of
+    machine learning and data transformation steps that is executed on a
+    Spark dataframe.
+
+We execute our pipeline on our dataset, resulting in a new dataframe
+called [preprocessed\_df] from which we keep only the relevant
+columns that are required for subsequent analysis and modelling, namely
+[unit\_id] (unique record identifier), [text] (original raw
+textual content of the tweet), [negative\_sentiment\_label] (our
+new label), and [normalised\_stems] (a [spark-nlp] array of
+filtered, stemmed, and normalized tokens as a result of our
+preprocessing pipeline), as shown in the following code:
+
+```
+document_assembler = DocumentAssembler()
+.setInputCol("concatenated_filtered_tokens")
+tokenizer = NLPTokenizer()
+.setInputCols(["document"]).setOutputCol("tokens_2")
+stemmer = Stemmer().setInputCols(["tokens_2"])
+.setOutputCol("stems")
+normalizer = Normalizer()
+.setInputCols(["stems"]).setOutputCol("normalised_stems")
+pipeline = Pipeline(stages=[document_assembler, tokenizer, stemmer,
+normalizer])
+pipeline_model = pipeline.fit(preprocessed_part_1_df)
+preprocessed_df = pipeline_model.transform(preprocessed_part_1_df)
+preprocessed_df.select("unit_id", "text",
+"negative_sentiment_label", "normalised_stems")
+```
+
+
+6.  Before we can create feature vectors from our array of stemmed
+    tokens using [MLlib]\'s native feature extractors, there is
+    one final preprocessing step. The column containing our stemmed
+    tokens, namely [normalised\_stems], persists these tokens in a
+    specialized [spark-nlp] array structure. We need to convert
+    this [spark-nlp] array back into a standard list of tokens so
+    that we may apply [MLlib]\'s native TF--IDF algorithms to it.
+    We achieve this by first exploding the [spark-nlp] array
+    structure, which has the effect of creating a new dataframe
+    observation for every element in this array. We then group our Spark
+    dataframe by [unit\_id], which is the primary key for each
+    unique tweet, before aggregating the stems using the whitespace
+    delimiter into a new string column called [tokens]. Finally,
+    we apply the [split] function to this column to convert the
+    aggregated string into a list of strings or tokens, as shown in the
+    following code:
+
+```
+exploded_df = preprocessed_df
+.withColumn("stems", explode("normalised_stems"))
+.withColumn("stems", col("stems").getItem("result"))
+.select("unit_id", "negative_sentiment_label", "text", "stems")
+
+aggregated_df = exploded_df.groupBy("unit_id")
+.agg(concat_ws(" ", collect_list(col("stems"))),
+first("text"), first("negative_sentiment_label"))
+.toDF("unit_id", "tokens", "text", "negative_sentiment_label")
+.withColumn("tokens", split(col("tokens"), " ")
+.cast("array<string>"))
+```
+
+
+7.  We are now ready to generate feature vectors from our list of
+    filtered, stemmed, and normalized tokens! As discussed, we will be
+    using the TF--IDF feature extractor to generate feature vectors
+    rather than the basic bag of words approach. The TF--IDF feature
+    extractor is native to [MLlib] and comes in two parts. First,
+    we generate the **term frequency** (**TF**) feature vectors by
+    passing our list of tokens into [MLlib]\'s [HashingTF]
+    transformer. We then *fit* [MLlib]\'s **inverse document
+    frequency** (**IDF**) estimator to our dataframe containing the term
+    frequency feature vectors, as shown in the following code. The
+    result is a new Spark dataframe with our TF--IDF feature vectors
+    contained in a column called [features]:
+
+```
+hashingTF = HashingTF(inputCol="tokens", outputCol="raw_features",
+numFeatures=280)
+features_df = hashingTF.transform(aggregated_df)
+idf = IDF(inputCol="raw_features", outputCol="features")
+idf_model = idf.fit(features_df)
+scaled_features_df = idf_model.transform(features_df)
+```
+
+
+8.  Since our label column is
+    categorical in nature, we need to apply [MLlib]\'s
+    [StringIndexer] to it in order to identify and index all
+    possible classifications. The result is a new Spark dataframe with
+    an indexed label column called [\"label\"], which is 0.0 if
+    [negative\_sentiment\_label] is [true], and 1.0 if
+    [negative\_sentiment\_label] is [false], as shown in the
+    following code:
+
+```
+indexer = StringIndexer(inputCol = "negative_sentiment_label",
+outputCol = "label").fit(scaled_features_df)
+scaled_features_indexed_label_df = indexer.transform(scaled_features_df)
+```
+
+
+9.  We are now ready to create training and test dataframes in order to
+    train and evaluate subsequent machine learning models. We achieve
+    this as normal, using the [randomSplit] method (as shown in
+    the following code), but in this case, 90% of all observations will
+    go into our training dataframe, with the remaining 10% going into
+    our test dataframe:
+
+```
+train_df, test_df = scaled_features_indexed_label_df
+.randomSplit([0.9, 0.1], seed=12345)
+```
+
+
+10. In this example, we will be training a supervised decision tree
+    classifier in order to help us
+    classify whether a given tweet is positive or negative in sentiment.
+    We fit [MLlib]\'s
+    [DecisionTreeClassifier] estimator to our training dataframe
+    in order to train our classification tree, as shown in the following
     code:
 
 ```
-planes_train_df, planes_test_df = planes_df
-.randomSplit([0.75, 0.25], seed=12345)
-birds_train_df, birds_test_df = birds_df
-.randomSplit([0.75, 0.25], seed=12345)
-train_df = planes_train_df.unionAll(birds_train_df)
-test_df = planes_test_df.unionAll(birds_test_df)
+decision_tree = DecisionTreeClassifier(featuresCol = 'features',
+labelCol = 'label')
+decision_tree_model = decision_tree.fit(train_df)
 ```
 
 
-5.  As with previous case studies, we need to generate feature vectors
-    from our input data. However, rather than training a deep CNN from
-    scratch---which could take many days, even with distributed
-    technologies---we will take advantage of the pretrained Inception-v3
-    deep CNN. To do this, we will use a process called **transfer
-    learning**. In this process, knowledge gained while solving one
-    machine learning problem is applied to a different but related
-    problem. To use transfer learning in our case study, we employ the
-    [DeepImageFeaturizer] module of the third-party
-    [sparkdl] Spark package. The [DeepImageFeaturizer] not
-    only transforms our images into numeric features, it also performs
-    fast transfer learning by peeling off the last layer of a pretrained
-    neural network and then uses the output from all the previous layers
-    as features for a standard classification algorithm. In our case,
-    the [DeepImageFeaturizer] will be peeling off the last layer
-    of the pretrained Inception-v3 deep CNN, as follows:
+11. Now that we have a trained classification tree, we can apply it to
+    our test dataframe in order to classify test tweets. We apply our trained
+    classification tree to the test dataframe using the
+    [transform()] method (as shown in the following code), and
+    afterwards study its predicted classifications:
 
 ```
-featurizer = DeepImageFeaturizer(inputCol = "image",
-outputCol = "features", modelName = "InceptionV3")
+test_decision_tree_predictions_df = decision_tree_model
+.transform(test_df)
+print("TEST DATASET PREDICTIONS AGAINST ACTUAL LABEL: ")
+test_decision_tree_predictions_df.select("prediction", "label",
+"text").show(10, False)
 ```
 
 
-6.  Now that we have the features from all previous layers of the
-    pretrained Inception-v3 deep CNN extracted via transfer learning, we
-    input them into a classification algorithm. In our case, we will use
-    [MLlib]\'s [LogisticRegression] classifier, as follows:
+For example, our decision tree classifier has predicted that the
+following tweets from our test dataframe are negative in sentiment:
+
+-   \"I need you\...to be a better airline. \^LOL\"
+-   \"if you can\'t guarantee parents will sit with their children,
+    don\'t sell tickets with that promise\"
+-   \"resolved and im sick and tired of waiting on you. I want my refund
+    and I\'d like to speak to someone about it.\"
+-   \"I would have loved to respond to your website until I saw the
+    really long form. In business the new seats are bad\"
+
+A human would also probably classify these tweets as negative in
+sentiment! But more importantly, airlines can use this model and the
+tweets that it identifies to focus on areas for improvement. Based on
+this sample of tweets, such areas would include website usability,
+ticket marketing, and the time taken to process refunds.
+
+12. Finally, in order to quantify the accuracy of our trained
+    classification tree, let\'s compute its confusion matrix on the test
+    data using the following code:
 
 ```
-logistic_regression = LogisticRegression(maxIter = 20,
-regParam = 0.05, elasticNetParam = 0.3, labelCol = "label")
-```
-
-
-7.  To execute the transfer learning and logistic regression model
-    training, we build a standard [pipeline] and [fit] that
-    pipeline to our training dataframe, as follows:
-
-```
-pipeline = Pipeline(stages = [featurizer, logistic_regression])
-model = pipeline.fit(train_df)
-```
-
-
-8.  Now that we have a trained classification model, using the features
-    derived by the Inception-v3 deep CNN, we apply our trained logistic
-    regression model to our test dataframe to make predictions as
-    normal, as shown in the following code:
-
-```
-test_predictions_df = model.transform(test_df)
-test_predictions_df.select("image.origin", "prediction")
-.show(truncate=False)
+predictions_and_label = test_decision_tree_predictions_df
+.select("prediction", "label").rdd
+metrics = MulticlassMetrics(predictions_and_label)
+print("N = %g" % test_decision_tree_predictions_df.count())
+print(metrics.confusionMatrix())
 ```
 
 
-9.  Finally, we quantify the accuracy of our model on the test dataframe
-    using [MLlib]\'s [MulticlassClassificationEvaluator], as
-    follows:
+The resulting confusion matrix looks as follows:
+
++-----------------------+-----------------------+-----------------------+
+|                       | **Predict *y* = 0     | **Predict *y* = 1     |
+|                       | (Negative)**          | (Non-Negative)**      |
++-----------------------+-----------------------+-----------------------+
+| **Actual *y* = 0**    | 725                   | 209                   |
+|                       |                       |                       |
+| **(Negative)**        |                       |                       |
++-----------------------+-----------------------+-----------------------+
+| **Actual *y* = 1**    | 244                   | 325                   |
+|                       |                       |                       |
+| **(Non-Negative)**    |                       |                       |
++-----------------------+-----------------------+-----------------------+
+
+We can interpret this confusion matrix as follows---out of a total of
+1,503 test tweets, our model exhibits the following properties:
+
+-   Correctly classifies 725 tweets as negative in sentiment that are
+    actually negative
+-   Correctly classifies 325 tweets as non-negative in sentiment that
+    are actually non-negative
+-   Incorrectly classifies 209 tweets as non-negative in sentiment that
+    are actually negative
+-   Incorrectly classifies 244 tweets as negative in sentiment that are
+    actually non-negative
+-   Overall accuracy = 70%
+-   Overall error rate = 30%
+-   Sensitivity = 57%
+-   Specificity = 78%
+
+So, based on a default threshold value of 0.5 (which in this case study
+is fine because we have no preference over what type of error is
+better), our decision tree classifier has an overall accuracy rate of
+70%, which is quite good!
+
+13. For the sake of completeness, let\'s train a decision tree
+    classifier, but using the feature vectors that are derived from the
+    bag of words algorithm. Note that we already computed these feature
+    vectors when we applied the [HashingTF] transformer to our
+    preprocessed corpus to calculate the term frequency (TF) feature
+    vectors. Therefore, we can just repeat our machine learning
+    pipeline, but based only on the output of the [HashingTF]
+    transformer instead, as follows:
 
 ```
-accuracy_evaluator = MulticlassClassificationEvaluator(
-metricName = "accuracy")
-print("Accuracy on Test Dataset = %g" % accuracy_evaluator
-.evaluate(test_predictions_df.select("label", "prediction")))
+# Create Training and Test DataFrames based on the Bag of Words Feature Vectors
+bow_indexer = StringIndexer(inputCol = "negative_sentiment_label",
+outputCol = "label").fit(features_df)
+bow_features_indexed_label_df = bow_indexer.transform(features_df)
+.withColumnRenamed("raw_features", "features")
+bow_train_df, bow_test_df = bow_features_indexed_label_df
+.randomSplit([0.9, 0.1], seed=12345)
+
+# Train a Decision Tree Classifier using the Bag of Words Feature Vectors
+bow_decision_tree = DecisionTreeClassifier(featuresCol =
+'features', labelCol = 'label')
+bow_decision_tree_model = bow_decision_tree.fit(bow_train_df)
+
+# Apply the Bag of Words Decision Tree Classifier to the Test DataFrame and generate the Confusion Matrix
+bow_test_decision_tree_predictions_df = bow_decision_tree_model
+.transform(bow_test_df)
+bow_predictions_and_label = bow_test_decision_tree_predictions_df
+.select("prediction", "label").rdd
+bow_metrics = MulticlassMetrics(bow_predictions_and_label)
+print("N = %g" % bow_test_decision_tree_predictions_df.count())
+print(bow_metrics.confusionMatrix())
 ```
 
 
-Spark submit
-============
+Note that the resulting confusion matrix is exactly the same as when we
+applied our decision tree classifier that had been trained on the
+*scaled* feature vectors using the [IDF] estimator (given the same
+random split seed and size of the training dataframe). This is because
+of the fact that our corpus of tweets is relatively small at 14,872
+documents, and therefore the effect of scaling the term frequency
+([TF]) feature vectors based on the frequency across the corpus
+will have a negligible impact on the predictive quality of this specific
+model.
 
-We are now ready to run our image recognition application! Since it is a
-Spark application, we can execute it via [spark-submit] on the
-Linux command line. We can execute the
-[spark-submit] program by passing it the following command-line
-arguments:
-
+14. A very useful feature provided by [MLlib] is the ability to
+    save trained machine learning models to disk for later use. We can
+    take advantage of this feature by saving our trained decision tree
+    classifier to the local disk of our single-node development
+    environment:
 
 ```
-> spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 lab07/chp07-02-convolutional-neural-network-transfer-learning.py
+bow_decision_tree_model.save('<Target filesystem path to save MLlib Model>')
 ```
 
-
-
-
-Image-recognition results
-=========================
-
-Assuming that the image-recognition application ran successfully, you
-should see the following results output to the console:
-
-  ------------------------------ ----------------
-  **Origin**                     **Prediction**
-  [planes/plane-005.jpg]   [1.0]
-  [planes/plane-008.jpg]   [1.0]
-  [planes/plane-009.jpg]   [1.0]
-  [planes/plane-016.jpg]   [1.0]
-  [planes/plane-017.jpg]   [0.0]
-  [planes/plane-018.jpg]   [1.0]
-  [birds/bird-005.jpg]     [0.0]
-  [birds/bird-008.jpg]     [0.0]
-  [birds/bird-009.jpg]     [0.0]
-  [birds/bird-016.jpg]     [0.0]
-  [birds/bird-017.jpg]     [0.0]
-  [birds/bird-018.jpg]     [0.0]
-  ------------------------------ ----------------
-
-The [Origin] column refers to the absolute filesystem path of the
-image, and the value in the [Prediction] column is [1.0] if
-our model predicts that the object in the image is a plane and
-[0.0] if our model predicts that the object in the image is a
-bird. Our model has an astonishingly high accuracy of 92% when run on
-the test dataset. The only mistake that our model made was on
-[plane-017.jpg], illustrated in *Figure* *7.16*, which was
-incorrectly classified as a bird when it was in fact a plane:
-
-
-![](./images/677136f7-68b4-4b1c-8202-81f483f1fda0.png)
-
-
-If we look at [plane-017.jpg] in *Figure 7.16*, we can quickly
-understand why the model made this mistake. Though it is a man-made
-plane, it has been physically modeled to look like a bird for increased
-efficiency and aerodynamic purposes.
-
-In this case study, we used a pretrained CNN to featurize images. We
-then passed the resulting features to a standard logistic regression
-algorithm to predict whether a given image is a bird or a plane.
-
-
-
-Case study 3 -- image prediction
-================================
-
-In case study 2 (image recognition), we still explicitly labelled our
-test images before training our final logistic regression classifier. In
-this case study, we will simply send random images to the pretrained
-Inception-v3 deep CNN without labeling them and let the CNN itself
-classify the objects contained within the images. Again, we will take
-advantage of the third-party [sparkdl] Spark package to access the
-pretrained Inception-v3 CNN.
-
-The assortment of random images that we will use have again been
-downloaded from the **Open Images v4 dataset**, and may be found in the
-GitHub repository accompanying this course under
-[image-recognition-data/assorted]. *Figure 7.17* shows a couple of
-typical images that you may find in this test dataset:
-
-
-![](./images/b763134a-ece7-47ff-b8d4-888928a49752.png)
-
-PySpark image-prediction application
-====================================
-
-In our Python-based image-prediction application, we go through the
-following steps (numbered to correspond to the numbered comments in our
-Python code file):
 
 **Note:**
 
-The following Python code file, called
-[chp07-03-convolutional-neural-network-image-predictor.py], can be
-found in the GitHub repository accompanying this course.
-
-
-1.  First, we import the required Python dependencies as usual,
-    including the [DeepImagePredictor] class from the third-party
-    [sparkdl] Spark package, as shown in the following code:
-
-```
-from sparkdl import DeepImagePredictor
-from pyspark.sql import SparkSession
-from pyspark.ml.image import ImageSchema
-```
-
-
-2.  Next, we create a [SparkSession] that acts as an entry point
-    into the Spark execution environment, as follows:
-
-```
-spark = SparkSession.builder.appName("Convolutional Neural Networks - Deep Image Predictor").getOrCreate()
-```
-
-
-3.  We then load our assortment of random images into a Spark dataframe
-    using the [readImages] method of the [ImageSchema] class
-    that we first encountered in the previous case study, as shown in
-    the following code:
-
-```
-assorted_images_df = ImageSchema.readImages(
-"lab07/data/image-recognition-data/assorted")
-```
-
-
-4.  Finally, we pass our Spark dataframe containing our assortment of
-    random images to [sparkdl]\'s [DeepImagePredictor],
-    which will apply a specified pretrained neural network to the images
-    in an effort to classify the objects found within them. In our case,
-    we will be using the pretrained Inception-v3 deep CNN. We also tell
-    the [DeepImagePredictor] to return the top 10
-    ([topK=10]) predicted classifications for each image in
-    descending order of confidence, as follows:
-
-```
-deep_image_predictor = DeepImagePredictor(inputCol = "image",
-outputCol = "predicted_label", modelName = "InceptionV3",
-decodePredictions = True, topK = 10)
-predictions_df = deep_image_predictor.transform(assorted_images_df)
-predictions_df.select("image.origin", "predicted_label")
-.show(truncate = False)
-```
-
-
-To run this PySpark image-prediction application, we again invoke
-[spark-submit] via the command line, as follows:
-
-```
-> cd {SPARK_HOME}
-> bin/spark-submit --master local --packages databricks:spark-deep-learning:1.2.0-spark2.3-s_2.11 lab07/chp07-03-convolutional-neural-network-image-predictor.py
-```
-
-
-
-
-Image-prediction results
-========================
-
-Assuming that the image-prediction application ran successfully, you
-should see the following results output to the console:
-
-  -------------------------------- ------------------------------
-  **Origin**                       **First Predicted Label**
-  [assorted/snowman.jpg]     [Teddy]
-  [assorted/bicycle.jpg]     [Mountain Bike]
-  [assorted/house.jpg]       [Library]
-  [assorted/bus.jpg]         [Trolley Bus]
-  [assorted/banana.jpg]      [Banana]
-  [assorted/pizza.jpg]       [Pizza]
-  [assorted/toilet.jpg]      [Toilet Seat]
-  [assorted/knife.jpg]       [Cleaver]
-  [assorted/apple.jpg]       [Granny Smith (Apple)]
-  [assorted/pen.jpg]         [Ballpoint]
-  [assorted/lion.jpg]        [Lion]
-  [assorted/saxophone.jpg]   [Saxophone]
-  [assorted/zebra.jpg]       [Zebra]
-  [assorted/fork.jpg]        [Spatula]
-  [assorted/car.jpg]         [Convertible]
-  -------------------------------- ------------------------------
-
-As you can see, the pretrained Inception-v3 deep CNN has an astonishing
-ability to recognize and classify the objects found in images. Though
-the images provided in this case study were relatively simple, the
-Inception-v3 CNN has a top-five error rate--- how often the model fails
-to predict the correct answer as one of its top five guesses---of just
-3.46% on the ImageNet image database. Remember that the Inception-v3 CNN
-attempts to classify entire images into 1,000 classes, hence a top-5
-error rate of just 3.46% is truly impressive, and clearly demonstrates
-the learning ability and power of not only convolution neural networks
-but ANNs in general when detecting and learning patterns!
+Our trained decision tree classifier for performing sentiment analysis
+of airline tweets has also been pushed to the GitHub repository
+accompanying this course, and may be found in
+[lab06/models/airline-sentiment-analysis-decision-tree-classifier].
 
 Summary
 =======
 
-In this lab, we went on a hands-on exploration through the exciting
-and cutting-edge world of deep learning. We developed applications to
-recognize and classify objects in images with astonishingly high rates
-of accuracy, and demonstrated the truly impressive learning ability of
-ANNs to detect and learn patterns in input data.
-
+In this lab, we have studied, implemented, and evaluated common
+algorithms that are used in natural language processing. We have
+preprocessed a corpus of documents using feature transformers and
+generated feature vectors from the resulting processed corpus using
+feature extractors. We have also applied these common NLP algorithms to
+machine learning. We trained and tested a sentiment analysis model that
+we used to predict the underlying sentiment of tweets so that
+organizations may improve their product and service offerings.

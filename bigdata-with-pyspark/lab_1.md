@@ -293,30 +293,3 @@ We can see that [20] lines in the text file contain the word
 [Spark]. This is just a simple example of how we can use the Spark
 shell.
 
-
-
-SparkConf
-=========
-
-SparkConf allows us to configure a Spark application. It sets various
-Spark parameters as key-value pairs, and so will usually create a
-[SparkConf] object with a [SparkConf()] constructor, which
-would then load values from the [spark.\*] underlying Java system.
-
-There are a few useful functions; for example, we can use the
-[sets()] function to set the configuration property. We can use
-the [setMaster()] function to set the master URL to connect to. We
-can use the [setAppName()] function to set the application name,
-and [setSparkHome()] in order to set the path where Spark will be
-installed on worker nodes.
-
-Summary
-=======
-
-In this lab, we learned about the core concepts in Spark and
-PySpark. We learned about setting up Spark and using PySpark on Windows.
-We also went through the three main pillars of Spark, which are
-SparkContext, Spark shell, and SparkConf.
-
-In the next lab, we\'re going to look at getting your big data into
-Spark environments using RDDs.

@@ -1,746 +1,884 @@
 
-Natural Language Processing Using Apache Spark
-==============================================
 
-In this lab, we\'ll study and implement common algorithms that are
-used in NLP, which can help us develop machines that are capable of
-automatically analyzing and understanding human text and speech in
-context. Specifically, we will study and implement the following classes
-of computer science algorithms related to NLP:
+Unsupervised Learning Using Apache Spark
+========================================
 
--   Feature transformers, including the following:
-    -   Tokenization
-    -   Stemming
-    -   Lemmatization
-    -   Normalization
--   Feature extractors, including the following :
-    -   Bag of words
-    -   Term frequency--inverse document frequency
+In this lab, we will train and evaluate unsupervised machine
+learning models applied to a variety of real-world use cases, again
+using Python, Apache Spark, and its machine learning library, MLlib.
+Specifically, we will develop and interpret the following types of
+unsupervised machine learning models and techniques:
 
-Feature transformers
-====================
-
-The fundamental concept behind natural language processing is treating
-human text and speech as data---just like the structured and
-unstructured numerical and categorical data sources we have encountered
-in this course thus far---while preserving its *context*. However, natural
-language is notoriously difficult to understand, even for humans, let
-alone machines! Not only does natural language consist of hundreds of
-different spoken languages, with different writing systems, but it also
-poses other challenges, such as different tones, inflections, slang,
-abbreviations, metaphors, and sarcasm. Writing systems and communication
-platforms in particular provide us with text that may contain spelling
-mistakes, unconventional grammar, and sentences that are loosely
-structured.
-
-Our first challenge, therefore, is to convert natural language into data
-that can be used by a machine while preserving its underlying context.
-Furthermore, when applied to machine learning, we also need to convert
-natural language into feature vectors in order to train machine learning
-models. Well, there are two broad classes of computer science algorithms
-that help us with these challenges---**feature extractors**, which help
-us extract relevant features from the natural language data, and
-**feature transformers**, which help us scale, convert, and/or modify
-these features in preparation for subsequent modelling. In this
-subsection, we will discuss feature transformers and how they can help
-us convert our natural language data into structures that are easier to
-process. First, let\'s introduce some common definitions within NLP.
+-   Hierarchical clustering
+-   K-means clustering
+-   Principal component analysis
 
 
-
-Document
-========
-
-In NLP, a document represents a logical container of text. The container
-itself can be anything that makes sense within the context of your use
-case. For example, one document could refer to a single article, record,
-social media posting, or tweet.
-
-
-
-Corpus
-======
-
-Once you have defined what your document represents, a corpus is defined
-as a logical collection of documents. Using the previous examples, a
-corpus could represent a collection of articles (for example, a magazine
-or blog) or a collection of tweets (for example, tweets with a
-particular hashtag).
-
-
-
-Preprocessing pipeline
-======================
-
-One of the basic tasks involved in NLP is the preprocessing of your
-documents in an attempt to standardize the text from different sources
-as much as possible. Not only does preprocessing help us to standardize
-text, it often reduces the size of the raw text, thereby reducing the
-computational complexity of subsequent processes and models. The
-following subsections describe common preprocessing techniques that may
-constitute a typical ordered preprocessing pipeline.
-
-
-
-Tokenization
-============
-
-Tokenization refers to the technique of splitting up your text into
-individual *tokens* or terms. Formally, a token is defined as a sequence
-of characters that represents a subset of the original text. Informally,
-tokens are typically just the different words that make up the original
-text, and that have been segmented using the whitespace and other
-punctuation characters. For example, the sentence \"Machine Learning
-with Apache Spark\" may result in a collection of tokens persisted in an
-array or list expressed as [\[\"Machine\", \"Learning\", \"with\",
-\"Apache\", \"Spark\"\]].
-
-
-
-Stop words
+Clustering
 ==========
 
-Stop words are common words in a given language that are used to
-structure a sentence grammatically, but that are not necessarily helpful
-in determining its underlying meaning or sentiment. For example, in the
-English language, common stop words include *and*, *I*, *there*, *this*,
-and *with*. A common preprocessing technique is to therefore remove
-these words from the collection of tokens by filtering based on a
-language-specific lookup of stop words. Using our previous example, our
-filtered list of tokens would be [\[\"Machine\", \"Learning\",
-\"Apache\", \"Spark\]].
+In unsupervised learning, the goal is to uncover hidden relationships, trends, and
+patterns given only the input data, *x~i~*, with no output, *y~i~*. In
+other words, our input dataset will be of the following form:
 
+![](./images/3f2330fc-359c-4772-824c-3ba8d26bb77d.png)
 
+Clustering is a well-known example of a class of unsupervised learning
+algorithms where the goal is to segment data points into groups, where
+all of the data points in a specific group share similar features or
+attributes in common. By the nature of clustering, however, it is
+recommended that clustering models are trained on large datasets to
+avoid over fitting. The two most commonly used clustering algorithms are
+**hierarchical clustering** and **k-means clustering**, which are
+differentiated from each other by the processes by which they construct
+clusters. We shall study both of these algorithms in this lab.
 
-Stemming
-========
-
-Stemming refers to the technique of reducing words to a common base or
-*stem*. For example, the words \"connection\", \"connections\",
-\"connective\", \"connected\", and \"connecting\" can all be reduced to
-their common stem of \"connect\". Stemming is not a perfect process, and
-stemming algorithms are liable to make mistakes. However, for the
-purposes of reducing the size of a dataset in order to train a machine
-learning model, it is a valuable technique. Using our previous example,
-our filtered list of stems would be [\[\"Machin\", \"Learn\", \"Apach\",
-\"Spark\"\]].
-
-
-
-Lemmatization
-=============
-
-While stemming quickly reduces words to a base form, it does not take
-into account the context, and can therefore not differentiate between
-words that have different meanings depending on their position within a
-sentence or context. Lemmatization does not crudely reduce words purely
-based on a common stem, but instead aims to remove inflectional endings
-only in order to return a dictionary form of a word called its *lemma*.
-For example, the words *am*, *is*, *being*, and *was* can be reduced to
-the lemma *be*, while a stemmer would not be able to infer this
-contextual meaning.
-
-While lemmatization can be used to preserve context and meaning to a
-better extent, it comes at the cost of additional computational
-complexity and processing time. Using our previous example, our filtered
-list of lemmas may therefore look like [\[\"Machine\", \"Learning\",
-\"Apache\", \"Spark\"\]].
-
-
-
-Normalization
-=============
-
-Finally, normalization refers to a wide variety of common techniques
-that are used to standardize text. Typical normalization techniques
-include converting all text to lowercase, removing selected characters,
-punctuation and other sequences of characters (typically using regular
-expressions), and expanding abbreviations by applying language-specific
-dictionaries of common abbreviations and slang terms.
-
-*Figure 6.1* illustrates a typical ordered preprocessing pipeline that
-is used to standardize raw written text:
-
-
-![](./images/2166c5b8-2ae4-494c-aeff-0addd02bdefa.png)
-
-
-Feature extractors
+Euclidean distance
 ==================
 
-We have seen how feature transformers allow us to convert, modify, and
-standardize our documents using a preprocessing pipeline, resulting in
-the conversion of raw text into a collection of tokens. *Feature
-extractors* take these tokens and generate feature vectors from them
-that may then be used to train machine learning models. Two common
-examples of typical feature extractors that are used in NLP are the
-**bag of words** and **term frequency--inverse document frequency**
-(**TF--IDF**) algorithms.
-
-
-
-Bag of words
-============
-
-The *bag of words* approach simply counts the number of occurrences of
-each unique word in the raw or tokenized text. For example, given the
-text \"Machine Learning with Apache Spark, Apache Spark\'s MLlib and
-Apache Kafka\", the bag of words approach would provide us with the
-following numerical feature vector:
-
-  --------- ---------- ------ -------- ------- ------- -------
-  Machine   Learning   with   Apache   Spark   MLlib   Kafka
-  1         1          1      3        2       1       1
-  --------- ---------- ------ -------- ------- ------- -------
-
-Note that each unique word is a feature or dimension, and that the bag
-of words approach is a simple technique that is often employed as a
-baseline model with which to compare the performance of more advanced
-feature extractors.
-
-
-
-Term frequency--inverse document frequency
-==========================================
-
-**TF--IDF** aims to improve upon the bag of words approach by providing
-an indication of how *important* each word is, taking into account how
-often that word appears across the entire corpus.
-
-Let us use *TF(t, d)* to denote the **term frequency**, which is the
-number of times that a term, *t*, appears in a document, *d*. Let\'s
-also use *DF(t, D)* to denote the **document frequency**, which is the
-number of documents in our corpus, *D*, that contain the term *t*. We
-can then define the **inverse document frequency** *IDF(t, D)* as
+By definition, in order to cluster data points into groups, we require
+an understanding of the *distance* between two given data points. A
+common measure of distance is the **Euclidean distance**, which is
+simply the straight-line distance between two given points in
+*k*-dimensional space, where *k* is the number of independent variables
+or features. Formally, the Euclidean distance between two points, *p*
+and *q*, given *k* independent variables or dimensions is defined as
 follows:
 
+![](./images/1555c487-d45f-4a1d-ac70-8be68fef47a6.png)
 
-![](./images/a66d7f42-032c-4cd8-8362-92c147274cbc.png)
+Other common measures of distance include the **Manhattan distance**,
+which is the sum of the absolute values instead of squares (
+![](./images/c9a63cea-d2fb-4e72-b7fc-9c7471329d7a.png)) and the
+**maximum coordinate distance**, where measurements are only considered
+for those data points that deviate the most. For the remainder of this
+lab, we will measure the Euclidean distance. Now that we have an
+understanding of distance, we can define the following measures between
+two clusters, as illustrated in *Figure 5.1*:
 
+-   The *minimum distance* between clusters is the distance between the
+    two points that are the closest to each other.
+-   The *maximum distance* between clusters is the distance between the
+    two points that are furthest away from each other.
+-   The *centroid distance* between clusters is the distance between the
+    centroids of each cluster, where the centroid is defined as the
+    average of all data points in a given cluster:
 
-The IDF provides us with a measure of how important a term is, taking
-into account how often that term appears across the entire corpus, where
-*\|D\|* is the total number of documents in our corpus, *D*. Terms that
-are less common across the corpus have a higher IDF metric. Note,
-however, that because of the use of the logarithm, if a term appears in
-all documents, its IDF becomes 0---that is, *log(1)*. IDF, therefore,
-provides a metric whereby more value is placed on rarer terms that are
-important in describing documents.
+![](./images/f379f7d2-1234-405f-8932-d9bcbccef7bd.png)
 
-Finally, to calculate the TF--IDF measure, we simply multiply the term
-frequency by the inverse document frequency as follows:
+Figure 5.1: Cluster distance measures
 
+Hierarchical clustering
+=======================
 
-![](./images/fc877716-e3b7-4aba-a75e-9a744a014d5c.png)
+In hierarchical clustering, each data point starts off in its own
+self-defined cluster—for example, if you have 10 data points in your
+dataset, then there will initially be 10 clusters. The two *nearest*
+clusters, as defined by the Euclidean centroid distance, for example,
+are then combined. This process is then repeated for all distinct
+clusters until eventually all data points belong in the same cluster.
 
+This process can be visualized using a **dendrogram**, as illustrated in
+*Figure 5.2*:
 
-This implies that the TF--IDF measure increases proportionally with the
-number of times that a word appears in a document, offset by the
-frequency of the word across the entire corpus. This is important
-because the term frequency alone may highlight words such as \"a\",
-\"I\", and \"the\" that appear very often in a given document but that
-do not help us determine the underlying meaning or sentiment of the
-text. By employing TF--IDF, we can reduce the impact of these types of
-words on our analysis.
+![](./images/66d40dfe-b419-4837-8425-c7650889885f.png)
 
+Figure 5.2: Hierarchical clustering dendrogram
 
-Case study -- sentiment analysis
-================================
+A dendrogram helps us to decide when to stop the hierarchical clustering
+process. It is generated by plotting the original data points on the
+*x*axis and the distance between clusters on the *y*axis. As new parent
+clusters are created, by combining the nearest clusters together, a
+horizontal line is plotted between those child clusters. Eventually, the
+dendrogram ends when all data points belong in the same cluster. The aim
+of the dendrogram is to tell us when to stop the hierarchical clustering
+process. We can deduce this by drawing a dashed horizontal line across
+the dendrogram, placed at a position that maximizes the vertical
+distance between this dashed horizontal line and the next horizontal
+line (up or down). The final number of clusters at which to stop the
+hierarchical clustering process is then the number of vertical lines the
+dashed horizontal line intersects. In *Figure 5.2*, we would end up with
+two clusters containing the data points {5, 2, 7} and {8, 4, 10, 6, 1,
+3, 9} respectively. However, make sure that the final number of clusters
+makes sense in the context of your use case.
 
-Let\'s now apply these feature transformers and feature extractors to a
-very modern real-world use case---sentiment analysis. In sentiment
-analysis, the goal is to classify the underlying human sentiment---for
-example, whether the writer is positive, neutral, or negative towards
-the subject of a text. To many organizations, sentiment analysis is an
-important technique that is used to better understand their customers
-and target markets. For example, sentiment analysis can be used by
-retailers to gauge the public\'s reaction to a particular product, or by
-politicians to assess public mood towards a policy or news item. In our
-case study, we will examine tweets about airlines in order to predict
-whether customers are saying positive or negative things about them. Our
-analysis could then be used by airlines in order to improve their
-customer service by focusing on those tweets that have been classified
-as negative in sentiment.
+K-means clustering
+==================
 
-**Note:**
+In k-means clustering, a different process is followed in order to
+segment data points into clusters. First, the final number of clusters,
+*k*, must be defined upfront based on the context of your use case. Once
+defined, each data point is randomly assigned to one of these *k*
+clusters, after which the following process is employed:
 
-The corpus of tweets that we will use for our case study has been
-downloaded from **Figure Eight**, a company that provides businesses
-with high-quality training datasets for real-world machine learning.
-Figure Eight also provides a Data for Everyone platform containing open
-datasets that are available for download by the public, and which may be
-found at <https://www.figure-eight.com/data-for-everyone/>.
+-   The centroid of each cluster is computed
+-   Data points are then reassigned to those clusters that have the
+    closest centroid to them
+-   The centroids of all clusters are then recomputed
+-   Data points are then reassigned once more
 
+This process is repeated until no data points can be reassigned—that is,
+until there are no further improvements to be had and all data points
+belong to a cluster that has the closest centroid to them. Therefore,
+since the centroid of a cluster is defined as the mean average of all
+data points in a given cluster, k-means clustering effectively
+partitions the data points into *k* clusters with each data point
+assigned to a cluster with a mean average that is closest to it.
 
-If you open [twitter-data/airline-tweets-labelled-corpus.csv] in
-any text editor from either the GitHub repository accompanying this course
-or from Figure Eight\'s Data for Everyone platform, you will find a
-collection of 14,872 tweets about major airlines that were scraped from
-Twitter in February 2015. These tweets have also been pre-labelled for
-us, with a sentiment classification of positive, negative, or neutral.
-The pertinent columns in this dataset are described in the following
-table:
+Note that in both clustering processes (hierarchical and k-means), a
+measure of distance needs to be computed. However, distance scales
+differently based on the type and units of the independent variables
+involved—for example, height and weight. Therefore, it is important to
+normalize your data first (sometimes called feature scaling) before
+training a clustering model so that it works properly. To learn more
+about normalization, please visit
+[https://en.wikipedia.org/wiki/Feature\_scaling](https://en.wikipedia.org/wiki/Feature_scaling).
 
-  ---------------------------- ---------------- -----------------------------------------------------------
-  **Column Name**              **Data Type**    **Description**
-  [unit\_id]             [Long]     Unique identifier (primary key)
-  [airline\_sentiment]   [String]   Sentiment classification---positive, neutral, or negative
-  [airline]              [String]   Name of the airline
-  [text]                 [String]   Textual content of the tweet
-  ---------------------------- ---------------- -----------------------------------------------------------
+Case study – detecting brain tumors
+===================================
 
-Our goal will be to use this corpus of tweets in order to train a
-machine learning model to predict whether future tweets about a given
-airline are positive or negative in sentiment towards that airline.
+Let's apply k-means clustering to a very important real-world use case:
+detecting brain tumors from **magnetic resonance imaging** (**MRI**)
+scans. MRI scans are used across the world to generate detailed images
+of the human body, and can be used for a wide range of medical
+applications, from detecting cancerous cells to measuring blood flow. In
+this case study, we will use grayscale MRI scans of a healthy human
+brain as the input for a k-means clustering model. We will then apply
+the trained k-means clustering model to an MRI scan of another human
+brain to see if we can detect suspicious growths and tumors.
 
+Note that the images we will use in this case study are relatively
+simple, in that any suspicious growths that are present will be visible
+to the naked eye. The fundamental purpose of this case study is to show
+how Python may be used to manipulate images, and how MLlib may be used
+to natively train k-means clustering models via its k-means estimator.
 
+Feature vectors from images
+===========================
 
-NLP pipeline
-============
+The first challenge for us is to convert images into numerical feature
+vectors in order to train our k-means clustering model. In our case, we
+will be using grayscale MRI scans. A grayscale image in general can be
+thought of as a matrix of pixel-intensity values between 0 (black) and 1
+(white), as illustrated in *Figure 5.3*:
 
-Before we look at the Python code for our case study, let\'s visualize
-the end-to-end NLP pipeline that we will construct. Our NLP pipeline for
-this case study is illustrated in *Figure 6.2*:
+![](./images/f66f2887-1962-4aad-8f70-9dd144bde421.png)
 
+Figure 5.3: Grayscale image mapped to a matrix of pixel-intensity values
 
-![](./images/e322457d-6d42-4f82-999a-a2a446d5862e.png)
+The dimensions of the resulting matrix is equal to the height (*m*) and
+width (*n*) of the original image in pixels. The input into our k-means
+clustering model will therefore be (*m* x *n*) observations across one
+independent variable—the pixel-intensity value. This can subsequently be
+represented as a single vector containing (*m* x *n*) numerical
+elements—that is, (0.0, 0.0, 0.0, 0.2, 0.3, 0.4, 0.3, 0.4, 0.5 …).
 
+Image segmentation
+==================
 
+Now that we have derived feature vectors from our grayscale MRI image,
+our k-means clustering model will assign each pixel-intensity value to
+one of the *k* clusters when we train it on our MRI scan of a healthy
+human brain. In the context of the real world, these *k* clusters
+represent different substances in the brain, such as grey matter, white
+matter, fatty tissue, and cerebral fluids, which our model will
+partition based on color, a process called image segmentation. Once we
+have trained our k-means clustering model on a healthy human brain and
+identified *k* distinct clusters, we can then apply those defined
+clusters to MRI brain scans of other patients in an attempt to identify
+the presence and volume of suspicious growths.
 
-NLP in Apache Spark
-===================
+K-means cost function
+=====================
 
-Tokenization and stop-word removal feature
-transformers (among a wide variety of others), and the TF--IDF feature
-extractor is available natively in [MLlib]. Although stemming,
-lemmatization, and standardization can be achieved indirectly through
-transformations on Spark dataframes in Spark 2.3.2 (via **user-defined
-functions** (**UDFs**) and map functions that are applied to RDDs), we
-will be using a third-party Spark library called [spark-nlp] to
-perform these feature transformations. This third-party library has been
-designed to extend the features already available in [MLlib] by
-providing an easy-to-use API for distributed NLP annotations on Spark
-dataframes at scale.
+One of the challenges when using the k-means clustering algorithm is how
+to choose a suitable value for *k* upfront, especially if it is not
+obvious from the wider context of the use case in question. One method
+to help us is to plot a range of possible values of *k* on the *x*axis
+against the output of the k-means cost function on the *y*axis. The
+k-means cost function computes the total sum of the squared distance of
+every point to its corresponding cluster centroid for that value of *k*.
+The goal is to choose a suitable value of *k* that minimizes the cost
+function, but that is not so large that it increases the computational
+complexity of generating the clusters with only a small return in the
+reduction in cost. We will demonstrate how to generate this plot, and
+hence choose a suitable value of *k*, when we develop our Spark
+application for image segmentation in the next subsection.
 
+K-means clustering in Apache Spark
+==================================
 
+The MRI brain scans that we will use for our k-means clustering model
+have been downloaded from **The Cancer Imaging Archive** (**TCIA**), a
+service that anonymizes and hosts a large archive of medical images of
+cancer for public download, and that may be found at
+[http://www.cancerimagingarchive.net/](http://www.cancerimagingarchive.net/).
 
-We then need to tell Spark where it can find the **spark-nlp**
-library. We can do this either by setting the
-`spark.jars.packages` configuration within our code when instantiating a
-Spark context, as follows:
-
-```
-conf = SparkConf().set("spark.jars.packages", "com.johnsnowlabs.nlp:spark-nlp_2.12:3.2.1")
-.setAppName("Natural Language Processing - Sentiment Analysis")
-sc = SparkContext(conf=conf)
-```
-
-
-We are now ready to develop our NLP pipeline in Apache Spark in order to
-perform sentiment analysis on our corpus of airline tweets! Let\'s go
-through the following steps:
-
-**Note:**
+The MRI scan of our healthy human brain may be found in the GitHub
+repository accompanying this course, and is called
+mri-images-data/mri-healthy-brain.png. The MRI scan of the test human
+brain is called mri-images-data/mri-test-brain.png. We will use both in
+the following Spark application when training our k-means clustering
+model and applying it to image segmentation. Let's begin:
 
 The following subsections describe each of the pertinent cells in the
 corresponding Jupyter notebook for this use case, called
-[01-natural-language-processing.ipynb]. It can be found in
-the GitHub repository accompanying this course.
+chp05-01-kmeans-clustering.ipynb. It can be found in the GitHub
+repository accompanying this course.
 
-
-1.  As well as importing the standard PySpark dependencies, we also need
-    to import the relevant [spark-nlp] dependencies, including its
-    [Tokenizer], [Stemmer], and [Normalizer] classes,
-    as follows:
+1.  Let's open the grayscale MRI scan of the healthy human brain and
+    take a look at it! We can achieve this using the scikit-learn
+    machine learning library for Python as follows:
 
 ```
-import findspark
-findspark.init()
-from pyspark import SparkContext, SparkConf
-from pyspark.sql import SQLContext
-from pyspark.sql.functions import *
-from pyspark.sql.types import StructType, StructField
-from pyspark.sql.types import LongType, DoubleType, IntegerType, StringType, BooleanType
-from pyspark.ml.feature import VectorAssembler
-from pyspark.ml.feature import StringIndexer
-from pyspark.ml.feature import Tokenizer
-from pyspark.ml.feature import StopWordsRemover
-from pyspark.ml.feature import HashingTF, IDF
-from pyspark.ml import Pipeline, PipelineModel
-from pyspark.ml.classification import DecisionTreeClassifier
-from pyspark.ml.evaluation import BinaryClassificationEvaluator
-from pyspark.mllib.evaluation import MulticlassMetrics
-
-from sparknlp.base import *
-from sparknlp.annotator import Tokenizer as NLPTokenizer
-from sparknlp.annotator import Stemmer, Normalizer
+mri_healthy_brain_image = io.imread(
+'lab05/data/mri-images-data/mri-healthy-brain.png')
+mri_healthy_brain_image_plot = plt.imshow(
+mri_healthy_brain_image, cmap='gray')
 ```
 
+Copy
 
-2.  Next, we instantiate a [SparkContext] as usual. Note, however,
-    that in this case, we explicitly tell Spark where to find the
-    [spark-nlp] library using the [spark-jars] configuration
-    parameter. We can then invoke the [getConf()] method on our
-    [SparkContext] instance to review the current Spark
-    configuration, as follows:
+The rendered image is illustrated in *Figure 5.4*:
 
-```
-conf = SparkConf().set("spark.jars", '/opt/anaconda3/lib/python3.6/site-packages/sparknlp/lib/sparknlp.jar')
-.setAppName("Natural Language Processing - Sentiment Analysis")
-sc = SparkContext(conf=conf)
-sqlContext = SQLContext(sc)
-sc.getConf().getAll()
-```
+![](./images/641d2583-8db8-43a3-a049-0d373649e56e.png)
 
+Figure 5.4: Original MRI scan rendered using scikit-learn and matplotlib
 
-3.  After loading our corpus of airline tweets from
-    [twitter-data/airline-tweets-labelled-corpus.csv] into a Spark
-    dataframe called [airline\_tweets\_df], we generate a new
-    label column. The existing dataset already contains a label column
-    called [airline\_sentiment], which is either
-    [\"positive\"], [\"neutral\"], or [\"negative\"]
-    based on a manual pre-classification. Although positive messages are
-    naturally always welcome, in reality, the most useful messages are
-    usually the negative ones. By automatically identifying and studying
-    the negative messages, organizations can focus more efficiently on
-    how to improve their products and services based on negative
-    feedback. Therefore, we will create a new label column called
-    [negative\_sentiment\_label] that is [\"true\"] if the
-    underlying sentiment has been classified as [\"negative\"] and
-    [\"false\"] otherwise, as shown in the following code:
+2.  We now need to turn this image into a matrix of decimal point
+    pixel-intensity values between 0 and 1. Conveniently, this function
+    is provided out of the box by scikit-learn using the img\_as\_float
+    method, as shown in the following code. The dimensions of the
+    resulting matrix are 256 x 256, implying an original image of 256 x
+    256 pixels:
 
 ```
-airline_tweets_with_labels_df = airline_tweets_df
-.withColumn("negative_sentiment_label",
-when(col("airline_sentiment") == "negative", lit("true"))
-.otherwise(lit("false")))
-.select("unit_id", "text", "negative_sentiment_label")
+mri_healthy_brain_matrix = img_as_float(mri_healthy_brain_image)
 ```
 
+Copy
 
-4.  We are now ready to build and apply our preprocessing pipeline to
-    our corpus of raw tweets! Here, we demonstrate how to utilize the
-    feature transformers native to Spark\'s [MLlib], namely its
-    [Tokenizer] and [StopWordsRemover] transformers. First,
-    we tokenize the raw textual content of each tweet using the
-    [Tokenizer] transformer, resulting in a new column containing
-    a list of parsed tokens. We then pass this column containing the
-    tokens to the [StopWordsRemover] transformer, which removes
-    English language (default) stop words from this list, resulting in a
-    new column containing the list of filtered tokens. In the next cell,
-    we will demonstrate how to utilize the feature transformers
-    available in the [spark-nlp] third-party library. However,
-    [spark-nlp] requires a column of a [string] type as its
-    initial input, not a list of tokens. Therefore, the final statement
-    concatenates the list of filtered tokens back into a
-    whitespace-delimited [string] column, as follows:
+3.  Next, we need to flatten this matrix into a single vector of 256 x
+    256 elements, where each element represents a pixel-intensity value.
+    This can be thought of as another matrix of dimensions 1 x (256 x
+    256) = 1 x 65536. We can achieve this using the numpy Python
+    library. First, we convert our original 256 x 256 matrix into a
+    2-dimensional numpy array. We then use numpy's ravel() method to
+    flatten this 2-dimensional array into a 1-dimensional array.
+    Finally, we represent this 1-dimensional array as a specialized
+    array, or matrix, of dimensions 1 x 65536 using the np.matrix
+    command, as follows:
 
 ```
-filtered_df = airline_tweets_with_labels_df
-.filter("text is not null")
-tokenizer = Tokenizer(inputCol="text", outputCol="tokens_1")
-tokenized_df = tokenizer.transform(filtered_df)
-remover = StopWordsRemover(inputCol="tokens_1",
-outputCol="filtered_tokens")
-preprocessed_part_1_df = remover.transform(tokenized_df)
-preprocessed_part_1_df = preprocessed_part_1_df
-.withColumn("concatenated_filtered_tokens",
-concat_ws(" ", col("filtered_tokens")))
+mri_healthy_brain_2d_array = np.array(mri_healthy_brain_matrix)
+.astype(float)
+mri_healthy_brain_1d_array = mri_healthy_brain_2d_array.ravel()
+mri_healthy_brain_vector = np.matrix(mri_healthy_brain_1d_array)
 ```
 
+Copy
 
-5.  We can now demonstrate how to utilize the feature transformers and
-    annotators available in the [spark-nlp] third-party library,
-    namely its [DocumentAssember] transformer and
-    [Tokenizer], [Stemmer] , and [Normalizer]
-    annotators. First, we create annotated documents from our string
-    column that are required as the initial input into the
-    [spark-nlp] pipelines. Then, we apply the [spark-nlp]
-    [Tokenizer] and [Stemmer] annotators to convert our
-    filtered list of tokens into a list of *stems*. Finally, we apply
-    its [Normalizer] annotator, which converts the stems into
-    lowercase by default. All of these stages are defined within a
-    *pipeline*, which is an ordered list of
-    machine learning and data transformation steps that is executed on a
-    Spark dataframe.
-
-We execute our pipeline on our dataset, resulting in a new dataframe
-called [preprocessed\_df] from which we keep only the relevant
-columns that are required for subsequent analysis and modelling, namely
-[unit\_id] (unique record identifier), [text] (original raw
-textual content of the tweet), [negative\_sentiment\_label] (our
-new label), and [normalised\_stems] (a [spark-nlp] array of
-filtered, stemmed, and normalized tokens as a result of our
-preprocessing pipeline), as shown in the following code:
-
-```
-document_assembler = DocumentAssembler()
-.setInputCol("concatenated_filtered_tokens")
-tokenizer = NLPTokenizer()
-.setInputCols(["document"]).setOutputCol("tokens_2")
-stemmer = Stemmer().setInputCols(["tokens_2"])
-.setOutputCol("stems")
-normalizer = Normalizer()
-.setInputCols(["stems"]).setOutputCol("normalised_stems")
-pipeline = Pipeline(stages=[document_assembler, tokenizer, stemmer,
-normalizer])
-pipeline_model = pipeline.fit(preprocessed_part_1_df)
-preprocessed_df = pipeline_model.transform(preprocessed_part_1_df)
-preprocessed_df.select("unit_id", "text",
-"negative_sentiment_label", "normalised_stems")
-```
-
-
-6.  Before we can create feature vectors from our array of stemmed
-    tokens using [MLlib]\'s native feature extractors, there is
-    one final preprocessing step. The column containing our stemmed
-    tokens, namely [normalised\_stems], persists these tokens in a
-    specialized [spark-nlp] array structure. We need to convert
-    this [spark-nlp] array back into a standard list of tokens so
-    that we may apply [MLlib]\'s native TF--IDF algorithms to it.
-    We achieve this by first exploding the [spark-nlp] array
-    structure, which has the effect of creating a new dataframe
-    observation for every element in this array. We then group our Spark
-    dataframe by [unit\_id], which is the primary key for each
-    unique tweet, before aggregating the stems using the whitespace
-    delimiter into a new string column called [tokens]. Finally,
-    we apply the [split] function to this column to convert the
-    aggregated string into a list of strings or tokens, as shown in the
-    following code:
-
-```
-exploded_df = preprocessed_df
-.withColumn("stems", explode("normalised_stems"))
-.withColumn("stems", col("stems").getItem("result"))
-.select("unit_id", "negative_sentiment_label", "text", "stems")
-
-aggregated_df = exploded_df.groupBy("unit_id")
-.agg(concat_ws(" ", collect_list(col("stems"))),
-first("text"), first("negative_sentiment_label"))
-.toDF("unit_id", "tokens", "text", "negative_sentiment_label")
-.withColumn("tokens", split(col("tokens"), " ")
-.cast("array<string>"))
-```
-
-
-7.  We are now ready to generate feature vectors from our list of
-    filtered, stemmed, and normalized tokens! As discussed, we will be
-    using the TF--IDF feature extractor to generate feature vectors
-    rather than the basic bag of words approach. The TF--IDF feature
-    extractor is native to [MLlib] and comes in two parts. First,
-    we generate the **term frequency** (**TF**) feature vectors by
-    passing our list of tokens into [MLlib]\'s [HashingTF]
-    transformer. We then *fit* [MLlib]\'s **inverse document
-    frequency** (**IDF**) estimator to our dataframe containing the term
-    frequency feature vectors, as shown in the following code. The
-    result is a new Spark dataframe with our TF--IDF feature vectors
-    contained in a column called [features]:
-
-```
-hashingTF = HashingTF(inputCol="tokens", outputCol="raw_features",
-numFeatures=280)
-features_df = hashingTF.transform(aggregated_df)
-idf = IDF(inputCol="raw_features", outputCol="features")
-idf_model = idf.fit(features_df)
-scaled_features_df = idf_model.transform(features_df)
-```
-
-
-8.  Since our label column is
-    categorical in nature, we need to apply [MLlib]\'s
-    [StringIndexer] to it in order to identify and index all
-    possible classifications. The result is a new Spark dataframe with
-    an indexed label column called [\"label\"], which is 0.0 if
-    [negative\_sentiment\_label] is [true], and 1.0 if
-    [negative\_sentiment\_label] is [false], as shown in the
-    following code:
-
-```
-indexer = StringIndexer(inputCol = "negative_sentiment_label",
-outputCol = "label").fit(scaled_features_df)
-scaled_features_indexed_label_df = indexer.transform(scaled_features_df)
-```
-
-
-9.  We are now ready to create training and test dataframes in order to
-    train and evaluate subsequent machine learning models. We achieve
-    this as normal, using the [randomSplit] method (as shown in
-    the following code), but in this case, 90% of all observations will
-    go into our training dataframe, with the remaining 10% going into
-    our test dataframe:
-
-```
-train_df, test_df = scaled_features_indexed_label_df
-.randomSplit([0.9, 0.1], seed=12345)
-```
-
-
-10. In this example, we will be training a supervised decision tree
-    classifier in order to help us
-    classify whether a given tweet is positive or negative in sentiment.
-    We fit [MLlib]\'s
-    [DecisionTreeClassifier] estimator to our training dataframe
-    in order to train our classification tree, as shown in the following
+4.  Now that we have our single vector, represented as a matrix of 1 x
+    65536 in dimension, we need to convert it into a Spark dataframe. To
+    achieve this, we firstly transpose the matrix using numpy's
+    reshape() method so that it is 65536 x 1. We then use the
+    createDataFrame() method, exposed by Spark's SQLContext, to create a
+    Spark dataframe containing 65536 observations/rows and 1 column,
+    representing 65536 pixel-intensity values, as shown in the following
     code:
 
 ```
-decision_tree = DecisionTreeClassifier(featuresCol = 'features',
-labelCol = 'label')
-decision_tree_model = decision_tree.fit(train_df)
+mri_healthy_brain_vector_transposed = mri_healthy_brain_vector
+.reshape(mri_healthy_brain_vector.shape[1],
+mri_healthy_brain_vector.shape[0])
+mri_healthy_brain_df = sqlContext.createDataFrame(
+pd.DataFrame(mri_healthy_brain_vector_transposed,
+columns = ['pixel_intensity']))
 ```
 
+Copy
 
-11. Now that we have a trained classification tree, we can apply it to
-    our test dataframe in order to classify test tweets. We apply our trained
-    classification tree to the test dataframe using the
-    [transform()] method (as shown in the following code), and
-    afterwards study its predicted classifications:
-
-```
-test_decision_tree_predictions_df = decision_tree_model
-.transform(test_df)
-print("TEST DATASET PREDICTIONS AGAINST ACTUAL LABEL: ")
-test_decision_tree_predictions_df.select("prediction", "label",
-"text").show(10, False)
-```
-
-
-For example, our decision tree classifier has predicted that the
-following tweets from our test dataframe are negative in sentiment:
-
--   \"I need you\...to be a better airline. \^LOL\"
--   \"if you can\'t guarantee parents will sit with their children,
-    don\'t sell tickets with that promise\"
--   \"resolved and im sick and tired of waiting on you. I want my refund
-    and I\'d like to speak to someone about it.\"
--   \"I would have loved to respond to your website until I saw the
-    really long form. In business the new seats are bad\"
-
-A human would also probably classify these tweets as negative in
-sentiment! But more importantly, airlines can use this model and the
-tweets that it identifies to focus on areas for improvement. Based on
-this sample of tweets, such areas would include website usability,
-ticket marketing, and the time taken to process refunds.
-
-12. Finally, in order to quantify the accuracy of our trained
-    classification tree, let\'s compute its confusion matrix on the test
-    data using the following code:
+5.  We are now ready to generate MLlib feature vectors using
+    VectorAssembler, a method that we have seen before. The
+    feature\_columns for VectorAssembler will simply be the sole
+    pixel-intensity column from our Spark dataframe. The output of
+    applying VectorAssembler to our Spark dataframe via the transform()
+    method will be a new Spark dataframe called
+    mri\_healthy\_brain\_features\_df, containing our 65536 MLlib
+    feature vectors, as follows:
 
 ```
-predictions_and_label = test_decision_tree_predictions_df
-.select("prediction", "label").rdd
-metrics = MulticlassMetrics(predictions_and_label)
-print("N = %g" % test_decision_tree_predictions_df.count())
-print(metrics.confusionMatrix())
+feature_columns = ['pixel_intensity']
+vector_assembler = VectorAssembler(inputCols = feature_columns,
+outputCol = 'features')
+mri_healthy_brain_features_df = vector_assembler
+.transform(mri_healthy_brain_df).select('features')
 ```
 
+Copy
 
-The resulting confusion matrix looks as follows:
-
-+-----------------------+-----------------------+-----------------------+
-|                       | **Predict *y* = 0     | **Predict *y* = 1     |
-|                       | (Negative)**          | (Non-Negative)**      |
-+-----------------------+-----------------------+-----------------------+
-| **Actual *y* = 0**    | 725                   | 209                   |
-|                       |                       |                       |
-| **(Negative)**        |                       |                       |
-+-----------------------+-----------------------+-----------------------+
-| **Actual *y* = 1**    | 244                   | 325                   |
-|                       |                       |                       |
-| **(Non-Negative)**    |                       |                       |
-+-----------------------+-----------------------+-----------------------+
-
-We can interpret this confusion matrix as follows---out of a total of
-1,503 test tweets, our model exhibits the following properties:
-
--   Correctly classifies 725 tweets as negative in sentiment that are
-    actually negative
--   Correctly classifies 325 tweets as non-negative in sentiment that
-    are actually non-negative
--   Incorrectly classifies 209 tweets as non-negative in sentiment that
-    are actually negative
--   Incorrectly classifies 244 tweets as negative in sentiment that are
-    actually non-negative
--   Overall accuracy = 70%
--   Overall error rate = 30%
--   Sensitivity = 57%
--   Specificity = 78%
-
-So, based on a default threshold value of 0.5 (which in this case study
-is fine because we have no preference over what type of error is
-better), our decision tree classifier has an overall accuracy rate of
-70%, which is quite good!
-
-13. For the sake of completeness, let\'s train a decision tree
-    classifier, but using the feature vectors that are derived from the
-    bag of words algorithm. Note that we already computed these feature
-    vectors when we applied the [HashingTF] transformer to our
-    preprocessed corpus to calculate the term frequency (TF) feature
-    vectors. Therefore, we can just repeat our machine learning
-    pipeline, but based only on the output of the [HashingTF]
-    transformer instead, as follows:
+6.  We can now compute and plot the output of the k-means cost function
+    for a range of *k* in order to determine the best value of *k* for
+    this use case. We achieve this by using MLlib's KMeans() estimator
+    in the Spark dataframe containing our feature vectors, iterating
+    over values of k in the range(2, 20). We can then plot this using
+    the matplotlib Python library, as shown in the following code:
 
 ```
-# Create Training and Test DataFrames based on the Bag of Words Feature Vectors
-bow_indexer = StringIndexer(inputCol = "negative_sentiment_label",
-outputCol = "label").fit(features_df)
-bow_features_indexed_label_df = bow_indexer.transform(features_df)
-.withColumnRenamed("raw_features", "features")
-bow_train_df, bow_test_df = bow_features_indexed_label_df
-.randomSplit([0.9, 0.1], seed=12345)
+cost = np.zeros(20)
+for k in range(2, 20):
+kmeans = KMeans().setK(k).setSeed(1).setFeaturesCol("features")
+model = kmeans.fit(mri_healthy_brain_features_df
+.sample(False, 0.1, seed=12345))
+cost[k] = model.computeCost(mri_healthy_brain_features_df)
 
-# Train a Decision Tree Classifier using the Bag of Words Feature Vectors
-bow_decision_tree = DecisionTreeClassifier(featuresCol =
-'features', labelCol = 'label')
-bow_decision_tree_model = bow_decision_tree.fit(bow_train_df)
-
-# Apply the Bag of Words Decision Tree Classifier to the Test DataFrame and generate the Confusion Matrix
-bow_test_decision_tree_predictions_df = bow_decision_tree_model
-.transform(bow_test_df)
-bow_predictions_and_label = bow_test_decision_tree_predictions_df
-.select("prediction", "label").rdd
-bow_metrics = MulticlassMetrics(bow_predictions_and_label)
-print("N = %g" % bow_test_decision_tree_predictions_df.count())
-print(bow_metrics.confusionMatrix())
+fig, ax = plt.subplots(1, 1, figsize =(8, 6))
+ax.plot(range(2, 20),cost[2:20])
+ax.set_title('Optimal Number of Clusters K based on the
+K-Means Cost Function for a range of K')
+ax.set_xlabel('Number of Clusters K')
+ax.set_ylabel('K-Means Cost')
 ```
 
+Copy
 
-Note that the resulting confusion matrix is exactly the same as when we
-applied our decision tree classifier that had been trained on the
-*scaled* feature vectors using the [IDF] estimator (given the same
-random split seed and size of the training dataframe). This is because
-of the fact that our corpus of tweets is relatively small at 14,872
-documents, and therefore the effect of scaling the term frequency
-([TF]) feature vectors based on the frequency across the corpus
-will have a negligible impact on the predictive quality of this specific
-model.
+Based on the resulting plot, as illustrated in *Figure 5.5*, a value of
+*k* of either 5 or 6 would seem to be ideal. At these values, the
+k-means cost is minimized with little return gained thereafter, as shown
+in the following graph:
 
-14. A very useful feature provided by [MLlib] is the ability to
-    save trained machine learning models to disk for later use. We can
-    take advantage of this feature by saving our trained decision tree
-    classifier to the local disk of our single-node development
-    environment:
+![](./images/4ac60c7e-4c77-4411-b9b6-b4910e063ea3.png)
+
+Figure 5.5: K-means cost function
+
+7.  We are now ready to train our k-means clustering model! Again, we
+    will use MLlib's KMeans() estimator, but this time using a defined
+    value for *k* (5, in our case, as we decided in step 6). We will
+    then apply it, via the fit() method, to the Spark dataframe
+    containing our feature vectors and study the centroid values for
+    each of our 5 resulting clusters, as follows:
 
 ```
-bow_decision_tree_model.save('<Target filesystem path to save MLlib Model>')
+k = 5
+kmeans = KMeans().setK(k).setSeed(12345).setFeaturesCol("features")
+kmeans_model = kmeans.fit(mri_healthy_brain_features_df)
+kmeans_centers = kmeans_model.clusterCenters()
+print("Healthy MRI Scan - K-Means Cluster Centers: \n")
+for center in kmeans_centers:
+print(center)
 ```
 
+Copy
 
-**Note:**
+8.  Next, we will apply our trained k-means model to the Spark dataframe
+    containing our feature vectors so that we may assign each of the
+    65536 pixel-intensity values to one of the five clusters. The result
+    will be a new Spark dataframe containing our feature vectors mapped
+    to a prediction, where in this case the prediction is simply a value
+    between 0 and 4, representing one of the five clusters. Then, we
+    convert this new dataframe into a 256 x 256 matrix so that we can
+    visualize the segmented image, as follows:
 
-Our trained decision tree classifier for performing sentiment analysis
-of airline tweets has also been pushed to the GitHub repository
-accompanying this course, and may be found in
-[lab06/models/airline-sentiment-analysis-decision-tree-classifier].
+```
+mri_healthy_brain_clusters_df = kmeans_model
+.transform(mri_healthy_brain_features_df)
+.select('features', 'prediction')
+mri_healthy_brain_clusters_matrix = mri_healthy_brain_clusters_df
+.select("prediction").toPandas().values
+.reshape(mri_healthy_brain_matrix.shape[0],
+mri_healthy_brain_matrix.shape[1])
+plt.imshow(mri_healthy_brain_clusters_matrix)
+```
+
+Copy
+
+The resulting segmented image, rendered using matplotlib, is illustrated
+in *Figure 5.6*:
+
+![](./images/6cf03ae5-c26a-4983-84cf-70d8e7ce9315.png)
+
+Figure 5.6: Segmented MRI scan
+
+9.  Now that we have our five defined clusters, we can apply our trained
+    k-means model to a *new* image in order to segment it, also based on
+    the same five clusters. First, we load the new grayscale MRI brain
+    scan belonging to the test patient using the scikit-learn library,
+    as we did before using the following code:
+
+```
+mri_test_brain_image = io.imread(
+'lab05/data/mri-images-data/mri-test-brain.png')
+```
+
+Copy
+
+10. Once we have loaded the new MRI brain scan image, we need to follow
+    the same process to convert it into a Spark dataframe containing
+    feature vectors representing the pixel-intensity values of the new
+    test image. We then apply the trained k-means model, via the
+    transform() method, to this test Spark dataframe in order to assign
+    its pixels to one of the five clusters. Finally, we convert the
+    Spark dataframe containing the test image predictions in to a matrix
+    so that we can visualize the segmented test image, as follows:
+
+```
+mri_test_brain_df = sqlContext
+.createDataFrame(pd.DataFrame(mri_test_brain_vector_transposed,
+columns = ['pixel_intensity']))
+mri_test_brain_features_df = vector_assembler
+.transform(mri_test_brain_df)
+.select('features')
+mri_test_brain_clusters_df = kmeans_model
+.transform(mri_test_brain_features_df)
+.select('features', 'prediction')
+mri_test_brain_clusters_matrix = mri_test_brain_clusters_df
+.select("prediction").toPandas().values.reshape(
+mri_test_brain_matrix.shape[0], mri_test_brain_matrix.shape[1])
+plt.imshow(mri_test_brain_clusters_matrix)
+```
+
+Copy
+
+The resulting segmented image belonging to the test patient, again
+rendered using matplotlib, is illustrated in *Figure 5.7*:
+
+![](./images/8354900b-5a2b-47cd-a4b9-9518b991bd69.png)
+
+Figure 5.7: Segmented MRI scan belonging to the test patient
+
+If we compare the two segmented images side by side (as illustrated in
+*Figure 5.8*), we will see that, as a result of our k-means clustering
+model, five different colors have been rendered representing the five
+different clusters. In turn, these five different clusters represent
+different substances in the human brain, partitioned by color. We will
+also see that, in the test MRI brain scan, one of the colors takes up a
+substantially larger area compared to the healthy MRI brain scan,
+pointing to a suspicious growth that may potentially be a tumor
+requiring further analysis, as shown in the following image:
+
+![](./images/f612788f-acd9-49f0-969c-dcc79a3844d8.png)
+
+Figure 5.8: Comparison of segmented MRI scans
+
+
+Principal component analysis
+============================
+
+There are numerous real-world use cases where the number of features
+available that may potentially be used to train a model is very large. A
+common example is economic data, and using its constituent stock price
+data, employment data, banking data, industrial data, and housing data
+together to predict the **gross domestic product** (**GDP**). Such types
+of data are said to have high dimensionality. Though they offer numerous
+features that can be used to model a given use case, high-dimensional
+datasets increase the computational complexity of machine learning
+algorithms, and more importantly may also result in over fitting. Over
+fitting is one of the results of the **curse of dimensionality**, which
+formally describes the problem of analyzing data in high-dimensional
+spaces (which means that the data may contain many attributes, typically
+hundreds or even thousands of dimensions/features), but where that
+analysis no longer holds true in a lower-dimensional space.
+
+Informally, it describes the value of additional dimensions at the cost
+of model performance. **Principal component analysis** (**PCA**)****is
+an *unsupervised* technique used to preprocess and reduce the
+dimensionality of high-dimensional datasets while preserving the
+original structure and relationships inherent to the original dataset so
+that machine learning models can still learn from them and be used to
+make accurate predictions.
+
+Case study – movie recommendation system
+========================================
+
+To better understand PCA, let's study a movie recommendation use case.
+Our aim is to build a system that can make personalized movie
+recommendations to users based on historic user-community movie ratings
+(note that user viewing history data could also be used for such a
+system, but this is beyond the scope of this example).
+
+The historic user-community movie ratings data that we will use for our
+case study has been downloaded from GroupLens, a research laboratory
+based at the University of Minnesota that collects movie ratings and
+makes them available for public download at
+[https://grouplens.org/datasets/movielens/](https://grouplens.org/datasets/movielens/).
+For the purposes of this case study, we have transformed the individual
+*movies* and *ratings* datasets into a single pivot table where the 300
+rows represent 300 different users, and the 3,000 columns represent
+3,000 different movies. This transformed, pipe-delimited dataset can be
+found in the GitHub repository accompanying this course, and is called
+movie-ratings-data/user-movie-ratings.csv.
+
+A sample of the historic user-community movie ratings dataset that we
+will study looks as follows:
+
++--------------+--------------+--------------+--------------+--------------+--------------+
+|              | **Movie      | **Movie      | **Movie      | **Movie      | **Movie      |
+|              | \#1**        | \#2**        | \#3**        | \#4**        | \#5**        |
+|              |              |              |              |              |              |
+|              | **Toy        | **Monsters   | **Saw**      | **Ring**     | **Hitch**    |
+|              | Story**      | Inc.**       |              |              |              |
++--------------+--------------+--------------+--------------+--------------+--------------+
+| **User \#1** | 4            | 5            | 1            | NULL         | 4            |
++--------------+--------------+--------------+--------------+--------------+--------------+
+| **User \#2** | 5            | NULL         | 1            | 1            | NULL         |
++--------------+--------------+--------------+--------------+--------------+--------------+
+| **User \#3** | 5            | 4            | 3            | NULL         | 3            |
++--------------+--------------+--------------+--------------+--------------+--------------+
+| **User \#4** | 5            | 4            | 1            | 1            | NULL         |
++--------------+--------------+--------------+--------------+--------------+--------------+
+| **User \#5** | 5            | 5            | NULL         | NULL         | 3            |
++--------------+--------------+--------------+--------------+--------------+--------------+
+
+In this case, each movie is a different feature (or dimension), and each
+different user is a different instance (or observation). This sample
+table, therefore, represents a dataset containing 5 features. However,
+our actual dataset contains 3,000 different movies, and therefore 3,000
+features/dimensions. Furthermore, in a real-life representation, not all
+users would have rated all the movies, and so there will be a
+significant number of missing values. Such a dataset, and the matrix
+used to represent it, is described as *sparse*. These issues would pose
+a problem for machine learning algorithms, both in terms of
+computational complexity and the likelihood of over fitting.
+
+To solve this problem, take a closer look at the previous sample table.
+It seems that users that rated Movie \#1 highly (Toy Story) generally
+also rated Movie \#2 highly (Monsters Inc.) as well. We could say, for
+example, that User \#1 is *representative* of all fans of
+computer-animated children's films, and so we could recommend to User
+\#2 the other movies that User \#1 has historically rated highly (this
+type of recommendation system where we use data from other users is
+called **collaborative filtering**). At a high level, this is what PCA
+does—it identifies *typical representations*, called **principal
+components**, within a high-dimensional dataset so that the dimensions
+of the original dataset can be reduced while preserving its underlying
+structure and still be representative in *lower* dimensions! These
+reduced datasets can then be fed into machine learning models to make
+predictions as normal, without the fear of any adverse effects from
+reducing the raw size of the original dataset. Our formal definition of
+PCA can therefore now be extended so that we can define PCA as the
+identification of a linear subspace of lower dimensionality where the
+largest variance in the original dataset is maintained.
+
+Returning to our historic user-community movie ratings dataset, instead
+of eliminating Movie \#2 entirely, we could seek to create a new feature
+that combines Movie \#1 and Movie \#2 in some manner. Extending this
+concept, we can create new features where each new feature is based on
+all the old features, and thereafter order these new features by how
+well they help us in predicting user movie ratings. Once ordered, we can
+drop the least important ones, thereby resulting in a reduction in
+dimensionality. So how does PCA achieve this? It does so by performing
+the following steps:
+
+1.  First, we standardize the original high-dimensional dataset.
+2.  Next, we take the standardized data and compute a covariance matrix
+    that provides a means to measure how all our features relate to each
+    other.
+3.  After computing the covariance matrix, we then find its
+    *eigenvectors* and corresponding *eigenvalues*. Eigenvectors
+    represent the principal components and provide a means to understand
+    the direction of the data. Corresponding eigenvalues represent how
+    much variance there is in the data in that direction.
+
+4.  The eigenvectors are then sorted in descending order based on their
+    corresponding eigenvalues, after which the top *k* eigenvectors are
+    selected representing the most important representations found in
+    the data.
+5.  A new matrix is then constructed with these *k* eigenvectors,
+    thereby reducing the original *n*-dimensional dataset into reduced
+    *k* dimensions.
+
+Covariance matrix
+=================
+
+In mathematics, **variance** refers to a measure of how spread out a
+dataset is, and is calculated by the sum of the squared distances of
+each data point, *x~i~*, from the mean *x-bar*, divided by the total
+number of data points, *N*. This is represented by the following
+formula:
+
+![](./images/787eabe6-db53-4369-9e63-43761b34b1d8.png)
+
+**Covariance** refers to a measure of how strong the correlation between
+two or more random variables is (in our case, our independent
+variables), and is calculated for variables *x* and *y* over *i*
+dimensions, as follows:
+
+![](./images/21109685-3428-485a-8bfc-2c75ae5a0a1d.png)
+
+If the covariance is positive, this implies that the independent
+variables are positively correlated. If the covariance is negative, this
+implies that the independent variables are negatively correlated.
+Finally, a covariance of zero implies that there is no correlation
+between the independent variables.
+
+
+The covariance matrix is shown in the following table:
+
++--------------------+--------------------+--------------------+--------------------+
+|                    | **x**              | **y**              | **z**              |
++--------------------+--------------------+--------------------+--------------------+
+| **x**              | var(x)             | cov(x, y)          | cov(x, z)          |
++--------------------+--------------------+--------------------+--------------------+
+| **y**              | cov(y, x)          | var(y)             | cov(y, z)          |
++--------------------+--------------------+--------------------+--------------------+
+| **z**              | cov(z, x)          | cov(z, y)          | var(z)             |
++--------------------+--------------------+--------------------+--------------------+
+
+Identity matrix
+===============
+
+An identity matrix is a square matrix in which all the elements along
+the main diagonal are 1 and the remaining elements are 0. Identity
+matrices are important for when we need to find all of the eigenvectors
+for a matrix. For example, a 3 x 3 identity matrix looks as follows:
+
+![](./images/15e61c67-15f7-474d-b0f3-f1b47599e4bf.png)
+
+Eigenvectors and eigenvalues
+============================
+
+In linear algebra, eigenvectors are a special set of vectors whose
+*direction* remains unchanged when a linear transformation is applied to
+it, and only changes by a *scalar* factor. In the context of
+dimensionality reduction, eigenvectors represent the principal
+components and provide a means to understand the direction of the data.
+
+Consider a matrix, *A*, of dimensions (*m* x *n*). We can multiply *A*
+by a vector, *x* (of dimensions *n* x 1 by definition), which results in
+a new vector, *b* (of dimensions *m* x 1), as follows:
+
+![](./images/1a360801-1a58-40ec-acce-35f7e62c63c7.png)
+
+In other words, ![](./images/ec5d7f90-b023-49b0-bf87-81f10dce29d7.png).
+
+However, in some cases, the resulting vector, *b*, is actually a scaled
+version of the original vector, *x*. We call this scalar factor *λ*, in
+which case the formula above can be rewritten as follows:
+
+![](./images/d1492866-60c5-45cf-bd49-c9612a240212.png)
+
+We say that *λ* is an *eigenvalue* of matrix *A*, and *x* is an
+*eigenvector* associated with *λ*. In the context of dimensionality
+reduction, eigenvalues represent how much variance there is in the data
+in that direction.
+
+In order to find all the eigenvectors for a matrix, we need to solve the
+following equation for each eigenvalue, where *I* is an identity matrix
+with the same dimensions as matrix *A*:
+
+![](./images/c433abbc-2457-45b1-8721-857bfe6dd7da.png)
+
+The process by which to solve this equation is beyond the scope of this
+course. However, to learn more about eigenvectors and eigenvalues, please
+visit
+[https://en.wikipedia.org/wiki/Eigenvalues\_and\_eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors).
+
+Once all of the eigenvectors for the covariance matrix are found, these
+are then sorted in descending order by their corresponding eigenvalues.
+Since eigenvalues represent the amount of variance in the data for that
+direction, the first eigenvector in the ordered list represents the
+principal component that captures the most variance in the original
+variables from the original dataset, and so on. For example, as
+illustrated in *Figure 5.9*, if we were to plot a dataset with two
+dimensions or features, the first eigenvector (which will be the first
+principal component in order of importance) would represent the
+direction of most variation between the two features.
+
+The second eigenvector (the second principal component in order of
+importance) would represent the direction of second-most variation
+between the two features:
+
+![](./images/f81a5743-0cc2-4b65-8cc9-ff48c27cf675.png)
+
+Figure 5.9: Principal components across two dimensions
+
+To help choose the number of principal components, *k*, to select from
+the top of the ordered list of eigenvectors, we can plot the number of
+principal components on the *x*axis against the cumulative explained
+variance on the *y*axis, as illustrated in *Figure 5.10*, where the
+explained variance is the ratio between the variance of that principal
+component and the total variance (that is, the sum of all eigenvalues):
+
+![](./images/8097f834-824c-4dfb-9fc0-663de2082ad7.png)
+
+Figure 5.10: Cumulative explained variance
+
+Using *Figure 5.10* as an example, we would select around the first 300
+principal components, as these describe the most variation within the
+data out of the 3,000 in total. Finally, we construct a new matrix by
+projecting the original dataset into *k*-dimensional space represented
+by the eigenvectors selected, thereby reducing the dimensionality of the
+original dataset from 3,000 dimensions to 300 dimensions. This
+preprocessed and reduced dataset can then be used to train machine
+learning models as normal.
+
+PCA in Apache Spark
+===================
+
+Let's now return to our transformed pipe-delimited user-community movie
+ratings dataset, movie-ratings-data/user-movie-ratings.csv, which
+contains ratings by 300 users covering 3,000 movies. We will develop an
+application in Apache Spark that seeks to reduce the dimensionality of
+this dataset while preserving its structure using PCA. To do this, we
+will go through the following steps:
+
+The following subsections describe each of the pertinent cells in the
+corresponding Jupyter notebook for this use case, called
+chp05-02-principal-component-analysis.ipynb. This can be found in the
+GitHub repository accompanying this course.
+
+1.  First, let's load the transformed, pipe-delimited user-community
+    movie ratings dataset into a Spark dataframe using the following
+    code. The resulting Spark dataframe will have 300 rows (representing
+    the 300 different users) and 3,001 columns (representing the 3,000
+    different movies plus the user ID column):
+
+```
+user_movie_ratings_df = sqlContext.read
+.format('com.databricks.spark.csv').options(header = 'true',
+inferschema = 'true', delimiter = '|')
+.load('<Path to CSV File>')
+print((user_movie_ratings_df.count(),
+len(user_movie_ratings_df.columns)))
+```
+
+Copy
+
+2.  We can now generate MLlib feature vectors containing 3,000 elements
+    (representing the 3,000 features) using MLlib's VectorAssembler, as
+    we have seen before. We can achieve this using the following code:
+
+```
+feature_columns = user_movie_ratings_df.columns
+feature_columns.remove('userId')
+vector_assembler = VectorAssembler(inputCols = feature_columns,
+outputCol = 'features')
+user_movie_ratings_features_df = vector_assembler
+.transform(user_movie_ratings_df)
+.select(['userId', 'features'])
+```
+
+Copy
+
+3.  Before we can reduce the dimensionality of the dataset using PCA, we
+    first need to standardize the features that we described previously.
+    This can be achieved using MLlib's StandardScaler estimator and
+    fitting it to the Spark dataframe containing our feature vectors, as
+    follows:
+
+```
+standardizer = StandardScaler(withMean=True, withStd=True,
+inputCol='features', outputCol='std_features')
+standardizer_model = standardizer
+.fit(user_movie_ratings_features_df)
+user_movie_ratings_standardized_features_df =
+standardizer_model.transform(user_movie_ratings_features_df)
+```
+
+Copy
+
+4.  Next, we convert our scaled features into a MLlib
+    RowMatrix**instance. A RowMatrix is a distributed matrix with no
+    index, where each row is a vector. We achieve this by converting our
+    scaled features data frame into an RDD and mapping each row of the
+    RDD to the corresponding scaled feature vector. We then pass this
+    RDD to MLlib's RowMatrix() (as shown in the following code),
+    resulting in a matrix of standardized feature vectors of dimensions
+    300 x 3,000:
+
+```
+scaled_features_rows_rdd =
+user_movie_ratings_standardized_features_df
+.select("std_features").rdd
+scaled_features_matrix = RowMatrix(scaled_features_rows_rdd
+.map(lambda x: x[0].tolist()))
+```
+
+Copy
+
+5.  Now that we have our standardized data in matrix form, we can easily
+    compute the top *k* principal components by invoking the
+    computePrincipalComponents() method exposed by MLlib's RowMatrix. We
+    can compute the top 300 principal components as follows:
+
+```
+number_principal_components = 300
+principal_components = scaled_features_matrix
+.computePrincipalComponents(number_principal_components)
+```
+
+Copy
+
+6.  Now that we have identified the top 300 principal components, we can
+    project the standardized user-community movie ratings data from
+    3,000 dimensions to a linear subspace of only 300 dimensions while
+    preserving the largest variances from the original dataset. This is
+    achieved by using matrix multiplication and multiplying the matrix
+    containing the standardized data by the matrix containing the top
+    300 principal components, as follows:
+
+```
+projected_matrix = scaled_features_matrix
+.multiply(principal_components)
+print((projected_matrix.numRows(), projected_matrix.numCols()))
+```
+
+Copy
+
+The resulting matrix now has dimensions of 300 x 300, confirming the
+reduction in dimensionality from the original 3,000 to only 300! We can
+now use this projected matrix and its PCA feature vectors as the input
+into subsequent machine learning models as normal.
+
+7.  Alternatively, we can use MLlib's PCA() estimator directly on the
+    dataframe containing our standardized feature vectors to generate a
+    new dataframe with a new column containing the PCA feature vectors,
+    as follows:
+
+```
+pca = PCA(k=number_principal_components, inputCol="std_features",
+outputCol="pca_features")
+pca_model = pca.fit(user_movie_ratings_standardized_features_df)
+user_movie_ratings_pca_df = pca_model
+.transform(user_movie_ratings_standardized_features_df)
+```
+
+Copy
+
+Again, this new dataframe and its PCA feature vectors can then be used
+to train subsequent machine learning models as normal.
+
+8.  Finally, we can extract the explained variance for each principal
+    component from our PCA model by accessing its explainedVariance
+    attribute as follows:
+
+```
+pca_model.explainedVariance
+```
+
+Copy
+
+The resulting vector (of 300 elements) shows that, in our example, the
+first eigenvector (and therefore the first principal component) in the
+ordered list of principal components explains 8.2% of the variance, the
+second explains 4%, and so on.
+
+In this case study, we have demonstrated how we can reduce the
+dimensionality of the user-community movie ratings dataset from 3,000
+dimensions to only 300 dimensions while preserving its structure using
+PCA. The resulting reduced dataset can then be used to train machine
+learning models as normal, such as a hierarchical clustering model for
+collaborative filtering.
+
+
 
 Summary
 =======
 
-In this lab, we have studied, implemented, and evaluated common
-algorithms that are used in natural language processing. We have
-preprocessed a corpus of documents using feature transformers and
-generated feature vectors from the resulting processed corpus using
-feature extractors. We have also applied these common NLP algorithms to
-machine learning. We trained and tested a sentiment analysis model that
-we used to predict the underlying sentiment of tweets so that
-organizations may improve their product and service offerings.
+In this lab, we have trained and evaluated various unsupervised
+machine learning models and techniques in Apache Spark using a variety
+of real-world use cases, including partitioning the various substances
+found in the human brain using image segmentation and helping to develop
+a movie recommendation system by reducing the dimensionality of a
+high-dimensional user-community movie ratings dataset.
+

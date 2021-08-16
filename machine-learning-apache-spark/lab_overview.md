@@ -6,16 +6,18 @@
 
 Labs for this course are available at endpoints shared below. Update `<host-ip>` with the lab environment DNS and open following URL in browser to open jupyter workspace for the lab.
 
-1. ##### Setting Up a Local Development Environment
+1. ##### Developing Spark Application
 		* http://<host-ip>/lab/workspaces/lab1_
-2. ##### Supervised Learning Using Apache Spark
-		* http://<host-ip>/lab/workspaces/lab2_
-3. ##### Unsupervised Learning Using Apache Spark
+2. ##### Artificial Intelligence and Machine Learning 
+		(Theory Only)
+3. ##### Supervised Learning Using Apache Spark
 		* http://<host-ip>/lab/workspaces/lab3_
-4. ##### Natural Language Processing Using Apache Spark
+4. ##### Unsupervised Learning Using Apache Spark
 		* http://<host-ip>/lab/workspaces/lab4_
-5. ##### Deep Learning Using Apache Spark
+5. ##### Natural Language Processing Using Apache Spark
 		* http://<host-ip>/lab/workspaces/lab5_
+6. ##### Deep Learning Using Apache Spark
+		* http://<host-ip>/lab/workspaces/lab6_
 
 ### About
 In this module, we introduce the latest scalable technologies to help us manage and process big data. We then introduce advanced analytical algorithms applied to real-world use cases in order to uncover patterns, derive actionable insights, and learn from this big data.
