@@ -14,20 +14,6 @@ supervised machine learning models:
 -   Classification and regression trees
 -   Random forests
 
-
-Linear regression
-=================
-
-The first supervised learning model that we will study is that of linear
-regression. Formally, linear regression models the relationship between
-a *dependent* variable using a set of one or more *independent*
-variables. The resulting model can then be used to predict the numerical
-value of the *dependent* variable. But what does this mean in practice?
-Well, let\'s look at our first real-world use case to make sense of
-this.
-
-
-
 Case study -- predicting bike sharing demand
 ============================================
 
@@ -84,118 +70,6 @@ day (*cnt*) given the weather patterns for that particular day? In this
 case, *cnt* is the *dependent* variable that we wish to predict based on
 a set of *independent* variables that we shall choose from.
 
-
-
-Univariate linear regression
-============================
-
-Univariate (or single-variable) linear regression refers to a linear
-regression model where we use only one independent variable *x* to learn
-a *linear* function that maps *x* to our dependent variable *y:*
-
-
-![](./images/e16cc5f8-50c1-4e2f-b9c8-7cfcfb1aa96f.png)
-
-
-In the preceding equation, we have the following:
-
--   *y^i^* represents the *dependent* variable (cnt) for the *i^th^*
-    observation
--   *x^i^* represents the single *independent* variable for the *i^th^*
-    observation
--   ε^*i*^ represents the *error* term for the *i^th^* observation
--   *β~0~* is the intercept coefficient
--   *β~1~* is the regression coefficient for the single independent
-    variable
-
-Since, in general form, a univariate linear regression model is a linear
-function, we can easily plot this on a scatter graph where the x-axis
-represents the single independent variable, and the y-axis represents
-the dependent variable that we are trying to predict. *Figure 4.1*
-illustrates the scatter plot generated when we plot normalized feeling
-temperature (independent variable) against total daily bike renters
-(dependent variable):
-
-
-![](./images/12c53f09-7f55-47e1-b8e7-210d12522132.png)
-
-By analyzing *Figure 4.1*, you will see that there seems to be a general
-positive linear trend between the normalized feeling temperature
-(**atemp**) and the total daily biker renters (**cnt**). However, you
-will also see that our blue trend line, which is the visual
-representation of our univariate linear regression function, is not
-perfect, in other words, not all of our data points fit exactly on this
-line. In the real world, it is extremely rare to have a perfect model;
-in other words, all predictive models will make some mistakes. The goal
-therefore is to minimize the number of mistakes our models make so that
-we may have confidence in the predictions that they provide.
-
-
-
-Residuals
-=========
-
-The errors (or mistakes) that our model makes are called error terms or
-*residuals*, and are denoted in our univariate linear regression
-equation by ε^*i*^. Our goal therefore is to choose regression
-coefficients for the independent variables (in our case *β~1~*) that
-minimize these residuals. To compute the *i^th^* residual, we can simply
-subtract the predicted value from the actual value, as illustrated in
-*Figure 4.1*. To quantify the quality of our regression line, and hence
-our regression model, we can use a metric called the **Sum of Squared
-Errors** (**SSE**), which is simply the sum of all squared residuals, as
-follows:
-
-
-![](./images/18a90520-c676-47aa-8d27-6ca44ac2dbf9.png)
-
-
-A smaller SSE implies a better fit. However, SSE as a metric to quantify
-the quality of our regression model has its limitations. SSE scales with
-the number of data points *N*, which means that if we doubled the number
-of data points, the SSE may be twice as large, which may lead you to
-believe that the model is twice as bad, which is not the case! We
-therefore require other means to quantify the quality of our model.
-
-
-
-Root mean square error
-======================
-
-The **root mean square error** (**RMSE**) is the square root of the SSE
-divided by the total number of data points *N*, as follows:
-
-
-![](./images/dff36623-b263-4ab0-8f39-9c455faf0dc6.png)
-
-
-The RMSE tends to be used more often as a means to quantify the quality
-of a linear regression model, since its units are the same as the
-dependent variable, and is normalized by N.
-
-
-
-R-squared
-=========
-
-Another metric that provides an error measure of a linear regression
-model is called the R^*2*^ (R-squared) metric. The R^2^ metric
-represents the proportion of *variance* in the dependent variable
-explained by the independent variable(s). The equation for calculating
-R^2^ is as follows:
-
-
-![](./images/8baa308e-d8df-4565-bcc7-2b0b5bd2d866.png)
-
-
-In this equation, SST refers to the **Total Sum of Squares**, which is
-just the SSE from the overall mean (as illustrated in *Figure 4.1* by
-the red horizontal line, which is often used as a **baseline** model).
-An R^2^ value of 0 implies a linear regression model that provides no
-improvement over the baseline model (in other words, SSE = SST). An R^2^
-value of 1 implies a perfect predictive linear regression model (in
-other words, SSE = 0). The aim therefore is to get an R^2^ value as
-close as possible to 1.
 
 
 
@@ -621,192 +495,6 @@ linear_regression_model = linear_regression.fit(train_df)
 ```
 
 
-5.  After splitting our original DataFrame into a training and test
-    DataFrame respectively, and applying the same *LinearRegression*
-    estimator to the training DataFrame, we now have a trained
-    multivariate linear regression model with the following summary
-    training statistics (as can be seen in cell 8 of this Jupyter
-    Notebook):\
-    \
-    -   β~0~ = -389.94, β~1~ = 526.05, β~2~ = 2058.85, β~3~ = -51.90,
-        β~4~ = 2408.66, β~5~ = 3502.94
-    -   RMSE = 1008.50
-    -   R^2^ = 0.73
-
-Therefore, our trained multivariate linear regression model has learned
-the following function in order to be able to predict our dependent
-variable *y* (total daily bike renters) using a set of independent
-variables *x~k~* (season, year, month, normalized temperature, and
-normalized feeling temperature):
-
-*y = -389.94 + 526.05x~1~ + 2058.85x~2~ - 51.90x~3~ + 2408.66x~4~ +
-3502.94x~5~*
-
-Furthermore, our trained multivariate linear regression model actually
-performs even better on the test dataset with a test RMSE of 964.60 and
-a test R^2^ of 0.74.
-
-To finish our discussion of multivariate linear regression models, note
-that our training R^2^ metric will always either increase or stay the
-same as more independent variables are added. However, a better training
-R^2^ metric does not always imply a better test R^2^ metric---in fact, a
-test R^2^ metric can even be negative, meaning that it performs worse on
-the test dataset than the baseline model (which can never be the case
-for the training R^2^ metric). The goal therefore is to be able to
-develop a model that works well for both the training and test datasets.
-
-
-Logistic regression
-===================
-
-We have seen how linear regression models allows us to predict a
-numerical outcome. Logistic regression models, however, allow us to
-predict a *categorical* outcome by predicting the probability that an
-outcome is true.
-
-As with linear regression, in logistic regression models, we also have a
-dependent variable *y* and a set of independent variables *x~1~*,
-*x~2~*, ..., *x~k~*. In logistic regression however, we want to learn a
-function that provides the probability that *y = 1* (in other words,
-that the outcome variable is true) given this set of independent
-variables, as follows:
-
-
-![](./images/fcd811e4-d51a-4d40-b1b2-3c4669141f9c.png)
-
-
-This function is called the **Logistic Response** function, and provides
-a number between 0 and 1, representing the probability that the
-outcome-dependent variable is true, as illustrated in *Figure 4.3*:
-
-
-![](./images/6fcc1d21-faf7-44d6-9ed3-8776dc37c6fe.png)
-
-Positive coefficient values β~k~ increase the probability that y = 1,
-and negative coefficient values decrease the probability that y = 1. Our
-goal, therefore, when developing logistic regression models, is to
-choose coefficients that predict a high probability when y = 1, but
-predict a low probability when y = 0.
-
-
-
-Threshold value
-===============
-
-We now know that logistic regression models provide us with the
-probability that the outcome variable is true, that is to say, y = 1.
-However, in real-world use cases, we need to make *decisions*, not just
-deliver probabilities. Often, we make binary predictions, such as
-Yes/No, Good/Bad, and Go/Stop. A threshold value (*t*) allows us to make
-these decisions based on probabilities as follows:
-
--   If P(y=1) \>= t, then we predict y = 1
--   If P(y=1) \< t, then we predict y = 0
-
-The challenge now is how to choose a suitable value of *t*. In fact,
-what does *suitable* mean in this context?
-
-In real-world use cases, some types of error are better than others.
-Imagine that you were a doctor and were testing a large group of
-patients for a particular disease using logistic regression. In this
-case, the outcome *y=1* would be a patient carrying the disease
-(therefore y=0 would be a patient not carrying the disease), and, hence,
-our model would provide P(y=1) for a given person. In this example, it
-is better to detect as many patients potentially carrying the disease as
-possible, even if it means misclassifying some patients as carrying the
-disease who subsequently turn out not to. In this case, we select a
-smaller threshold value. If we select a large threshold value, however,
-we would detect those patients that almost certainly have the disease,
-but we would misclassify a large number of patients as not carrying the
-disease when, in actual fact, they do, which would be a much worse
-scenario!
-
-In general therefore, when using logistic regression models, we can make
-two types of error:
-
--   We predict y=1 (disease), but the actual outcome is y=0 (healthy)
--   We predict y=0 (healthy), but the actual outcome is y=1 (disease)
-
-
-
-Confusion matrix
-================
-
-A confusion (or classification) matrix can help us qualify what
-threshold value to use by comparing the predicted outcomes against the
-actual outcomes as follows:
-
-  -------------------------- ------------------------------ ------------------------------
-                             **Predict y=0 (healthy)**      **Predict y=1 (disease)**
-  **Actual y=0 (healthy)**   **True negatives** (**TN**)    **False positives** (**FP**)
-  **Actual y=1 (disease)**   **False negatives** (**FN**)   **True positives** (**TP**)
-  -------------------------- ------------------------------ ------------------------------
-
-By generating a confusion matrix, it allows us to quantify the accuracy
-of our model based on a given threshold value by using the following
-series of metrics:
-
--   N = number of observations
--   Overall accuracy = (TN + TP) / N
--   Overall error rate = (FP + FN) / N
--   Sensitivity (True Positive Rate) = TP / (TP + FN)
--   Specificity (True Negative Rate) = TN / (TN + FP)
--   False positive error rate = FP / (TN + FP)
--   False negative error rate = FN / (TP + FN)
-
-Logistic regression models with a higher threshold value will have a
-lower sensitivity and higher specificity. Models with a lower threshold
-value will have a higher sensitivity and lower specificity. The choice
-of threshold value therefore depends on the type of error that is
-\"better\" for your particular use case. In use cases where there is
-genuinely no preference, for example, political leaning of
-Conservative/Non-Conservative, then you should choose a threshold value
-of 0.5 that will predict the most likely outcome.
-
-
-
-Receiver operator characteristic curve
-======================================
-
-To further assist us in choosing a threshold value in a more visual way,
-we can generate a **receiver operator characteristic** (**ROC**) curve.
-An ROC curve plots the **false positive error rate** (**FPR**) against
-the **true positive rate** (**TPR**, or sensitivity) for every threshold
-value between 0 and 1, as illustrated in *Figure 4.4*:
-
-
-![](./images/9366a343-9e08-481b-b1f5-b0b81bfb0c53.png)
-
-
-As illustrated in *Figure 4.4*, using a threshold value of 0 means that
-you will catch ALL cases of y=1 (disease), but you will also incorrectly
-label all cases of y=0 (healthy) as y=1 (disease) as well, scaring a lot
-of healthy people! However using a threshold value of 1 means that you
-will NOT catch ANY cases of y=1 (disease), leaving a lot of people
-untreated, but you will correctly label all cases of y=0 (healthy). The
-benefit of plotting an ROC curve therefore is that it helps you to see
-the trade-off for *every* threshold value, and ultimately helps you to
-make a decision as to which threshold value to use for your given use
-case.
-
-
-
-Area under the ROC curve
-========================
-
-As a means of quantifying the quality of the predictions made by a
-logistic regression model, we can calculate the **Area under the ROC
-curve** (**AUC**), as illustrated in *Figure 4.5*. The AUC measures the
-proportion of time that the model predicts correctly, with an AUC value
-of 1 (maximum), implying a perfect model, in other words, our model
-predicts correctly 100% of the time, and an AUC value of 0.5 (minimum),
-implying our model predicts correctly 50% of the time, analogous to just
-guessing:
-
-
-![](./images/4b08363c-6b44-4144-af01-3b21dc3b8799.png)
-
-
 Case study -- predicting breast cancer
 ======================================
 
@@ -891,7 +579,6 @@ breast_cancer_df = indexer.transform(breast_cancer_df)
 ```
 
 
-</div>
 
 2.  In our case, we will use all the raw quantitative columns
     \[[Age], [BMI], [Glucose], [Insulin],
@@ -918,7 +605,6 @@ breast_cancer_features_df = vector_assembler
 ```
 
 
-</div>
 
 3.  After generating training and test DataFrames respectively, we apply
     the [LogisticRegression] estimator of [MLlib] to train a
@@ -933,7 +619,6 @@ logistic_regression_model = logistic_regression.fit(train_df)
 ```
 
 
-</div>
 
 4.  We then use our trained logistic regression model to make
     predictions on the test DataFrame, using the [transform()]
@@ -955,7 +640,6 @@ test_logistic_regression_predictions_df.select("probability",
 ```
 
 
-</div>
 
 5.  To quantify the quality of our trained logistic regression model, we
     can plot an ROC curve and calculate the AUC metric. The ROC curve is
@@ -987,7 +671,6 @@ Area Under ROC Curve on Test Data = 0.859375
 ```
 
 
-</div>
 
 The resultant ROC curve, generated using the [matplotlib] library,
 is illustrated in *Figure 4.6*:
@@ -1033,7 +716,6 @@ print(metrics.confusionMatrix())
 ```
 
 
-</div>
 
 The confusion matrix for our logistic regression model, using a default
 threshold value of 0.5, is as follows:
@@ -1076,30 +758,6 @@ threshold value (in this case 0.5). As an extension exercise, generate
 confusion matrices for a range of threshold values to see how this
 affects our final classifications!
 
-
-Classification and Regression Trees
-===================================
-
-We have seen how linear regression models allow us to predict a
-numerical outcome, and how logistic regression models allow us to
-predict a categorical outcome. However, both of these models assume a
-*linear* relationship between variables. **Classification and Regression
-Trees** (**CART**) overcome this problem by generating **Decision
-Trees**, which are also much easier to interpret compared to the
-supervised learning models we have seen so far. These decision trees can
-then be traversed to come to a final decision, where the outcome can
-either be numerical (regression trees) or categorical (classification
-trees). A simple classification tree used by a mortgage lender is
-illustrated in *Figure 4.7*:
-
-
-![](./images/13ca1e7c-ba16-47ce-952c-472c29d1c620.png)
-
-
-When traversing decision trees, start at the top. Thereafter, traverse
-left for yes, or positive responses, and traverse right for no, or
-negative responses. Once you reach the end of a branch, the leaf nodes
-describe the final outcome.
 
 
 
@@ -1162,7 +820,6 @@ StructField("water_project_cost_sharing", StringType()),
 ```
 
 
-</div>
 
 2.  Since all of our columns, both the label and all the independent
     variables, are string-based data types, we need to apply a
@@ -1201,7 +858,6 @@ pipeline_stages += [vector_assembler]
 ```
 
 
-</div>
 
 3.  Next, we instantiate our pipeline by passing to it the list of
     stages that we generated in the previous cell. We then execute our
@@ -1222,7 +878,6 @@ pd.DataFrame(congressional_voting_features_df.take(5), columns=congressional_vot
 ```
 
 
-</div>
 
 4.  We are now ready to train our classification tree! To achieve this,
     we can use MLlib\'s [DecisionTreeClassifier] estimator to
@@ -1237,7 +892,6 @@ decision_tree_model = decision_tree.fit(train_df)
 ```
 
 
-</div>
 
 5.  After training our classification tree, we will evaluate its
     performance on the test DataFrame. As with logistic regression, we
@@ -1255,7 +909,6 @@ print("Area Under ROC Curve on Test Data = %g" % evaluator_roc_area.evaluate(tes
 ```
 
 
-</div>
 
 6.  Ideally, we would like to visualize our classification tree.
     Unfortunately, there is not yet any direct method in which to render
@@ -1272,7 +925,6 @@ print(str(decision_tree_model.toDebugString))
 ```
 
 
-</div>
 
 With an AUC value of 0.91, we can say that our classification tree model
 performs very well on the test data and is very good at predicting the
@@ -1291,35 +943,6 @@ bucket. In [MLlib], this value is tuneable, via the
 [minInstancesPerNode] parameter, which is accessible when training
 our [DecisionTreeClassifier]. The smaller this value, the more
 splits that will be generated.
-
-However, if it is too small, then overfitting will occur. Conversely, if
-it is too large, then our CART model will be too simple with a low level
-of accuracy. We will discuss how to select an appropriate value during
-our introduction to random forests next. Note that [MLlib] also
-exposes other configurable parameters, including [maxDepth] (the
-maximum depth of the tree) and [maxBins], but note that the larger
-a tree becomes in terms of splits and depth, the more computationally
-expensive it is to compute and traverse. To learn more about the
-tuneable parameters available to a [DecisionTreeClassifier],
-please visit
-<https://spark.apache.org/docs/latest/ml-classification-regression.html>.
-
-
-
-Random forests
-==============
-
-One method of improving the accuracy of CART models is to build multiple
-decision trees, not just the one. In random forests, we do just that---a
-large number of CART trees are generated and thereafter, each tree in
-the forest votes on the outcome, with the majority outcome taken as the
-final prediction.
-
-To generate a random forest, a process known as bootstrapping is
-employed whereby the training data for each tree making up the forest is
-selected randomly with replacement. Therefore, each individual tree will
-be trained using a different subset of independent variables and, hence,
-different training data.
 
 
 
@@ -1385,7 +1008,6 @@ random_forest_model = random_forest.fit(train_df)
 ```
 
 
-</div>
 
 2.  We can now evaluate the performance of our trained random forest
     model on our test dataset by computing the AUC metric using the same
@@ -1403,7 +1025,6 @@ print("Area Under ROC Curve on Test Data = %g" % evaluator_rf_roc_area.evaluate(
 ```
 
 
-</div>
 
 Our trained random forest model has an AUC value of 0.97, meaning that
 it is more accurate in predicting political affiliation based on

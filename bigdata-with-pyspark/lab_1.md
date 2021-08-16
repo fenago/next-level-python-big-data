@@ -106,10 +106,10 @@ SparkContext
 
 Let\'s see how to set up a SparkContext:
 
-1.  First, we need to import [SparkContext].
+1.  First, we need to import `SparkContext`.
 2.  Create a new object in the [sc] variable standing for the
-    SparkContext using the [SparkContext] constructor.
-3.  In the [SparkContext] constructor, pass a [local]
+    SparkContext using the `SparkContext` constructor.
+3.  In the `SparkContext` constructor, pass a [local]
     context. We are looking at `BigData PySpark` in this context,
     as follows:
 

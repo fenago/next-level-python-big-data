@@ -35,8 +35,12 @@ Start the spark shell by typing following command in the terminal:
 
 ```
 cd ~/Desktop/next-level-python-big-data/bigdata-with-pyspark/Lab02
+
 pyspark
 ```
+
+**Note:** Jupyter Notebook can be used as well instead of spark shell. `Lab_2.ipynb` is already present in Lab02 directory. 
+
 
 The UCI machine learning repository
 ===================================
@@ -52,7 +56,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/kddcup99-mld
 
 **Note:** Dataset is already downloaded. Let's load it in PySpark:
 
-Load this using [SparkContext]. So, [SparkContext]
+Load this using `SparkContext`. So, `SparkContext`
 is materialized or objectified in Python as the [sc] variable as follows:
 
 ```

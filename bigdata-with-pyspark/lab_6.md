@@ -41,7 +41,7 @@ csv = raw_data.map(lambda l: l.split(","))
 
 Using `SQLContext`, we create a new [sql\_context] variable
 that holds the object of the `SQLContext` variable created by
-PySpark. As we\'re using [SparkContext] to start this
+PySpark. As we\'re using `SparkContext` to start this
 `SQLContext` variable, we need to pipe in [sc] as the first
 parameter of the `SQLContext` creator. After this, we need to take
 our [raw\_data] variable and map it with the [l.split]

@@ -107,7 +107,7 @@ sc
 ```
 
 
-We instantly get access to our [SparkContext] that tells us that
+We instantly get access to our `SparkContext` that tells us that
 Spark is version [3.1.2], our [Master] is at [local],
 and the [AppName] is the Python SparkShell (`BigData PySpark`),
 as shown below:
