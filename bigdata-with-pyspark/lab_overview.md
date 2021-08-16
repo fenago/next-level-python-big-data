@@ -1,4 +1,4 @@
-<img align="right" src="./logo.png">
+<img align="right" src="../logo.png">
 
 <h2><span style="color:red;"></span>Big Data with PySpark</h2>
 

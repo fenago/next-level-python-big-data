@@ -1,4 +1,4 @@
-<img align="right" src="./logo.png">
+<img align="right" src="../logo.png">
 
 <h2><span style="color:red;"></span>Apache Spark Deep Learning</h2>
 
