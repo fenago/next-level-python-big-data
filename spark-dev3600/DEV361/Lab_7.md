@@ -13,7 +13,7 @@ There is no requirement for any setup.
 - Answers and solutions at the end of this lab. Run command `spark-shell` in the terminal.
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab7`
 
@@ -27,7 +27,7 @@ In this activity, you will look at Spark execution components in the Spark UI.
 
 ```
 val sfpdDF = spark.read.format("csv").option("inferSchema",
-true).load("/home/jovyan/work/spark-dev3600/data/sfpd.csv").toDF("incidentnum",
+true).load("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sfpd.csv").toDF("incidentnum",
 "category", "description", "dayofweek", "date", "time",
 "pddistrict", "resolution", "address", "X", "Y", "pdid")
 ```

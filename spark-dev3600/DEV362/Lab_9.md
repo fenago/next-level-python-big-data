@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab9`
 
@@ -118,7 +118,7 @@ String “1::1193::5::978300760”
 ```
 // load the data into an RDD
 
-val ratingText = sc.textFile("/home/jovyan/work/spark-dev3600/moviemed/ratings.dat")
+val ratingText = sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/moviemed/ratings.dat")
 // MapPartitionsRDD[1] at textFile
 
 // Return the first element in this RDD
@@ -183,10 +183,10 @@ the DataFrames as temporary tables so that we can use the tables in SQL statemen
 // load the data into DataFrames
 
 val usersDF =
-sc.textFile("/home/jovyan/work/spark-dev3600/moviemed/users.dat").map(parseUser).toDF()
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/moviemed/users.dat").map(parseUser).toDF()
 
 val moviesDF =
-sc.textFile("/home/jovyan/work/spark-dev3600/moviemed/movies.dat").map(parseMovie).toDF()
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/moviemed/movies.dat").map(parseMovie).toDF()
 // create a DataFrame from the ratingsRDD
 val ratingsDF = ratingsRDD.toDF()
 
@@ -563,7 +563,7 @@ We use the flight data for January 2014. Below we load the data from the CSV fil
 ```
 // load the data into an RDD
 
-val textRDD = sc.textFile("/home/jovyan/work/spark-dev3600/data/rita2014jan.csv")
+val textRDD = sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/rita2014jan.csv")
 // MapPartitionsRDD[1] at textFile
 
 // parse the RDD of csv lines into an RDD of flight classes

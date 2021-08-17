@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab5`
 
@@ -91,7 +91,7 @@ you perform any actions on the RDD.
 If you copied the files as per the directions, then the path to
 the file is:
 
-`/home/jovyan/work/spark-dev3600/data/sfpd.csv`
+`/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sfpd.csv`
 
 #### Lab 4.1.3: Explore data using RDD operations
 What transformations and actions would you use in each case? Complete the command with the
@@ -313,11 +313,11 @@ inc_group.______________________________________________________
 
 7. Create two pairRDDs.
 val catAdd =
-sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddCat.csv").map(x=>x.split(",")).
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddCat.csv").map(x=>x.split(",")).
 map(x=>(x(1),x(0)))
 
 val distAdd =
-sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddDist.csv").map(x=>x.split(",")).
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddDist.csv").map(x=>x.split(",")).
 map(x=>(x(1),x(0)))
 8. You can specify the number of partitions when you use the join operation.
 val catJdist = catAdd.join(distAdd,8)
@@ -398,7 +398,7 @@ PdId = 11
 To load the file:
 
 ```
-sfpdRDD=sc.textFile("/home/jovyan/work/spark-dev3600/data/sfpd.csv").map(lambda
+sfpdRDD=sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sfpd.csv").map(lambda
 line:line.split(","))
 ```
 
@@ -471,10 +471,10 @@ left outer join is 13.
 **Note:** Solutions are also in the file Lab4.scala from which you can copy and paste into the
 Interactive shell.
 5. val catAdd =
-sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddCat.csv").map(x=>x.split(","))
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddCat.csv").map(x=>x.split(","))
 .map(x=>(x(1),x(0)))
 val distAdd =
-sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddDist.csv").map(x=>x.split(","))
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddDist.csv").map(x=>x.split(","))
 .map(x=>(x(1),x(0)))
 6. val catJdist=catAdd.join(distAdd)
 catJDist.collect
@@ -491,9 +491,9 @@ catJdist2.count
 
 **Note:** Solutions are also in the file Lab4.py from which you can copy and paste into the
 Interactive shell.
-5. catAdd=sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddCat.csv").map(lambda
+5. catAdd=sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddCat.csv").map(lambda
 x:x.split(",")).map(lambda x:(x[1],x[0]))
-distAdd=sc.textFile("/home/jovyan/work/spark-dev3600/data/J_AddDist.csv").map(lambda
+distAdd=sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/J_AddDist.csv").map(lambda
 x:x.split(",")).map(lambda x:(x[1],x[0]))
 6. catJdist=catAdd.join(distAdd)
 catJDist.collect

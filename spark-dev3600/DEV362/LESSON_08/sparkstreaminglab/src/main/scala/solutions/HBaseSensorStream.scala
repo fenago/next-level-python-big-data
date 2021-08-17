@@ -13,7 +13,7 @@ import org.apache.spark.streaming.StreamingContext
 
 
 object HBaseSensorStream extends Serializable {
-  final val tableName = "/home/jovyan/work/spark-dev3600/sensor"
+  final val tableName = "/headless/Desktop/next-level-python-big-data/spark-dev3600/sensor"
   final val cfDataBytes = Bytes.toBytes("data")
   final val cfAlertBytes = Bytes.toBytes("alert")
   final val colHzBytes = Bytes.toBytes("hz")
@@ -62,7 +62,7 @@ object HBaseSensorStream extends Serializable {
     val conf = HBaseConfiguration.create()
     conf.set(TableOutputFormat.OUTPUT_TABLE, tableName)
     val jobConfig: JobConf = new JobConf(conf, this.getClass)
-    jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/home/jovyan/work/spark-dev3600/out")
+    jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/headless/Desktop/next-level-python-big-data/spark-dev3600/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
 
@@ -73,7 +73,7 @@ object HBaseSensorStream extends Serializable {
     val ssc = new StreamingContext(sc, Seconds(2))
 
     // Parse the lines of data into sensor objects
-    val sensorDStream = ssc.textFileStream("/home/jovyan/work/spark-dev3600/stream").map(Sensor.parseSensor)
+    val sensorDStream = ssc.textFileStream("/headless/Desktop/next-level-python-big-data/spark-dev3600/stream").map(Sensor.parseSensor)
 
     sensorDStream.foreachRDD { rdd =>
       val alertRDD = rdd.filter(sensor => sensor.psi < 5.0)

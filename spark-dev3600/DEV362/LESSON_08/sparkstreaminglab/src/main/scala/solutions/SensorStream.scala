@@ -23,7 +23,7 @@ object SensorStream extends Serializable {
     val ssc = new StreamingContext(sc, Seconds(2))
 
     // Parse the lines of data into sensor objects
-    val textDStream = ssc.textFileStream("/home/jovyan/work/spark-dev3600/stream");
+    val textDStream = ssc.textFileStream("/headless/Desktop/next-level-python-big-data/spark-dev3600/stream");
     val sensorDStream = textDStream.map(parseSensor)
 
     // Apply processing to each RDD in the input stream
@@ -32,7 +32,7 @@ object SensorStream extends Serializable {
         val alertRDD = rdd.filter(sensor => sensor.psi < 5.0)
         println("Low pressure alert")
         alertRDD.take(2).foreach(println)
-        alertRDD.saveAsTextFile("/home/jovyan/work/spark-dev3600/alertout")
+        alertRDD.saveAsTextFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/alertout")
       }
     }
 

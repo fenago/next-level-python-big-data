@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab4`
 
@@ -24,7 +24,7 @@ Lab 2. Instead of using the Interactive Shell, you will run a python script.
 ### Python Application
 Since you wrote your application in Python, then you can pass the .py file directly to spark-submit.
 
-`spark-submit work/spark-dev3600/DEV360/auctions_app.py`
+`spark-submit /headless/Desktop/next-level-python-big-data/spark-dev3600/DEV360/auctions_app.py`
 
 **Note:** The filename is the name of the Python file (for example: AuctionsApp.py).
 --master refers to the master URL. It points to the URL of the cluster. You can also specify
@@ -40,7 +40,7 @@ from pyspark import SparkContext,SparkConf
 conf = SparkConf().setAppName("AuctionsApp")
 sc = SparkContext(conf=conf)
 # MAKE SURE THAT PATH TO DATA FILE IS CORRECT
-aucFile ="/home/jovyan/work/spark-dev3600/data/auctiondata.csv"
+aucFile ="/headless/Desktop/next-level-python-big-data/spark-dev3600/data/auctiondata.csv"
 #map input variables
 auctionid = 0
 bid = 1

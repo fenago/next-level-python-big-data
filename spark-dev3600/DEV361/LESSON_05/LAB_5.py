@@ -7,7 +7,7 @@ import pyspark.sql.functions as func
 sqlContext = SQLContext(sc)
 
 # Load the data
-sfpdRDD = sc.textFile("/home/jovyan/work/spark-dev3600/data/sfpd.csv").map(lambda inc: inc.split(","))
+sfpdRDD = sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sfpd.csv").map(lambda inc: inc.split(","))
 
 # Infer the schema and register the DataFrame as a table
 sfpdSchema=sfpdRDD.map(lambda inc: Row(incidentnum=inc[0], category=inc[1], description=inc[2], dayofweek=inc[3], date=inc[4], time=inc[5], pddistrict=inc[6], resolution=inc[7], address=inc[8], X=float(inc[9]), Y=float(inc[10]), pdid=inc[11]))
@@ -30,7 +30,7 @@ top3CatSQL=sqlContext.sql("SELECT category, count(incidentnum) AS inccount FROM 
 top3CatSQL.show()
 
 # Save the top 10 resolutions to a JSON file
-top10ResSQL.toJSON.saveAsTextFile("/home/jovyan/work/spark-dev3600/output")
+top10ResSQL.toJSON.saveAsTextFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/output")
 
 # Define and register UDF to get year from a date string
 sqlContext.registerFunction("getyear", lambda x: x[-2:])

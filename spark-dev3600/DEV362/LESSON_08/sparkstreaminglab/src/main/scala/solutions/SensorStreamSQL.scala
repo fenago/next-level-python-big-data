@@ -42,8 +42,8 @@ object SensorStreamSQL extends Serializable {
     import sqlContext.implicits._
     import org.apache.spark.sql.functions._
 
-    val pumpRDD = sc.textFile("/home/jovyan/work/spark-dev3600/data/sensorvendor.csv").map(parsePumpInfo)
-    val maintRDD = sc.textFile("/home/jovyan/work/spark-dev3600/data/sensormaint.csv").map(parseMaint)
+    val pumpRDD = sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sensorvendor.csv").map(parsePumpInfo)
+    val maintRDD = sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sensormaint.csv").map(parseMaint)
     val maintDF = maintRDD.toDF()
     val pumpDF = pumpRDD.toDF()
     maintDF.registerTempTable("maint")
@@ -53,7 +53,7 @@ object SensorStreamSQL extends Serializable {
     val ssc = new StreamingContext(sc, Seconds(2))
 
     // Parse the lines of data into sensor objects
-    val textDStream = ssc.textFileStream("/home/jovyan/work/spark-dev3600/stream");
+    val textDStream = ssc.textFileStream("/headless/Desktop/next-level-python-big-data/spark-dev3600/stream");
     val sensorDStream = textDStream.map(parseSensor)
 
     // Apply processing to each RDD in the input stream
@@ -79,7 +79,7 @@ object SensorStreamSQL extends Serializable {
                                    m.technician, m.description from alert s join pump p on s.resid = p.resid join maint m on p.resid=m.resid")
         println("Alert pump maintenance data")
         alertpumpmaintViewDF.show()
-        alertRDD.saveAsTextFile("/home/jovyan/work/spark-dev3600/alertout")
+        alertRDD.saveAsTextFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/alertout")
       }
     }
 

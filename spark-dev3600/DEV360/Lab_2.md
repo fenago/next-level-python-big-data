@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab2`
 
@@ -29,7 +29,7 @@ Estimated time to complete: 20 minutes
 
 2. Load the data from the file sfpd.csv, which was unzipped earlier:
 val sfpdDF = spark.read.format("csv").option("inferSchema",
-true).load("/home/jovyan/work/spark-dev3600/data/sfpd.csv").toDF("incidentnum",
+true).load("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sfpd.csv").toDF("incidentnum",
 "category", "description", "dayofweek", "date", "time",
 "pddistrict", "resolution", "address", "x", "y", "pdid")
 
@@ -69,7 +69,7 @@ Try this! Try this optional lab on your own, or in class if you finish the other
 the steps below to implement Word Count using Datasets.
 
 1. Launch the Spark shell, if it is not already running.
-2. Load the Dataset with the file /home/jovyan/work/spark-dev3600/data/wordcount.txt using SparkSession’s
+2. Load the Dataset with the file /headless/Desktop/next-level-python-big-data/spark-dev3600/data/wordcount.txt using SparkSession’s
 read.text method. Assign the type as string.
 3. Use the Dataset’s flatmap method to split lines into words. Use “\\s+” (spaces) as word
 separator.

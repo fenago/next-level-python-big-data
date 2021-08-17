@@ -14,7 +14,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab3`
 
@@ -51,7 +51,7 @@ ___________________________________________________________________
 val top3CatSQL = spark.sql("__________________________________
 __________________________________________________________________")
 
-4. Save the top 10 resolutions to a JSON file in the folder /home/jovyan/work/spark-dev3600/output in the cluster
+4. Save the top 10 resolutions to a JSON file in the folder /headless/Desktop/next-level-python-big-data/spark-dev3600/output in the cluster
 file system.
 
 **Hint:**  Use: DS.write.format("json").mode("<mode type>").save("<path
@@ -69,7 +69,7 @@ attempting to remove temporary files without first making sure they exist.
 5. Open an additional terminal window. At the Linux command prompt, verify that the data was
 saved to the file:
 
-`cd /home/jovyan/work/spark-dev3600/output`
+`cd /headless/Desktop/next-level-python-big-data/spark-dev3600/output`
 
 `cat part-00000...`
 
@@ -113,7 +113,7 @@ application using DataFrames. High-level steps are listed below:
 2. Create the Dataset (schema inferred by reflection) and register it as a table (use Lab 2.3).
 3. Get the top three categories and print them to the console (refer to Lab 3.1).
 4. Find the address, resolution, date, and time for burglaries in 2015 (refer to Lab 3.1).
-5. Save this to a JSON file in a folder /home/jovyan/work/spark-dev3600/appoutput in the cluster (refer to Lab 3.1).
+5. Save this to a JSON file in a folder /headless/Desktop/next-level-python-big-data/spark-dev3600/appoutput in the cluster (refer to Lab 3.1).
 
 Note: You may encounter the following message: 
 

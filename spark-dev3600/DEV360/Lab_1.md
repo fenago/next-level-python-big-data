@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab1`
 
@@ -87,7 +87,7 @@ val dtl = 8
 
 ```
 val auctionRDD =
-sc.textFile("/home/jovyan/work/spark-dev3600/data/auctiondata.csv").map(_.split(","))
+sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/auctiondata.csv").map(_.split(","))
 ```
 
 <span style="color:red;">Caution!</span> If you do not have the correct path to the file auctiondata.csv, you will get an error when you perform any actions on the RDD.
@@ -184,7 +184,7 @@ openbid:Float,price:Float, itemtype:String,dtl:Int)
 ```
 
 
-4. Create an RDD inputRDD using sc.textFile to load the data from /home/jovyan/work/spark-dev3600/data/aucitondata.csv. Also, make sure that you split the input file based on the separator.
+4. Create an RDD inputRDD using sc.textFile to load the data from /headless/Desktop/next-level-python-big-data/spark-dev3600/data/aucitondata.csv. Also, make sure that you split the input file based on the separator.
 
 ```
 val inputRDD =
@@ -331,7 +331,7 @@ dtl = 8
 To load the file:
 
 ```
-auctionRDD=sc.textFile("/home/jovyan/work/spark-dev3600/data/auctiondata.csv").map(lambda
+auctionRDD=sc.textFile("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/auctiondata.csv").map(lambda
 line:line.split(","))
 ```
 

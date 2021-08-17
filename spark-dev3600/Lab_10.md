@@ -11,7 +11,7 @@ There is no requirement for any setup.
 **Note:** 
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab10`
 
@@ -40,7 +40,7 @@ val userSchema = new StructType().add("resid", "string").add("date",
 
 ```
 val csvDF = spark.read.format("csv").option("header",
-"false").schema(userSchema).load("/home/jovyan/work/spark-dev3600/data/sensordata.csv")
+"false").schema(userSchema).load("/headless/Desktop/next-level-python-big-data/spark-dev3600/data/sensordata.csv")
 ```
 
 5. View the data. Retrieve the first few rows of the dataframe:
@@ -98,7 +98,7 @@ import org.apache.spark.sql.types.StructType
 
 3. Open a second terminal window (the UNIX window).
 4. Create a directory named stream that the streaming application will read from:
-`mkdir -p ~/work/spark-dev3600/stream`
+`mkdir -p ~/Desktop/next-level-python-big-data/spark-dev3600/stream`
 5. Back in the Spark window, create a schema for the csv file so that we can process the csv stream
 directly into an unbounded dataframe:
 
@@ -112,7 +112,7 @@ val userSchema = new StructType().add("resid", "string").add("date",
 6. Next, create an input stream:
 ```
 val sensorCsvDF = spark.readStream.option("sep",
-",").schema(userSchema).csv("/home/jovyan/work/spark-dev3600/stream/")
+",").schema(userSchema).csv("/headless/Desktop/next-level-python-big-data/spark-dev3600/stream/")
 ```
 
 7. Finally, use the writeStream.format("console").start()method to display the
@@ -139,7 +139,7 @@ the directory from which the streaming application will read. Be sure to specify
 to the sensordata.csv file and the stream directory, if yours are different:
 
 ```
-cp ~/work/spark-dev3600/data/sensordata.csv ~/work/spark-dev3600/stream/file1.csv
+cp ~/Desktop/next-level-python-big-data/spark-dev3600/data/sensordata.csv ~/Desktop/next-level-python-big-data/spark-dev3600/stream/file1.csv
 ```
 
 The Spark window will print out the data.

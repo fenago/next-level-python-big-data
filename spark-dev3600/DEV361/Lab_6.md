@@ -12,7 +12,7 @@ There is no requirement for any setup.
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
 
-All labs are present in `work/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
+All labs are present in `next-level-python-big-data/spark-dev3600` folder. To copy and paste: use **Control-C** and to paste inside of a terminal, use **Control-V**
 
 You can access jupyter lab at `http://<lab-environment>/lab/workspaces/lab6`
 
@@ -142,7 +142,7 @@ ________________________________________________________________
 val top3CatSQL = sqlContext.sql("_______________________________
 
 _______________________________________________________________")
-4. Save the top 10 resolutions to a JSON file in the folder /home/jovyan/work/spark-dev3600/output.
+4. Save the top 10 resolutions to a JSON file in the folder /headless/Desktop/next-level-python-big-data/spark-dev3600/output.
 
 
 
@@ -159,7 +159,7 @@ https://spark.apache.org/docs/1.4.1/sql-programming-guide.html#generic-loadsave-
 directory first or add logic to remove the directory if it exists before saving.
 top10ResSQL._____________________________________________________
 To verify that the data was saved to the file:
-cd /home/jovyan/work/spark-dev3600/output
+cd /headless/Desktop/next-level-python-big-data/spark-dev3600/output
 cat part-00000
 
 ## Lab 5.3: Create and Use User Defined Functions
@@ -229,7 +229,7 @@ application using DataFrames that:
 - Registers the DataFrame as a table
 - Prints the top three categories to the console
 - Finds the address, resolution, date and time for burglaries in 2015
-- Saves this to a JSON file in a folder /home/jovyan/work/spark-dev3600/appoutput
+- Saves this to a JSON file in a folder /headless/Desktop/next-level-python-big-data/spark-dev3600/appoutput
 
 
 **High Level steps:**

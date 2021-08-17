@@ -6,4 +6,4 @@ technician STRING, description STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ","
 
 
-STORED AS TEXTFILE LOCATION "/home/jovyan/work/spark-dev3600/sensormaint.csv";
+STORED AS TEXTFILE LOCATION "/headless/Desktop/next-level-python-big-data/spark-dev3600/sensormaint.csv";
