@@ -8,6 +8,8 @@
 #### Lab Environment
 There is no requirement for any setup.
 
+#### Lab Solution
+Lab Solution is available in `LESSON_03` folder.
 
 
 **Note:** 

@@ -8,6 +8,9 @@
 #### Lab Environment
 There is no requirement for any setup.
 
+#### Lab Solution
+Lab Solution is available in `LESSON_02` folder.
+
 **Note:** 
 - Answers and solutions can be found in the files which are already opened in jupyertLab editor. Copy and paste the solution in the terminal(s) after running command `spark-shell` (for Scala) or `pyspark` (for Python).
 - Spark Labs (powered by Jupyter) will be accessible at the port given to you by your instructor. Password for jupyterLab : `1234`
