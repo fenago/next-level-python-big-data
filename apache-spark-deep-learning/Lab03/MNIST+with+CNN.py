@@ -82,7 +82,7 @@ from Augmentor import Pipeline
 
 # In[12]:
 
-augmentor = Pipeline('/home/asherif844/sparkNotebooks/Ch03/MNIST/images')
+augmentor = Pipeline('/headless/Desktop/next-level-python-big-data/apache-spark-deep-learning/Lab03/MNIST/images')
 
 
 # In[13]:

@@ -498,7 +498,7 @@ augmentation of our nine sample images.
 
 ```
 from Augmentor import Pipeline
-augmentor = Pipeline('/home/asherif844/sparkNotebooks/Ch03/MNIST/images')
+augmentor = Pipeline('/headless/Desktop/next-level-python-big-data/apache-spark-deep-learning/Lab03/MNIST/images')
 ```
 
 
